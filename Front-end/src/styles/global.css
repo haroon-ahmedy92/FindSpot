@@ -1,0 +1,233 @@
+html[data-theme="light"] {
+    --background: #F8F9FA;
+    --text: #212529;
+    --card-bg: #FFFFFF;
+}
+
+html[data-theme="dark"] {
+    --background: #212529;
+    --text: #F8F9FA;
+    --card-bg: #343a40;
+    --gray-100: #1a1a1a;
+    --gray-200: #2c2c2c;
+    --gray-300: #3d3d3d;
+    --gray-400: #4e4e4e;
+    --gray-500: #6c757d;
+    --gray-600: #adb5bd;
+    --gray-700: #ced4da;
+    --gray-800: #dee2e6;
+    --gray-900: #f8f9fa;
+    --light: #212529;
+    --dark: #F8F9FA;
+}
+
+:root {
+    --primary: #F35B04;
+    --primary-light: #ff7a2d;
+    --primary-dark: #d44d00;
+    --secondary: #3D348B;
+    --secondary-light: #4d41a9;
+    --secondary-dark: #2c2663;
+    --accent: #FFBE0B;
+    --accent-light: #ffd04f;
+    --accent-dark: #e5aa00;
+    --success: #00AFB9;
+    --danger: #FF006E;
+    --warning: #FFBE0B;
+    --light: #F8F9FA;
+    --dark: #212529;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-accent { background-color: var(--accent); }
+.bg-success { background-color: var(--success); }
+.bg-danger { background-color: var(--danger); }
+.bg-white { background-color: var(--card-bg); }
+
+.text-primary { color: var(--primary); }
+.text-secondary { color: var(--secondary); }
+.text-accent { color: var(--accent); }
+.text-dark { color: var(--text); }
+
+.border-primary { border-color: var(--primary); }
+.border-secondary { border-color: var(--secondary); }
+.border-accent { border-color: var(--accent); }
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(243, 91, 4, 0.2);
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    color: white;
+    transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+    background-color: var(--secondary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(61, 52, 139, 0.2);
+}
+
+.btn-accent {
+    background-color: var(--accent);
+    color: var(--dark);
+    transition: all 0.3s ease;
+}
+.btn-accent:hover {
+    background-color: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(255, 190, 11, 0.2);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+.btn-outline-primary:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(243, 91, 4, 0.2);
+}
+
+.btn-outline-secondary {
+    border: 2px solid var(--secondary);
+    color: var(--secondary);
+    transition: all 0.3s ease;
+}
+.btn-outline-secondary:hover {
+    background-color: var(--secondary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(61, 52, 139, 0.2);
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.badge-lost {
+    background-color: var(--danger);
+    color: white;
+}
+
+.badge-found {
+    background-color: var(--success);
+    color: white;
+}
+
+.badge-resolved {
+    background-color: var(--accent);
+    color: var(--dark);
+}
+
+.tab-active {
+    color: var(--primary);
+    border-bottom: 3px solid var(--primary);
+}
+
+.profile-nav-link.active {
+    background-color: var(--primary) !important;
+    color: white !important;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.animate-scale {
+    transition: transform 0.2s ease;
+}
+.animate-scale:hover {
+    transform: scale(1.05);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-200);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-400);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-500);
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    border-radius: 0.5rem;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease-out;
+    padding: 1.5rem;
+}
+
+@keyframes modalSlideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

@@ -17,11 +17,11 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Report Lost", path: "/report-lost" },
-    { name: "Report Found", path: "/report-found" },
-    { name: "My Items", path: "/my-items" },
-    { name: "About", path: "/about" },
+    { name: 'Home', path: '/' },
+    { name: 'Report Lost', path: '/report-lost' },
+    { name: 'Report Found', path: '/report-found' },
+    { name: 'My Items', path: '/my-items' },
+    { name: 'About', path: '/about' },
   ];
 
   const toggleMobileMenu = () => {
@@ -35,18 +35,12 @@ const Header = () => {
   };
 
   return (
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white shadow-md' : 'bg-transparent'
-      }`}>
+      <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center mr-4">
-            <FaSearchLocation className={`w-6 h-6 mr-2 ${
-                scrolled ? 'text-[#F35B04]' : 'text-[#F35B04]'
-            }`} />
-            <span className={`font-bold text-xl ${
-                scrolled ? 'text-[#212529]' : 'text-[#212529]'
-            }`}>FindSpot</span>
+            <FaSearchLocation className={`w-6 h-6 mr-2 ${scrolled ? 'text-[#F35B04]' : 'text-[#F35B04]'}`} />
+            <span className={`font-bold text-xl ${scrolled ? 'text-[#212529]' : 'text-[#212529]'}`}>FindSpot</span>
           </div>
 
           {/* Navigation Links */}
@@ -66,28 +60,29 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Right Side: Authentication Buttons */}
+          {/* Right Side: Authentication Links */}
           <div className="flex items-center space-x-3">
-            <button className={`px-4 py-2 rounded-full border-2 font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md ${
-                scrolled
-                    ? 'border-[#F35B04] text-[#F35B04] hover:bg-[#F35B04] hover:text-white'
-                    : 'border-[#F35B04] text-[#F35B04] hover:bg-[#F35B04] hover:text-white'
-            }`}>
+            <Link
+                to="/login"
+                className={`px-4 py-2 rounded-full border-2 font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md ${
+                    scrolled
+                        ? 'border-[#F35B04] text-[#F35B04] hover:bg-[#F35B04] hover:text-white'
+                        : 'border-[#F35B04] text-[#F35B04] hover:bg-[#F35B04] hover:text-white'
+                }`}
+            >
               Login
-            </button>
-            <button className={`px-4 py-2 rounded-full font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${
-                scrolled
-                    ? 'bg-[#F35B04] text-white hover:bg-[#d95203]'
-                    : 'bg-[#F35B04] text-white hover:bg-[#d95203]'
-            }`}>
+            </Link>
+            <Link
+                to="/register"
+                className={`px-4 py-2 rounded-full font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${
+                    scrolled ? 'bg-[#F35B04] text-white hover:bg-[#d95203]' : 'bg-[#F35B04] text-white hover:bg-[#d95203]'
+                }`}
+            >
               Register
-            </button>
+            </Link>
 
             {/* Mobile Menu Button */}
-            <button
-                className="md:hidden ml-4 text-[#212529]"
-                onClick={toggleMobileMenu}
-            >
+            <button className="md:hidden ml-4 text-[#212529]" onClick={toggleMobileMenu}>
               {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
             </button>
           </div>
@@ -107,6 +102,20 @@ const Header = () => {
                       {link.name}
                     </Link>
                 ))}
+                <Link
+                    to="/login"
+                    className="text-[#212529] hover:text-[#F35B04] px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+                    onClick={closeMobileMenu}
+                >
+                  Login
+                </Link>
+                <Link
+                    to="/register"
+                    className="text-[#212529] hover:text-[#F35B04] px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+                    onClick={closeMobileMenu}
+                >
+                  Register
+                </Link>
               </nav>
             </div>
         )}
@@ -115,3 +124,5 @@ const Header = () => {
 };
 
 export default Header;
+
+
