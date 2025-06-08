@@ -4,10 +4,18 @@ import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaArrowLeft, FaShareAlt,
 import { useNavigate, useParams } from 'react-router-dom';
 
 // ItemCard Component
-const ItemCard = ({ item }) => {
+const ItemCard = ({ item, isDashboard }) => { // Added isDashboard prop
     const { id, title, shortDescription, location, date, status, category, image } = item;
     const isLost = status === 'Lost';
     const navigate = useNavigate();
+
+    const handleNavigate = () => {
+        if (isDashboard) {
+            navigate(`/dashboard/item/${id}`);
+        } else {
+            navigate(`/item/${id}`);
+        }
+    };
 
     return (
         <motion.div
@@ -84,7 +92,7 @@ const ItemCard = ({ item }) => {
 
                 {/* Button with animated arrow */}
                 <button
-                    onClick={() => navigate(`/item/${id}`)}
+                    onClick={handleNavigate} // Updated onClick handler
                     className={`w-full py-2.5 rounded-lg font-medium flex items-center justify-center transition-all duration-300 ${
                         isLost
                             ? 'bg-gradient-to-r from-[#F35B04] to-[#FFBE0B] hover:from-[#F35B04]/90 hover:to-[#FFBE0B]/90 text-white'

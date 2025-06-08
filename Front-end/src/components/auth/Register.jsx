@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock, FaEnvelope, FaPhone, FaCheck } from 'react-icons/fa';
 
 const Register = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -61,7 +62,8 @@ const Register = () => {
             setIsLoading(false);
             console.log('Registration form submitted:', formData);
             // TODO: Implement API call here
-            // TODO: Navigate to login with success message
+            // For now, redirect to dashboard on successful registration
+            navigate('/dashboard');
         }, 2000);
     };
 

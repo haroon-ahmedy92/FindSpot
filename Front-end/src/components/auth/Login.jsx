@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock } from 'react-icons/fa';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: '', password: '' });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -29,6 +30,8 @@ const Login = () => {
             setIsLoading(false);
             console.log('Login form submitted:', formData);
             // TODO: Implement API call here
+            // For now, redirect to dashboard on any login attempt
+            navigate('/dashboard');
         }, 2000);
     };
 

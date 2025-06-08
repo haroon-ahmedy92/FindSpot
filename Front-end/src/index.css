@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+body {
+  padding-top: 4rem; /* space for fixed header height on small screens */
+}
+
+@media (min-width: 1024px) {
+  body {
+    padding-top: 5rem; /* space for fixed header height on large screens */
+  }
+}
+
+/* Remove body padding when dashboard is active */
+body.dashboard-active {
+  padding-top: 0;
+}
+
 
 
 

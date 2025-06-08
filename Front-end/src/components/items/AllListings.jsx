@@ -6,7 +6,7 @@ import ItemCard from '../ui/ItemCard';
 import { lostItems } from '../../data/lostItems';
 import { foundItems } from '../../data/foundItems';
 
-const AllListings = ({ type }) => {
+const AllListings = ({ type, isDashboard }) => { // Added isDashboard prop
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState(type);
     const [category, setCategory] = useState('');
@@ -74,7 +74,7 @@ const AllListings = ({ type }) => {
         },
     };
 
-    const item = {
+    const motionItemVariants = { // Renamed from 'item' to 'motionItemVariants'
         hidden: { y: 20, opacity: 0 },
         show: { y: 0, opacity: 1 },
     };
@@ -156,9 +156,12 @@ const AllListings = ({ type }) => {
                     animate="show"
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
-                    {paginatedItems.map((item) => (
-                        <motion.div key={item.id} variants={item}>
-                            <ItemCard item={item} />
+                    {paginatedItems.map((itemData, index) => ( // item renamed to itemData, index added
+                        <motion.div
+                            key={index} // Key changed to map index
+                            variants={motionItemVariants} // Variants prop now correctly refers to the renamed definition
+                        >
+                            <ItemCard item={itemData} isDashboard={isDashboard} />
                         </motion.div>
                     ))}
                     {paginatedItems.length === 0 && (
@@ -203,7 +206,8 @@ const AllListings = ({ type }) => {
                                     );
                                 }
                                 if (page === currentPage - 2 || page === currentPage + 2) {
-                                    return <span key={page} className="mx-2 text-[#212529]/60">...</span>;
+                                    // Ensure unique keys for ellipsis by adding a prefix/suffix
+                                    return <span key={`ellipsis-${page}`} className="mx-2 text-[#212529]/60">...</span>;
                                 }
                                 return null;
                             })}

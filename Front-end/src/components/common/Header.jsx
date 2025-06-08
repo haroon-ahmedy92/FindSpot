@@ -8,7 +8,7 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => {
@@ -18,10 +18,8 @@ const Header = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Report Lost', path: '/report-lost' },
-    { name: 'Report Found', path: '/report-found' },
-    { name: 'My Items', path: '/my-items' },
     { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const toggleMobileMenu = () => {
@@ -29,97 +27,136 @@ const Header = () => {
   };
 
   const closeMobileMenu = () => {
-    if (isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
-    }
+    setIsMobileMenuOpen(false);
   };
 
   return (
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <header 
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
+        scrolled 
+          ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/20 shadow-sm' 
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 lg:h-20">
+          
           {/* Logo */}
-          <div className="flex items-center mr-4">
-            <FaSearchLocation className={`w-6 h-6 mr-2 ${scrolled ? 'text-[#F35B04]' : 'text-[#F35B04]'}`} />
-            <span className={`font-bold text-xl ${scrolled ? 'text-[#212529]' : 'text-[#212529]'}`}>FindSpot</span>
-          </div>
+          <Link to="/" className="flex items-center space-x-3 group" onClick={closeMobileMenu}>
+            <div className="relative">
+              <FaSearchLocation 
+                className={`w-7 h-7 transition-all duration-300 ${
+                  scrolled ? 'text-[#F35B04]' : 'text-[#F35B04]'
+                } group-hover:scale-110`} 
+              />
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#F35B04] to-[#FFBE0B] rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm"></div>
+            </div>
+            <span 
+              className={`font-bold text-2xl tracking-tight transition-all duration-300 ${
+                scrolled ? 'text-gray-900' : 'text-gray-900'
+              }`}
+            >
+              FindSpot
+            </span>
+          </Link>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex space-x-6">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (
-                <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`font-medium transition-all duration-300 relative hover:text-[#F35B04] ${
-                        scrolled ? 'text-[#212529]' : 'text-[#212529]'
-                    }`}
-                    onClick={closeMobileMenu}
-                >
-                  {link.name}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#F35B04] transition-all duration-300 group-hover:w-full"></span>
-                </Link>
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 hover:bg-gray-100/80 hover:backdrop-blur-sm ${
+                  scrolled ? 'text-gray-700 hover:text-gray-900' : 'text-gray-700 hover:text-gray-900'
+                }`}
+                onClick={closeMobileMenu}
+              >
+                {link.name}
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-[#F35B04] to-[#FFBE0B] transform scale-x-0 origin-left transition-transform duration-300 hover:scale-x-100"></span>
+              </Link>
             ))}
           </nav>
 
-          {/* Right Side: Authentication Links */}
-          <div className="flex items-center space-x-3">
+          {/* Auth Buttons */}
+          <div className="hidden md:flex items-center space-x-3">
             <Link
-                to="/login"
-                className={`px-4 py-2 rounded-full border-2 font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md ${
-                    scrolled
-                        ? 'border-[#F35B04] text-[#F35B04] hover:bg-[#F35B04] hover:text-white'
-                        : 'border-[#F35B04] text-[#F35B04] hover:bg-[#F35B04] hover:text-white'
-                }`}
+              to="/login"
+              className={`px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 active:scale-95 ${
+                scrolled 
+                  ? 'text-gray-700 hover:text-gray-900 hover:bg-gray-100/80' 
+                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100/80'
+              }`}
             >
-              Login
+              Sign In
             </Link>
             <Link
-                to="/register"
-                className={`px-4 py-2 rounded-full font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${
-                    scrolled ? 'bg-[#F35B04] text-white hover:bg-[#d95203]' : 'bg-[#F35B04] text-white hover:bg-[#d95203]'
-                }`}
+              to="/register"
+              className="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-[#F35B04] to-[#FFBE0B] rounded-full transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-orange-500/25 relative overflow-hidden group"
             >
-              Register
+              <span className="relative z-10">Get Started</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FFBE0B] to-[#F35B04] transform scale-x-0 origin-right transition-transform duration-300 group-hover:scale-x-100"></div>
             </Link>
-
-            {/* Mobile Menu Button */}
-            <button className="md:hidden ml-4 text-[#212529]" onClick={toggleMobileMenu}>
-              {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-            </button>
           </div>
-        </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-            <div className="md:hidden bg-white shadow-lg rounded-b-2xl overflow-hidden animate-slideDown">
-              <nav className="flex flex-col p-4 space-y-3">
-                {navLinks.map((link) => (
-                    <Link
-                        key={`mobile-${link.path}`}
-                        to={link.path}
-                        className="text-[#212529] hover:text-[#F35B04] px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-medium"
-                        onClick={closeMobileMenu}
-                    >
-                      {link.name}
-                    </Link>
-                ))}
-                <Link
-                    to="/login"
-                    className="text-[#212529] hover:text-[#F35B04] px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-medium"
-                    onClick={closeMobileMenu}
-                >
-                  Login
-                </Link>
-                <Link
-                    to="/register"
-                    className="text-[#212529] hover:text-[#F35B04] px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-medium"
-                    onClick={closeMobileMenu}
-                >
-                  Register
-                </Link>
-              </nav>
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden p-2 rounded-full transition-all duration-200 hover:bg-gray-100/80 active:scale-95"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+          >
+            <div className="relative w-6 h-6">
+              <span className={`absolute inset-0 transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-0' : ''}`}>
+                {isMobileMenuOpen ? (
+                  <FaTimes className="w-6 h-6 text-gray-700" />
+                ) : (
+                  <FaBars className="w-6 h-6 text-gray-700" />
+                )}
+              </span>
             </div>
-        )}
-      </header>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`md:hidden transition-all duration-300 ease-in-out ${
+        isMobileMenuOpen 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 -translate-y-4 pointer-events-none'
+      }`}>
+        <div className="bg-white/95 backdrop-blur-xl border-t border-gray-200/20 shadow-lg">
+          <nav className="px-6 py-6 space-y-1">
+            {navLinks.map((link) => (
+              <Link
+                key={`mobile-${link.path}`}
+                to={link.path}
+                className="block px-4 py-3 text-base font-medium text-gray-700 rounded-xl transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900 active:scale-95"
+                onClick={closeMobileMenu}
+              >
+                {link.name}
+              </Link>
+            ))}
+            
+            {/* Mobile Auth Buttons */}
+            <div className="pt-4 space-y-3 border-t border-gray-200/30">
+              <Link
+                to="/login"
+                className="block px-4 py-3 text-base font-medium text-gray-700 rounded-xl transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900 active:scale-95"
+                onClick={closeMobileMenu}
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/register"
+                className="block px-4 py-3 text-base font-medium text-white bg-gradient-to-r from-[#F35B04] to-[#FFBE0B] rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 text-center"
+                onClick={closeMobileMenu}
+              >
+                Get Started
+              </Link>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
   );
 };
 
