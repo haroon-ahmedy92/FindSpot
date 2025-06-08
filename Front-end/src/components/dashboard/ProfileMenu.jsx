@@ -35,13 +35,13 @@ const ProfileMenu = () => {
       {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => { navigate('/dashboard/profile'); setOpen(false); }} // Updated navigation to /dashboard/profile
             className="w-full text-left px-4 py-2 hover:bg-gray-100"
           >
             Profile
           </button>
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => { navigate('/dashboard/settings'); setOpen(false); }} // Assuming a future settings page
             className="w-full text-left px-4 py-2 hover:bg-gray-100"
           >
             Settings

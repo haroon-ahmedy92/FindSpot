@@ -15,7 +15,10 @@ const Footer = () => {
     },
     {
       title: "Legal",
-      links: ["Terms of Service", "Privacy Policy", "Cookie Policy"]
+      links: [
+        { name: "Terms of Service", path: "/terms-of-service" },
+        { name: "Privacy Policy", path: "/privacy-policy" },
+        { name: "Cookie Policy", path: "/cookie-policy" }]
     }
   ];
 
@@ -67,10 +70,10 @@ const Footer = () => {
                     {section.links.map((link, linkIndex) => (
                         <li key={linkIndex}>
                           <a
-                              href="#"
+                              href={link.path || '#'}
                               className="text-gray-400 hover:text-white transition-colors duration-300"
                           >
-                            {link}
+                            {link.name || link}
                           </a>
                         </li>
                     ))}

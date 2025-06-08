@@ -21,6 +21,10 @@ import { lostItems } from './data/lostItems';
 import { foundItems } from './data/foundItems';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import DashboardPage from './pages/DashboardPage';
+import UserProfilePage from './pages/UserProfilePage'; // Import the new UserProfilePage
+import FaqPage from './pages/FaqPage'; // Add this line
+import TermsOfServicePage from './pages/TermsOfServicePage'; // Add this line
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'; // Add this line
 
 function App() {
     const allItems = [...lostItems, ...foundItems];
@@ -116,10 +120,32 @@ function App() {
                         <Footer />
                     </>
                 } />
+                <Route path="/faq" element={
+                    <>
+                        <Header />
+                        <FaqPage />
+                        <Footer />
+                    </>
+                } />
+                <Route path="/terms-of-service" element={
+                    <>
+                        <Header />
+                        <TermsOfServicePage />
+                        <Footer />
+                    </>
+                } />
+                <Route path="/privacy-policy" element={
+                    <>
+                        <Header />
+                        <PrivacyPolicyPage />
+                        <Footer />
+                    </>
+                } />
                 
                 {/* logged-in dashboard route */}
                 <Route path="/dashboard" element={<DashboardLayout />}>
                   <Route index element={<DashboardPage />} />
+                  <Route path="profile" element={<UserProfilePage />} /> {/* Add route for UserProfilePage */}
                   <Route path="browse" element={<AllListings isDashboard={true} />} /> {/* Pass isDashboard prop to AllListings when in dashboard context */}
                   <Route path="report-lost" element={<ReportLostPage />} />
                   <Route path="report-found" element={<ReportFoundPage />} />

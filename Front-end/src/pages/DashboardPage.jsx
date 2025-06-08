@@ -26,61 +26,61 @@ const siteActivity = [
 
 const DashboardPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#F8F9FA] to-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
 
         {/* Welcome and Quick Actions */}
         <section className="mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Welcome back, {currentUser.name}!</h1>
+          <h1 className="text-4xl font-bold text-[#212529] mb-2">Welcome back, {currentUser.name}!</h1>
           <p className="text-lg text-gray-600 mb-8">Let's help you find what's lost or report what you've found.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Link to="/dashboard/report-lost" className="group bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-between">
+            <Link to="/dashboard/report-lost" className="group bg-gradient-to-r from-[#F35B04] to-[#FFBE0B] text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-semibold">Report a Lost Item</h2>
                 <p className="text-sm opacity-90">Help us find your missing item.</p>
               </div>
-              <FaSearch className="text-3xl opacity-70 group-hover:scale-110 transition-transform" />
+              <FaSearch className="text-3xl text-white opacity-70 group-hover:scale-110 transition-transform" />
             </Link>
-            <Link to="/dashboard/report-found" className="group bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-between">
+            <Link to="/dashboard/report-found" className="group bg-gradient-to-r from-[#00AFB9] to-[#3D348B] text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-semibold">Report a Found Item</h2>
                 <p className="text-sm opacity-90">You found something? Report it here.</p>
               </div>
-              <FaPlusCircle className="text-3xl opacity-70 group-hover:scale-110 transition-transform" />
+              <FaPlusCircle className="text-3xl text-white opacity-70 group-hover:scale-110 transition-transform" />
             </Link>
-            <Link to="/dashboard/my-posts" className="group bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-between">
+            <Link to="/dashboard/my-posts" className="group bg-gradient-to-r from-[#3D348B] to-[#4d41a9] text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-semibold">View My Posts</h2>
                 <p className="text-sm opacity-90">Check the status of your items.</p>
               </div>
-              <FaEye className="text-3xl opacity-70 group-hover:scale-110 transition-transform" />
+              <FaEye className="text-3xl text-white opacity-70 group-hover:scale-110 transition-transform" />
             </Link>
           </div>
         </section>
 
         {/* Your Activity Snapshot */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-6">Your Activity Snapshot</h2>
+          <h2 className="text-2xl font-semibold text-[#212529] mb-6">Your Activity Snapshot</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-xl shadow-lg flex items-center space-x-4">
-              <FaBoxOpen className="text-4xl text-red-500" />
+              <FaBoxOpen className="text-4xl text-[#F35B04]" />
               <div>
-                <p className="text-3xl font-bold text-gray-800">{currentUser.stats.activeLost}</p>
-                <p className="text-gray-600">Active Lost Items</p>
+                <p className="text-3xl font-bold text-[#212529]">{currentUser.stats.activeLost}</p>
+                <p className="text-[#212529]/80">Active Lost Items</p>
               </div>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-lg flex items-center space-x-4">
-              <FaCheckCircle className="text-4xl text-green-500" />
+              <FaCheckCircle className="text-4xl text-[#00AFB9]" />
               <div>
-                <p className="text-3xl font-bold text-gray-800">{currentUser.stats.activeFound}</p>
-                <p className="text-gray-600">Active Found Items</p>
+                <p className="text-3xl font-bold text-[#212529]">{currentUser.stats.activeFound}</p>
+                <p className="text-[#212529]/80">Active Found Items</p>
               </div>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-lg flex items-center space-x-4">
-              <FaHistory className="text-4xl text-blue-500" />
+              <FaHistory className="text-4xl text-[#3D348B]" />
               <div>
-                <p className="text-3xl font-bold text-gray-800">{currentUser.stats.resolved}</p>
-                <p className="text-gray-600">Items Resolved</p>
+                <p className="text-3xl font-bold text-[#212529]">{currentUser.stats.resolved}</p>
+                <p className="text-[#212529]/80">Items Resolved</p>
               </div>
             </div>
           </div>
@@ -90,8 +90,8 @@ const DashboardPage = () => {
         {currentUser.recentItems && currentUser.recentItems.length > 0 && (
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-gray-700">Your Recent Posts</h2>
-              <Link to="/dashboard/my-posts" className="text-blue-600 hover:text-blue-700 font-medium flex items-center">
+              <h2 className="text-2xl font-semibold text-[#212529]">Your Recent Posts</h2>
+              <Link to="/dashboard/my-posts" className="text-[#F35B04] hover:text-[#d95203] font-medium flex items-center">
                 View All <FaChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
@@ -105,17 +105,21 @@ const DashboardPage = () => {
 
         {/* Latest on FindSpot */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-6">Latest on FindSpot</h2>
+          <h2 className="text-2xl font-semibold text-[#212529] mb-6">Latest on FindSpot</h2>
           <div className="bg-white rounded-xl shadow-lg">
             <ul className="divide-y divide-gray-200">
               {siteActivity.map(activity => (
-                <li key={activity.id} className="p-4 hover:bg-gray-50 transition-colors duration-150">
+                <li key={activity.id} className="p-4 hover:bg-[#F35B04]/10 transition-colors duration-150">
                   <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
-                      {activity.icon}
+                    <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full ${
+                      activity.type === 'new_lost' ? 'bg-[#F35B04]/20' : activity.type === 'new_found' ? 'bg-[#00AFB9]/20' : 'bg-[#3D348B]/20'
+                    }`}>
+                      {React.cloneElement(activity.icon, { className: `${
+                        activity.type === 'new_lost' ? 'text-[#F35B04]' : activity.type === 'new_found' ? 'text-[#00AFB9]' : 'text-[#3D348B]'
+                      }` })}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-700">{activity.description}</p>
+                      <p className="text-sm text-[#212529]">{activity.description}</p>
                       <p className="text-xs text-gray-500">{activity.time}</p>
                     </div>
                     <FaChevronRight className="text-gray-400 h-5 w-5" />
@@ -124,7 +128,7 @@ const DashboardPage = () => {
               ))}
             </ul>
             <div className="p-4 text-center border-t border-gray-200">
-                <Link to="/dashboard/browse" className="text-blue-600 hover:text-blue-700 font-medium">
+                <Link to="/dashboard/browse" className="text-[#3D348B] hover:text-[#2c2566] font-medium">
                     Browse All Items
                 </Link>
             </div>
@@ -133,19 +137,19 @@ const DashboardPage = () => {
 
         {/* Helpful Resources */}
         <section>
-          <h2 className="text-2xl font-semibold text-gray-700 mb-6">Helpful Resources</h2>
+          <h2 className="text-2xl font-semibold text-[#212529] mb-6">Helpful Resources</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Link to="/faq" className="group bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
-              <FaQuestionCircle className="text-3xl text-yellow-500" />
+              <FaQuestionCircle className="text-3xl text-[#FFBE0B]" />
               <div>
-                <h3 className="font-semibold text-gray-800">FAQ & Guides</h3>
+                <h3 className="font-semibold text-[#212529]">FAQ & Guides</h3>
                 <p className="text-sm text-gray-600">Find answers to common questions.</p>
               </div>
             </Link>
             <Link to="/contact" className="group bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
-              <FaPlusCircle className="text-3xl text-purple-500" /> {/* Placeholder icon */}
+              <FaPlusCircle className="text-3xl text-[#3D348B]" />
               <div>
-                <h3 className="font-semibold text-gray-800">Contact Support</h3>
+                <h3 className="font-semibold text-[#212529]">Contact Support</h3>
                 <p className="text-sm text-gray-600">Need help? Get in touch with us.</p>
               </div>
             </Link>
