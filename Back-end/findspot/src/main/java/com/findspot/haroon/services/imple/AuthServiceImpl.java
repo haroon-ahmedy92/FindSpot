@@ -27,7 +27,6 @@ public class AuthServiceImpl implements AuthService {
     private AuthenticationManager authenticationManager;
     private JWTGenerator jwtGenerator;
 
-
     public AuthServiceImpl(UserRepository userRepository,
                            AuthenticationManager authenticationManager,
                            PasswordEncoder passwordEncoder,
@@ -48,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtGenerator.generateToken(authentication);
+        System.out.println("Generated JWT: " + token);
 
         return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
     }
@@ -65,11 +65,16 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(userEntity.getEmail());
         user.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
-
         Role role = roleRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRoles(Collections.singletonList(role));
 
         userRepository.save(user);
         return new ResponseEntity<>("User has been registered successfully", HttpStatus.OK);
+    }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
     }
 }

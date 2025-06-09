@@ -1,11 +1,11 @@
 package com.findspot.haroon.security;
 
+import com.findspot.haroon.exceptions.AuthenticationCredentialsNotFoundException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.Jwts;
 
 import java.util.Date;
 
@@ -17,15 +17,26 @@ public class JWTGenerator {
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + SecurityConstant.JWT_EXPIRATION);
 
-
         String token = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512,SecurityConstant.JWT_SECRET)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SECRET)
                 .compact();
 
         return token;
+    }
+
+    public String generateTokenFromUsername(String username) {
+        Date currentDate = new Date();
+        Date expirationDate = new Date(currentDate.getTime() + SecurityConstant.JWT_EXPIRATION);
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(currentDate)
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SECRET)
+                .compact();
     }
 
     public String getUsernameFromJWT(String token){

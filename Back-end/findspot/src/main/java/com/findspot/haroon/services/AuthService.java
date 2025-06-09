@@ -7,4 +7,5 @@ import org.springframework.http.ResponseEntity;
 public interface AuthService {
     ResponseEntity<AuthResponseDto> login(UserEntity userEntity);
     ResponseEntity<String> register(UserEntity userEntity);
+    UserEntity findByUsername(String username);
 }
