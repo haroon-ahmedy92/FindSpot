@@ -2,8 +2,13 @@
 import React, { useState } from 'react';
 import { FaCloudUploadAlt, FaTimes } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import ItemService from '../api/itemService';
 
 const ReportFoundPage = () => {
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
     const [formData, setFormData] = useState({
         title: '',
         category: '',
@@ -15,8 +20,21 @@ const ReportFoundPage = () => {
         contactPreference: 'email',
         agreedToTerms: false
     });
-
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+
+    // Redirect to login if not authenticated
+    React.useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login', { 
+                state: { 
+                    from: { pathname: '/report-found' },
+                    message: 'Please log in to report a found item' 
+                } 
+            });
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -24,18 +42,25 @@ const ReportFoundPage = () => {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }));
+        setError('');
+        setSuccessMessage('');
     };
 
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
         if (files.length + formData.images.length > 3) {
-            alert('Maximum 3 images allowed');
+            setError('Maximum 3 images allowed');
             return;
         }
+
+        // For demo purposes, we'll use URLs. In production, you'd upload to a service
         const newImages = files.map(file => ({
             file,
-            preview: URL.createObjectURL(file)
+            preview: URL.createObjectURL(file),
+            // In production, you'd upload the file and get back a URL
+            url: `http://example.com/${file.name}` // Placeholder URL
         }));
+
         setFormData(prev => ({
             ...prev,
             images: [...prev.images, ...newImages]
@@ -44,7 +69,9 @@ const ReportFoundPage = () => {
 
     const removeImage = (index) => {
         const newImages = [...formData.images];
-        URL.revokeObjectURL(newImages[index].preview);
+        if (newImages[index].preview) {
+            URL.revokeObjectURL(newImages[index].preview);
+        }
         newImages.splice(index, 1);
         setFormData(prev => ({
             ...prev,
@@ -54,19 +81,71 @@ const ReportFoundPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setSuccessMessage('');
+
+        if (!formData.agreedToTerms) {
+            setError('Please agree to the terms and conditions');
+            return;
+        }
+
         setIsSubmitting(true);
+
         try {
-            console.log('Form submitted:', formData);
-            // Add API call here
-            // await submitFoundItem(formData);
+            // Prepare data for backend
+            const foundItemData = {
+                title: formData.title,
+                category: formData.category,
+                description: formData.description,
+                location: formData.location,
+                date: formData.date,
+                // Convert images to URLs (in production, you'd upload files first)
+                images: formData.images.map(img => img.url || img.preview),
+                status: formData.status,
+                contactPreference: formData.contactPreference,
+                agreedToTerms: formData.agreedToTerms
+            };
+
+            const response = await ItemService.reportFoundItem(foundItemData);
+            
+            setSuccessMessage(`Successfully reported found item! Item ID: ${response.itemId}`);
+            
+            // Reset form
+            setFormData({
+                title: '',
+                category: '',
+                description: '',
+                location: '',
+                date: '',
+                images: [],
+                status: 'with-me',
+                contactPreference: 'email',
+                agreedToTerms: false
+            });
+
+            // Redirect to dashboard after success
+            setTimeout(() => {
+                navigate('/dashboard', { 
+                    state: { 
+                        message: `Found item "${response.title}" has been reported successfully!` 
+                    }
+                });
+            }, 3000);
+
+        } catch (submitError) {
+            setError(submitError.message || 'Failed to report found item. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    // Don't render form if not authenticated (will redirect)
+    if (!isAuthenticated) {
+        return null;
+    }
+
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#F8F9FA] to-white">
-
             <main className="flex-grow py-12">
                 <div className="container max-w-4xl mx-auto px-4">
                     <motion.div
@@ -84,6 +163,26 @@ const ReportFoundPage = () => {
                                 Help reunite this item with its owner by providing detailed information
                             </p>
                         </div>
+
+                        {/* Success/Error Messages */}
+                        {error && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-red-100 text-red-700 p-4 border-l-4 border-red-500"
+                            >
+                                {error}
+                            </motion.div>
+                        )}
+                        {successMessage && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-green-100 text-green-700 p-4 border-l-4 border-green-500"
+                            >
+                                {successMessage}
+                            </motion.div>
+                        )}
 
                         {/* Form Body */}
                         <form onSubmit={handleSubmit} className="p-6 md:p-8">
@@ -116,14 +215,14 @@ const ReportFoundPage = () => {
                                     required
                                 >
                                     <option value="">Select a category</option>
-                                    <option value="electronics">Electronics</option>
-                                    <option value="documents">Documents</option>
-                                    <option value="wallets">Wallets/Purses</option>
-                                    <option value="keys">Keys</option>
-                                    <option value="bags">Bags/Backpacks</option>
-                                    <option value="jewelry">Jewelry/Accessories</option>
-                                    <option value="clothing">Clothing</option>
-                                    <option value="other">Other</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Documents">Documents</option>
+                                    <option value="Wallet">Wallets/Purses</option>
+                                    <option value="Keys">Keys</option>
+                                    <option value="Bags">Bags/Backpacks</option>
+                                    <option value="Jewelry">Jewelry/Accessories</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
 
@@ -319,6 +418,7 @@ const ReportFoundPage = () => {
                                 <motion.button
                                     type="button"
                                     whileHover={{ x: -3 }}
+                                    onClick={() => navigate('/dashboard')}
                                     className="px-6 py-3 bg-white border-2 border-[#F35B04] text-[#F35B04] rounded-lg font-medium hover:bg-[#F35B04]/10 transition-colors"
                                 >
                                     Cancel
@@ -328,7 +428,7 @@ const ReportFoundPage = () => {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     disabled={isSubmitting}
-                                    className="px-8 py-3 bg-[#00AFB9] hover:bg-[#0095a0] text-white rounded-lg font-bold shadow-md transition-colors duration-300 flex items-center"
+                                    className="px-8 py-3 bg-[#00AFB9] hover:bg-[#0095a0] text-white rounded-lg font-bold shadow-md transition-colors duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting ? (
                                         <>
@@ -347,7 +447,6 @@ const ReportFoundPage = () => {
                     </motion.div>
                 </div>
             </main>
-
         </div>
     );
 };

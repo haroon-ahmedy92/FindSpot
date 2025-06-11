@@ -1,13 +1,56 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaArrowLeft, FaShareAlt, FaFlag, FaBookmark, FaEnvelope } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
+import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaUser, FaClock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 // ItemCard Component
-const ItemCard = ({ item, isDashboard }) => { // Added isDashboard prop
-    const { id, title, shortDescription, location, date, status, category, image } = item;
-    const isLost = status === 'Lost';
+const ItemCard = ({ item, isDashboard }) => {
     const navigate = useNavigate();
+    
+    // Handle both old data structure (from local data) and new API structure
+    const {
+        id,
+        title,
+        shortDescription,
+        fullDescription,
+        location,
+        date,
+        status,
+        category,
+        image,
+        images = [],
+        reportedBy,
+        reportedDate,
+        contactInfo,
+        itemType // New field to distinguish lost vs found items
+    } = item;
+
+    // Determine if it's a lost item based on the itemType field from API
+    const isLost = itemType === 'lost';
+    
+    // Get the first image from the images array if available
+    const itemImage = image || (images && images.length > 0 ? images[0] : null);
+    
+    // Format date to be more readable
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Unknown';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    };
+
+    // Format reported date for display
+    const formatReportedDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+    };
 
     const handleNavigate = () => {
         if (isDashboard) {
@@ -25,32 +68,43 @@ const ItemCard = ({ item, isDashboard }) => { // Added isDashboard prop
         >
             {/* Image with gradient overlay */}
             <div className="relative h-48 overflow-hidden">
-                {image ? (
+                {itemImage ? (
                     <img
-                        src={image}
+                        src={itemImage}
                         alt={title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        onError={(e) => {
+                            // Fallback if image fails to load
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                        }}
                     />
-                ) : (
-                    <div className={`w-full h-full flex items-center justify-center ${
+                ) : null}
+                
+                {/* Fallback placeholder */}
+                <div 
+                    className={`w-full h-full flex items-center justify-center ${
                         isLost ? 'bg-gradient-to-br from-[#F35B04]/10 to-[#FFBE0B]/10' : 'bg-gradient-to-br from-[#00AFB9]/10 to-[#3D348B]/10'
+                    } ${itemImage ? 'hidden' : 'flex'}`}
+                >
+                    <div className={`text-4xl ${
+                        isLost ? 'text-[#F35B04]' : 'text-[#00AFB9]'
                     }`}>
-                        <div className={`text-4xl ${
-                            isLost ? 'text-[#F35B04]' : 'text-[#00AFB9]'
-                        }`}>
-                            {isLost ? '🔍' : '🔄'}
-                        </div>
+                        {isLost ? '🔍' : '🔄'}
                     </div>
-                )}
+                </div>
+                
                 <div className="absolute inset-0 bg-gradient-to-t from-[#212529]/20 to-transparent" />
 
                 {/* Status badge */}
                 <span className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
-                    isLost
-                        ? 'bg-[#F35B04]/90 text-white'
-                        : 'bg-[#00AFB9]/90 text-white'
+                    status === 'ACTIVE'
+                        ? isLost 
+                            ? 'bg-[#F35B04]/90 text-white' 
+                            : 'bg-[#00AFB9]/90 text-white'
+                        : 'bg-gray-500/90 text-white'
                 }`}>
-                    {status}
+                    {status === 'ACTIVE' ? (isLost ? 'Lost' : 'Found') : status}
                 </span>
             </div>
 
@@ -70,29 +124,44 @@ const ItemCard = ({ item, isDashboard }) => { // Added isDashboard prop
                 </h3>
 
                 <p className="text-[#212529] text-sm mb-4 line-clamp-2">
-                    {shortDescription}
+                    {shortDescription || fullDescription || 'No description available'}
                 </p>
 
                 {/* Metadata */}
-                <div className="space-y-2 mb-5">
+                <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm text-[#212529]/80">
                         <FaMapMarkerAlt className={`w-4 h-4 mr-2 ${
                             isLost ? 'text-[#F35B04]' : 'text-[#00AFB9]'
                         }`} />
-                        <span>{location}</span>
+                        <span className="truncate">{location}</span>
                     </div>
 
                     <div className="flex items-center text-sm text-[#212529]/80">
                         <FaCalendarAlt className={`w-4 h-4 mr-2 ${
                             isLost ? 'text-[#F35B04]' : 'text-[#00AFB9]'
                         }`} />
-                        <span>{isLost ? 'Lost' : 'Found'} • {date}</span>
+                        <span>{isLost ? 'Lost' : 'Found'} • {formatDate(date)}</span>
                     </div>
+
+                    {/* Additional info for API data */}
+                    {reportedBy && (
+                        <div className="flex items-center text-sm text-[#212529]/60">
+                            <FaUser className="w-3 h-3 mr-2" />
+                            <span className="truncate">By {reportedBy}</span>
+                        </div>
+                    )}
+
+                    {reportedDate && (
+                        <div className="flex items-center text-sm text-[#212529]/60">
+                            <FaClock className="w-3 h-3 mr-2" />
+                            <span>Reported {formatReportedDate(reportedDate)}</span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Button with animated arrow */}
                 <button
-                    onClick={handleNavigate} // Updated onClick handler
+                    onClick={handleNavigate}
                     className={`w-full py-2.5 rounded-lg font-medium flex items-center justify-center transition-all duration-300 ${
                         isLost
                             ? 'bg-gradient-to-r from-[#F35B04] to-[#FFBE0B] hover:from-[#F35B04]/90 hover:to-[#FFBE0B]/90 text-white'

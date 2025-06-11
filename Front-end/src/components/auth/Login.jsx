@@ -2,37 +2,33 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock } from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login, isLoading, error, clearError } = useAuth();
     const [formData, setFormData] = useState({ username: '', password: '' });
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError('');
+        if (error) clearError(); // Clear error when user starts typing
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-        setIsLoading(true);
-
+        
         if (!formData.username || !formData.password) {
-            setError('Username and Password are required');
-            setIsLoading(false);
+            // You might want to set a local validation error here
             return;
         }
 
-        // Simulate loading for demo
-        setTimeout(() => {
-            setIsLoading(false);
-            console.log('Login form submitted:', formData);
-            // TODO: Implement API call here
-            // For now, redirect to dashboard on any login attempt
-            navigate('/dashboard');
-        }, 2000);
+        try {
+            await login(formData);
+            navigate('/dashboard'); // Redirect to dashboard on successful login
+        } catch (loginError) {
+            // Error is already handled by AuthContext
+            console.error('Login failed:', loginError);
+        }
     };
 
     return (

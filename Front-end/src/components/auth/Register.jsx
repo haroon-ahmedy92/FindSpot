@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock, FaEnvelope, FaPhone, FaCheck } from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Register = () => {
     const navigate = useNavigate();
+    const { register, isLoading, error, clearError } = useAuth();
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -14,22 +16,24 @@ const Register = () => {
         confirmPassword: '',
     });
     const [currentStep, setCurrentStep] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [localError, setLocalError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError('');
+        if (error) clearError();
+        setLocalError('');
+        setSuccessMessage('');
     };
 
     const nextStep = () => {
         // Basic validation for Step 1
         if (!formData.fullName || !formData.email) {
-            setError('Full Name and Email are required');
+            setLocalError('Full Name and Email are required');
             return;
         }
         if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            setError('Please enter a valid email address');
+            setLocalError('Please enter a valid email address');
             return;
         }
         setCurrentStep(currentStep + 1);
@@ -39,33 +43,57 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setLocalError('');
+        setSuccessMessage('');
 
         // Validate Step 2
         if (!formData.username || !formData.password || !formData.confirmPassword) {
-            setError('All fields are required');
+            setLocalError('All fields are required');
             return;
         }
         if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+            setLocalError('Passwords do not match');
             return;
         }
         if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters');
+            setLocalError('Password must be at least 6 characters');
             return;
         }
 
-        setIsLoading(true);
-        
-        // Simulate loading for demo
-        setTimeout(() => {
-            setIsLoading(false);
-            console.log('Registration form submitted:', formData);
-            // TODO: Implement API call here
-            // For now, redirect to dashboard on successful registration
-            navigate('/dashboard');
-        }, 2000);
+        try {
+            // Prepare data for backend (exclude confirmPassword)
+            const registrationData = {
+                fullName: formData.fullName,
+                email: formData.email,
+                phone: formData.phone,
+                username: formData.username,
+                password: formData.password,
+            };
+
+            const response = await register(registrationData);
+            
+            // Backend returns "User registered successfully!" as plain text
+            setSuccessMessage(response.message || 'Registration successful!');
+            
+            // Since your backend doesn't auto-login after registration,
+            // redirect to login page after a brief delay
+            setTimeout(() => {
+                navigate('/login', { 
+                    state: { 
+                        message: 'Registration successful! Please log in with your credentials.' 
+                    } 
+                });
+            }, 2000);
+
+        } catch (registrationError) {
+            // Error is already handled by AuthContext, but we can show additional feedback
+            console.error('Registration failed:', registrationError);
+            setLocalError(registrationError.message || 'Registration failed. Please try again.');
+        }
     };
+
+    // Display either AuthContext error or local validation error
+    const displayError = error || localError;
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#F8F9FA] to-white p-4">
@@ -113,15 +141,30 @@ const Register = () => {
                             <div className={`w-3 h-3 rounded-full mx-1 ${currentStep >= 2 ? 'bg-[#00AFB9]' : 'bg-gray-300'}`}></div>
                         </div>
                     </div>
-                    {error && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="bg-red-100 text-red-700 p-3 rounded-lg mb-4"
-                        >
-                            {error}
-                        </motion.div>
-                    )}
+                    
+                    <AnimatePresence>
+                        {displayError && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="bg-red-100 text-red-700 p-3 rounded-lg mb-4"
+                            >
+                                {displayError}
+                            </motion.div>
+                        )}
+                        {successMessage && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="bg-green-100 text-green-700 p-3 rounded-lg mb-4"
+                            >
+                                {successMessage}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <AnimatePresence mode="wait">
                             {currentStep === 1 && (
@@ -231,7 +274,7 @@ const Register = () => {
                                         <button
                                             type="submit"
                                             disabled={isLoading}
-                                            className="w-2/3 py-3 rounded-full bg-[#F35B04] text-white font-medium hover:bg-gradient-to-r hover:from-[#FFBE0B] hover:to-[#F35B04] transition-all duration-300 flex items-center justify-center"
+                                            className="w-2/3 py-3 rounded-full bg-[#F35B04] text-white font-medium hover:bg-gradient-to-r hover:from-[#FFBE0B] hover:to-[#F35B04] transition-all duration-300 flex items-center justify-center disabled:opacity-50"
                                         >
                                             {isLoading && (
                                                 <svg
@@ -248,7 +291,7 @@ const Register = () => {
                                                     ></path>
                                                 </svg>
                                             )}
-                                            Register
+                                            {isLoading ? 'Creating Account...' : 'Register'}
                                         </button>
                                     </div>
                                 </motion.div>
