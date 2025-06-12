@@ -2,10 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaUser, FaClock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../contexts/ThemeContext';
 
 // ItemCard Component
 const ItemCard = ({ item, isDashboard }) => {
     const navigate = useNavigate();
+    const { isDarkMode } = useTheme();
     
     // Handle both old data structure (from local data) and new API structure
     const {
@@ -64,7 +66,11 @@ const ItemCard = ({ item, isDashboard }) => {
         <motion.div
             whileHover={{ y: -5 }}
             transition={{ duration: 0.2 }}
-            className="relative group overflow-hidden rounded-xl bg-white/80 backdrop-blur-sm border border-[#E9ECEF] shadow-sm hover:shadow-md transition-all duration-300"
+            className={`relative group overflow-hidden rounded-xl backdrop-blur-sm border shadow-sm hover:shadow-md transition-all duration-300 ${
+                isDarkMode 
+                    ? 'bg-gray-800/80 border-gray-700' 
+                    : 'bg-white/80 border-[#E9ECEF]'
+            }`}
         >
             {/* Image with gradient overlay */}
             <div className="relative h-48 overflow-hidden">
@@ -110,7 +116,11 @@ const ItemCard = ({ item, isDashboard }) => {
 
             <div className="p-5">
                 {/* Category chip */}
-                <span className="inline-block px-2.5 py-1 text-xs font-medium rounded-full bg-[#E9ECEF] text-[#212529] mb-2">
+                <span className={`inline-block px-2.5 py-1 text-xs font-medium rounded-full mb-2 ${
+                    isDarkMode 
+                        ? 'bg-gray-700 text-gray-300' 
+                        : 'bg-[#E9ECEF] text-[#212529]'
+                }`}>
                     {category}
                 </span>
 
@@ -123,20 +133,26 @@ const ItemCard = ({ item, isDashboard }) => {
                     {title}
                 </h3>
 
-                <p className="text-[#212529] text-sm mb-4 line-clamp-2">
+                <p className={`text-sm mb-4 line-clamp-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                }`}>
                     {shortDescription || fullDescription || 'No description available'}
                 </p>
 
                 {/* Metadata */}
                 <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm text-[#212529]/80">
+                    <div className={`flex items-center text-sm ${
+                        isDarkMode ? 'text-gray-400' : 'text-[#212529]/80'
+                    }`}>
                         <FaMapMarkerAlt className={`w-4 h-4 mr-2 ${
                             isLost ? 'text-[#F35B04]' : 'text-[#00AFB9]'
                         }`} />
                         <span className="truncate">{location}</span>
                     </div>
 
-                    <div className="flex items-center text-sm text-[#212529]/80">
+                    <div className={`flex items-center text-sm ${
+                        isDarkMode ? 'text-gray-400' : 'text-[#212529]/80'
+                    }`}>
                         <FaCalendarAlt className={`w-4 h-4 mr-2 ${
                             isLost ? 'text-[#F35B04]' : 'text-[#00AFB9]'
                         }`} />
@@ -145,14 +161,18 @@ const ItemCard = ({ item, isDashboard }) => {
 
                     {/* Additional info for API data */}
                     {reportedBy && (
-                        <div className="flex items-center text-sm text-[#212529]/60">
+                        <div className={`flex items-center text-sm ${
+                            isDarkMode ? 'text-gray-500' : 'text-[#212529]/60'
+                        }`}>
                             <FaUser className="w-3 h-3 mr-2" />
                             <span className="truncate">By {reportedBy}</span>
                         </div>
                     )}
 
                     {reportedDate && (
-                        <div className="flex items-center text-sm text-[#212529]/60">
+                        <div className={`flex items-center text-sm ${
+                            isDarkMode ? 'text-gray-500' : 'text-[#212529]/60'
+                        }`}>
                             <FaClock className="w-3 h-3 mr-2" />
                             <span>Reported {formatReportedDate(reportedDate)}</span>
                         </div>

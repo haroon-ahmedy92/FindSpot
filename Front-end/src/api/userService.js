@@ -39,6 +39,116 @@ const UserService = {
   },
 
   /**
+   * Update user profile (alias for updateUserProfile for settings page compatibility)
+   * 
+   * @param {Object} profileData - User profile data to update
+   * @returns {Promise} Updated user profile
+   */
+  updateProfile: async (profileData) => {
+    return UserService.updateUserProfile(profileData);
+  },
+
+  /**
+   * Change user password
+   * 
+   * @param {Object} passwordData - Object containing currentPassword and newPassword
+   * @returns {Promise} Success response
+   */
+  changePassword: async (passwordData) => {
+    try {
+      const response = await axiosInstance.put('/users/change-password', passwordData);
+      console.log('Password changed successfully');
+      return response;
+    } catch (error) {
+      console.error('Error changing password:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get user settings (notifications, privacy, display preferences)
+   * 
+   * @returns {Promise} User settings object
+   */
+  getUserSettings: async () => {
+    try {
+      const response = await axiosInstance.get('/users/settings');
+      console.log('Raw user settings response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error fetching user settings:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update notification settings
+   * 
+   * @param {Object} notificationSettings - Notification preferences
+   * @returns {Promise} Updated settings
+   */
+  updateNotificationSettings: async (notificationSettings) => {
+    try {
+      const response = await axiosInstance.put('/users/settings/notifications', notificationSettings);
+      console.log('Notification settings updated');
+      return response;
+    } catch (error) {
+      console.error('Error updating notification settings:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update privacy settings
+   * 
+   * @param {Object} privacySettings - Privacy preferences
+   * @returns {Promise} Updated settings
+   */
+  updatePrivacySettings: async (privacySettings) => {
+    try {
+      const response = await axiosInstance.put('/users/settings/privacy', privacySettings);
+      console.log('Privacy settings updated');
+      return response;
+    } catch (error) {
+      console.error('Error updating privacy settings:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update display settings
+   * 
+   * @param {Object} displaySettings - Display preferences
+   * @returns {Promise} Updated settings
+   */
+  updateDisplaySettings: async (displaySettings) => {
+    try {
+      const response = await axiosInstance.put('/users/settings/display', displaySettings);
+      console.log('Display settings updated');
+      return response;
+    } catch (error) {
+      console.error('Error updating display settings:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete user account
+   * 
+   * @returns {Promise} Success response
+   */
+  deleteAccount: async () => {
+    try {
+      const response = await axiosInstance.delete('/users/account');
+      console.log('Account deleted successfully');
+      return response;
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Save/bookmark or unsave an item
    * 
    * @param {number} itemId - ID of the item to save/unsave

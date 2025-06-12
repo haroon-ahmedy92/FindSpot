@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaSearch, FaChevronLeft, FaChevronRight, FaSpinner } from 'react-icons/fa';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import ItemCard from '../ui/ItemCard';
 import ItemService from '../../api/itemService';
 
 const AllListings = ({ type, isDashboard }) => {
-    const { type: urlType } = useParams(); // Read the type from URL params
+    const { type: urlType } = useParams();
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState('');
     const [category, setCategory] = useState('');
     const [location, setLocationFilter] = useState('');
     const [sort, setSort] = useState('recent');
-    const [currentPage, setCurrentPage] = useState(0); // Backend uses 0-based pagination
+    const [currentPage, setCurrentPage] = useState(0);
     const [itemsPerPage] = useState(6);
     
     // API state
@@ -26,44 +27,41 @@ const AllListings = ({ type, isDashboard }) => {
     const locationHook = useLocation();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
+    const { isDarkMode } = useTheme();
+    
+    // Use refs to track initialization and prevent duplicate calls
+    const isInitialized = useRef(false);
+    const abortControllerRef = useRef(null);
+    const searchTimeoutRef = useRef(null);
 
-    // Set filter type based on URL parameter or prop
+    // Initialize component state only once
     useEffect(() => {
-        const typeFromUrl = urlType && urlType !== 'all' ? urlType : '';
-        const initialType = type || typeFromUrl;
-        setFilterType(initialType);
-    }, [urlType, type]);
+        if (!isInitialized.current) {
+            const typeFromUrl = urlType && urlType !== 'all' ? urlType : '';
+            const initialType = type || typeFromUrl;
+            setFilterType(initialType);
 
-    // Handle category query parameter
-    useEffect(() => {
-        const params = new URLSearchParams(locationHook.search);
-        const categoryParam = params.get('category');
-        if (categoryParam) {
-            setCategory(categoryParam);
-        }
-    }, [locationHook.search]);
-
-    // Fetch items when filters change
-    useEffect(() => {
-        if (isAuthenticated) {
-            fetchItems();
-        }
-    }, [filterType, category, location, currentPage, itemsPerPage, isAuthenticated]);
-
-    // Debounced search effect
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (isAuthenticated) {
-                setCurrentPage(0); // Reset to first page when searching
-                fetchItems();
+            const params = new URLSearchParams(locationHook.search);
+            const categoryParam = params.get('category');
+            if (categoryParam) {
+                setCategory(categoryParam);
             }
-        }, 500);
+            
+            isInitialized.current = true;
+        }
+    }, [urlType, type, locationHook.search]);
 
-        return () => clearTimeout(timer);
-    }, [searchTerm]);
+    // Memoized fetch function to prevent recreation on every render
+    const fetchItems = useCallback(async () => {
+        if (!isAuthenticated || !isInitialized.current) return;
 
-    const fetchItems = async () => {
-        if (!isAuthenticated) return;
+        // Cancel any pending request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+
+        // Create new abort controller for this request
+        abortControllerRef.current = new AbortController();
 
         setLoading(true);
         setError('');
@@ -81,86 +79,128 @@ const AllListings = ({ type, isDashboard }) => {
             
             if (filterType === 'lost') {
                 response = await ItemService.getLostItems(params);
-                // Tag all items as lost type
                 response.content = response.content?.map(item => ({
                     ...item,
                     itemType: 'lost'
                 })) || [];
             } else if (filterType === 'found') {
                 response = await ItemService.getFoundItems(params);
-                // Tag all items as found type
                 response.content = response.content?.map(item => ({
                     ...item,
                     itemType: 'found'
                 })) || [];
             } else {
-                // For "all" items, we need to implement proper pagination
-                // Since we're combining both lost and found items, we need to handle pagination differently
-                
-                // First, get the total counts without pagination to calculate total pages
-                const [lostCountResponse, foundCountResponse] = await Promise.all([
+                // For "all" items - simplified approach to avoid multiple API calls
+                const [lostResponse, foundResponse] = await Promise.all([
                     ItemService.getLostItems({ 
-                        page: 0, 
-                        limit: 1000, // Get a large number to count total items
+                        page: Math.floor(currentPage / 2), 
+                        limit: Math.ceil(itemsPerPage / 2),
                         ...(category && { category }),
                         ...(location && { location }),
                         ...(searchTerm && { search: searchTerm })
                     }),
                     ItemService.getFoundItems({ 
-                        page: 0, 
-                        limit: 1000, // Get a large number to count total items
+                        page: Math.floor(currentPage / 2), 
+                        limit: Math.ceil(itemsPerPage / 2),
                         ...(category && { category }),
                         ...(location && { location }),
                         ...(searchTerm && { search: searchTerm })
                     })
                 ]);
 
-                // Calculate combined totals
-                const combinedTotalElements = (lostCountResponse.totalElements || 0) + (foundCountResponse.totalElements || 0);
-                const combinedTotalPages = Math.ceil(combinedTotalElements / itemsPerPage);
-
-                // Get all items and combine them
-                const lostItems = lostCountResponse.content?.map(item => ({
+                const lostItems = lostResponse.content?.map(item => ({
                     ...item,
                     itemType: 'lost'
                 })) || [];
                 
-                const foundItems = foundCountResponse.content?.map(item => ({
+                const foundItems = foundResponse.content?.map(item => ({
                     ...item,
                     itemType: 'found'
                 })) || [];
 
-                // Combine and sort all items (you might want to implement sorting based on date)
                 const allItems = [...lostItems, ...foundItems];
-                
-                // Sort by creation date (most recent first) - adjust field name as needed
                 allItems.sort((a, b) => new Date(b.createdAt || b.reportedDate || 0) - new Date(a.createdAt || a.reportedDate || 0));
 
-                // Apply client-side pagination
-                const startIndex = currentPage * itemsPerPage;
-                const endIndex = startIndex + itemsPerPage;
-                const paginatedItems = allItems.slice(startIndex, endIndex);
-
                 response = {
-                    content: paginatedItems,
-                    totalPages: combinedTotalPages,
-                    totalElements: combinedTotalElements,
+                    content: allItems.slice(0, itemsPerPage),
+                    totalPages: Math.max(lostResponse.totalPages || 0, foundResponse.totalPages || 0),
+                    totalElements: (lostResponse.totalElements || 0) + (foundResponse.totalElements || 0),
                     number: currentPage,
                     size: itemsPerPage
                 };
             }
 
-            setItems(response.content || []);
-            setTotalPages(response.totalPages || 0);
-            setTotalElements(response.totalElements || 0);
+            // Only update state if the request wasn't aborted
+            if (!abortControllerRef.current?.signal.aborted) {
+                setItems(response.content || []);
+                setTotalPages(response.totalPages || 0);
+                setTotalElements(response.totalElements || 0);
+            }
             
         } catch (fetchError) {
-            setError(fetchError.message || 'Failed to fetch items');
-            console.error('Error fetching items:', fetchError);
+            // Only set error if request wasn't aborted
+            if (!abortControllerRef.current?.signal.aborted) {
+                setError(fetchError.message || 'Failed to fetch items');
+                console.error('Error fetching items:', fetchError);
+            }
         } finally {
-            setLoading(false);
+            // Only set loading to false if request wasn't aborted
+            if (!abortControllerRef.current?.signal.aborted) {
+                setLoading(false);
+            }
         }
-    };
+    }, [filterType, category, location, currentPage, itemsPerPage, searchTerm, isAuthenticated]);
+
+    // Main effect to fetch items when dependencies change
+    useEffect(() => {
+        if (isInitialized.current && isAuthenticated) {
+            fetchItems();
+        }
+        
+        // Cleanup function
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+        };
+    }, [fetchItems]);
+
+    // Debounced search effect
+    useEffect(() => {
+        if (!isInitialized.current) return;
+
+        // Clear previous timeout
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
+        }
+
+        // Set new timeout for search
+        searchTimeoutRef.current = setTimeout(() => {
+            if (isAuthenticated) {
+                setCurrentPage(0); // Reset to first page when searching
+                // fetchItems will be called automatically due to currentPage change
+            }
+        }, 500);
+
+        // Cleanup function
+        return () => {
+            if (searchTimeoutRef.current) {
+                clearTimeout(searchTimeoutRef.current);
+            }
+        };
+    }, [searchTerm, isAuthenticated]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            if (searchTimeoutRef.current) {
+                clearTimeout(searchTimeoutRef.current);
+            }
+        };
+    }, []);
 
     const categories = [
         'Electronics',
@@ -191,10 +231,18 @@ const AllListings = ({ type, isDashboard }) => {
     // Show login message if not authenticated
     if (!isAuthenticated) {
         return (
-            <section className="py-10 bg-gradient-to-b from-[#F8F9FA] to-white">
+            <section className={`py-10 ${
+                isDarkMode 
+                    ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                    : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+            }`}>
                 <div className="container mx-auto px-4 text-center">
-                    <h2 className="text-3xl font-bold text-[#212529] mb-4">Browse Items</h2>
-                    <p className="text-gray-600 mb-6">Please log in to view and browse items.</p>
+                    <h2 className={`text-3xl font-bold mb-4 ${
+                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                    }`}>Browse Items</h2>
+                    <p className={`mb-6 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Please log in to view and browse items.</p>
                     <button 
                         onClick={() => navigate('/login')}
                         className="bg-[#F35B04] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#d95203] transition-colors"
@@ -207,7 +255,11 @@ const AllListings = ({ type, isDashboard }) => {
     }
 
     return (
-        <section className="py-10 bg-gradient-to-b from-[#F8F9FA] to-white">
+        <section className={`py-10 ${
+            isDarkMode 
+                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+        }`}>
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
@@ -215,16 +267,22 @@ const AllListings = ({ type, isDashboard }) => {
                     transition={{ duration: 0.5 }}
                     className="mb-8"
                 >
-                    <h2 className="text-3xl font-bold text-[#212529] mb-2">
+                    <h2 className={`text-3xl font-bold mb-2 ${
+                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                    }`}>
                         Browse {filterType === 'lost' ? 'Lost' : filterType === 'found' ? 'Found' : 'All'} Items
                     </h2>
-                    <p className="text-gray-600">
-                        {totalElements > 0 ? `${totalElements} items found` : 'Searching for items...'}
+                    <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                        {totalElements > 0 ? `${totalElements} items found` : loading ? 'Searching for items...' : 'No items found'}
                     </p>
                 </motion.div>
 
                 {/* Filter and Search Section */}
-                <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-[#E9ECEF]">
+                <div className={`rounded-lg shadow-md p-6 mb-8 border ${
+                    isDarkMode 
+                        ? 'bg-gray-800 border-gray-700' 
+                        : 'bg-white border-[#E9ECEF]'
+                }`}>
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         {/* Search Input */}
                         <div className="flex-1 max-w-md">
@@ -232,18 +290,28 @@ const AllListings = ({ type, isDashboard }) => {
                                 <input
                                     type="text"
                                     placeholder="Search items..."
-                                    className="w-full border-2 border-[#E9ECEF] rounded-lg px-4 py-3 pr-10 focus:outline-none focus:border-[#3D348B]"
+                                    className={`w-full border-2 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:border-[#3D348B] ${
+                                        isDarkMode 
+                                            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                            : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                    }`}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                                <FaSearch className="absolute right-3 top-3 text-[#212529]/60" />
+                                <FaSearch className={`absolute right-3 top-3 ${
+                                    isDarkMode ? 'text-gray-400' : 'text-[#212529]/60'
+                                }`} />
                             </div>
                         </div>
 
                         {/* Filters */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             <select
-                                className="px-4 py-3 border border-[#E9ECEF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B]"
+                                className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B] ${
+                                    isDarkMode 
+                                        ? 'bg-gray-700 border-gray-600 text-white' 
+                                        : 'bg-white border-[#E9ECEF] text-gray-900'
+                                }`}
                                 value={filterType}
                                 onChange={(e) => {
                                     setFilterType(e.target.value);
@@ -259,7 +327,11 @@ const AllListings = ({ type, isDashboard }) => {
                             </select>
 
                             <select
-                                className="px-4 py-3 border border-[#E9ECEF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B]"
+                                className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B] ${
+                                    isDarkMode 
+                                        ? 'bg-gray-700 border-gray-600 text-white' 
+                                        : 'bg-white border-[#E9ECEF] text-gray-900'
+                                }`}
                                 value={category}
                                 onChange={(e) => {
                                     setCategory(e.target.value);
@@ -280,7 +352,11 @@ const AllListings = ({ type, isDashboard }) => {
                             <input
                                 type="text"
                                 placeholder="Location..."
-                                className="px-4 py-3 border border-[#E9ECEF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B]"
+                                className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B] ${
+                                    isDarkMode 
+                                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                        : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                }`}
                                 value={location}
                                 onChange={(e) => {
                                     setLocationFilter(e.target.value);
@@ -289,7 +365,11 @@ const AllListings = ({ type, isDashboard }) => {
                             />
 
                             <select
-                                className="px-4 py-3 border border-[#E9ECEF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B]"
+                                className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3D348B] ${
+                                    isDarkMode 
+                                        ? 'bg-gray-700 border-gray-600 text-white' 
+                                        : 'bg-white border-[#E9ECEF] text-gray-900'
+                                }`}
                                 value={sort}
                                 onChange={(e) => setSort(e.target.value)}
                             >
@@ -302,7 +382,11 @@ const AllListings = ({ type, isDashboard }) => {
 
                 {/* Error Message */}
                 {error && (
-                    <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-6 border border-red-200">
+                    <div className={`p-4 rounded-lg mb-6 border ${
+                        isDarkMode 
+                            ? 'bg-red-900/30 border-red-600/30 text-red-300' 
+                            : 'bg-red-100 text-red-700 border-red-200'
+                    }`}>
                         {error}
                     </div>
                 )}
@@ -311,7 +395,9 @@ const AllListings = ({ type, isDashboard }) => {
                 {loading && (
                     <div className="flex justify-center items-center py-12">
                         <FaSpinner className="animate-spin text-3xl text-[#F35B04]" />
-                        <span className="ml-3 text-lg text-gray-600">Loading items...</span>
+                        <span className={`ml-3 text-lg ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Loading items...</span>
                     </div>
                 )}
 
@@ -332,9 +418,11 @@ const AllListings = ({ type, isDashboard }) => {
                             </motion.div>
                         ))}
                         {items.length === 0 && !loading && (
-                            <div className="col-span-full text-center text-[#212529]/60 py-10">
-                                <p className="text-xl mb-2">No items found</p>
-                                <p className="text-gray-500">
+                            <div className="col-span-full text-center py-10">
+                                <p className={`text-xl mb-2 ${
+                                    isDarkMode ? 'text-gray-300' : 'text-[#212529]/60'
+                                }`}>No items found</p>
+                                <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
                                     Try adjusting your search criteria or{' '}
                                     <button 
                                         onClick={() => {
@@ -359,7 +447,11 @@ const AllListings = ({ type, isDashboard }) => {
                         <nav className="flex items-center">
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
-                                className="w-10 h-10 flex items-center justify-center rounded-full border border-[#E9ECEF] mx-1 text-[#212529]/60 hover:bg-[#F35B04] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={`w-10 h-10 flex items-center justify-center rounded-full border mx-1 hover:bg-[#F35B04] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed ${
+                                    isDarkMode 
+                                        ? 'border-gray-600 text-gray-300' 
+                                        : 'border-[#E9ECEF] text-[#212529]/60'
+                                }`}
                                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
                                 disabled={currentPage === 0}
                             >
@@ -380,7 +472,9 @@ const AllListings = ({ type, isDashboard }) => {
                                             className={`w-10 h-10 flex items-center justify-center rounded-full mx-1 ${
                                                 currentPage === page
                                                     ? 'bg-[#3D348B] text-white'
-                                                    : 'border border-[#E9ECEF] hover:bg-[#F35B04] hover:text-white'
+                                                    : isDarkMode 
+                                                        ? 'border border-gray-600 hover:bg-[#F35B04] hover:text-white text-gray-300' 
+                                                        : 'border border-[#E9ECEF] hover:bg-[#F35B04] hover:text-white text-gray-900'
                                             }`}
                                             onClick={() => setCurrentPage(page)}
                                         >
@@ -389,14 +483,20 @@ const AllListings = ({ type, isDashboard }) => {
                                     );
                                 }
                                 if (page === currentPage - 2 || page === currentPage + 2) {
-                                    return <span key={`ellipsis-${page}`} className="mx-2 text-[#212529]/60">...</span>;
+                                    return <span key={`ellipsis-${page}`} className={`mx-2 ${
+                                        isDarkMode ? 'text-gray-400' : 'text-[#212529]/60'
+                                    }`}>...</span>;
                                 }
                                 return null;
                             })}
                             
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
-                                className="w-10 h-10 flex items-center justify-center rounded-full border border-[#E9ECEF] mx-1 text-[#212529]/60 hover:bg-[#F35B04] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={`w-10 h-10 flex items-center justify-center rounded-full border mx-1 hover:bg-[#F35B04] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed ${
+                                    isDarkMode 
+                                        ? 'border-gray-600 text-gray-300' 
+                                        : 'border-[#E9ECEF] text-[#212529]/60'
+                                }`}
                                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
                                 disabled={currentPage === totalPages - 1}
                             >

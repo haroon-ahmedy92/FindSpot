@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { FaCamera, FaMapMarkerAlt, FaCalendarAlt, FaInfoCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import ItemService from '../api/itemService';
 
 const ReportLostPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { isDarkMode } = useTheme();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -143,14 +145,20 @@ const ReportLostPage = () => {
   }
 
   return (
-    <section className="py-12 bg-gradient-to-b from-[#F8F9FA] to-white">
+    <section className={`py-12 ${
+      isDarkMode 
+        ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+        : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+    }`}>
       <div className="container max-w-4xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="bg-white rounded-2xl shadow-lg overflow-hidden"
+          className={`rounded-2xl shadow-lg overflow-hidden ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}
         >
           {/* Form Header */}
           <div className="py-6 px-8 bg-[#F35B04] text-white">
@@ -165,7 +173,11 @@ const ReportLostPage = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-red-100 text-red-700 p-4 border-l-4 border-red-500"
+              className={`p-4 border-l-4 ${
+                isDarkMode 
+                  ? 'bg-red-900/30 border-red-600/30 text-red-300' 
+                  : 'bg-red-100 text-red-700 border-red-500'
+              }`}
             >
               {error}
             </motion.div>
@@ -174,7 +186,11 @@ const ReportLostPage = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-green-100 text-green-700 p-4 border-l-4 border-green-500"
+              className={`p-4 border-l-4 ${
+                isDarkMode 
+                  ? 'bg-green-900/30 border-green-600/30 text-green-300' 
+                  : 'bg-green-100 text-green-700 border-green-500'
+              }`}
             >
               {successMessage}
             </motion.div>
@@ -184,7 +200,9 @@ const ReportLostPage = () => {
           <form onSubmit={handleSubmit} className="p-8">
             {/* Item Title */}
             <div className="mb-6">
-              <label className="block text-[#212529] font-medium mb-2">
+              <label className={`block font-medium mb-2 ${
+                isDarkMode ? 'text-white' : 'text-[#212529]'
+              }`}>
                 Item Title*
               </label>
               <input
@@ -193,14 +211,20 @@ const ReportLostPage = () => {
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="Brief description of the lost item"
-                className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20"
+                className={`w-full px-4 py-3 rounded-lg border focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                    : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                }`}
                 required
               />
             </div>
 
             {/* Description */}
             <div className="mb-6">
-              <label className="block text-[#212529] font-medium mb-2">
+              <label className={`block font-medium mb-2 ${
+                isDarkMode ? 'text-white' : 'text-[#212529]'
+              }`}>
                 Detailed Description*
               </label>
               <textarea
@@ -209,21 +233,31 @@ const ReportLostPage = () => {
                 onChange={handleChange}
                 rows="4"
                 placeholder="Provide specific details about the item (brand, color, distinguishing features, contents, etc.)"
-                className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20"
+                className={`w-full px-4 py-3 rounded-lg border focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                    : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                }`}
                 required
               ></textarea>
             </div>
 
             {/* Category */}
             <div className="mb-6">
-              <label className="block text-[#212529] font-medium mb-2">
+              <label className={`block font-medium mb-2 ${
+                isDarkMode ? 'text-white' : 'text-[#212529]'
+              }`}>
                 Category*
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM3NzgxODIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWRvd24iPjxwYXRoIGQ9Im03IDEwIDUgNSA1LTUiLz48L3N2Zz4=')] bg-no-repeat bg-[center_right_1rem]"
+                className={`w-full px-4 py-3 rounded-lg border focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM3NzgxODIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWRvd24iPjxwYXRoIGQ9Im03IDEwIDUgNSA1LTUiLz48L3N2Zz4=')] bg-no-repeat bg-[center_right_1rem] ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white' 
+                    : 'bg-white border-[#E9ECEF] text-gray-900'
+                }`}
                 required
               >
                 <option value="">Select a category</option>
@@ -240,12 +274,14 @@ const ReportLostPage = () => {
 
             {/* Location */}
             <div className="mb-6">
-              <label className="block text-[#212529] font-medium mb-2">
+              <label className={`block font-medium mb-2 ${
+                isDarkMode ? 'text-white' : 'text-[#212529]'
+              }`}>
                 Where did you lose it?*
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaMapMarkerAlt className="text-gray-400" />
+                  <FaMapMarkerAlt className={isDarkMode ? 'text-gray-400' : 'text-gray-400'} />
                 </div>
                 <input
                   type="text"
@@ -253,7 +289,11 @@ const ReportLostPage = () => {
                   value={formData.location}
                   onChange={handleChange}
                   placeholder='Specific location (e.g. "University Library, Room 203")'
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20"
+                  className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                      : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                  }`}
                   required
                 />
               </div>
@@ -261,19 +301,25 @@ const ReportLostPage = () => {
 
             {/* Date */}
             <div className="mb-6">
-              <label className="block text-[#212529] font-medium mb-2">
+              <label className={`block font-medium mb-2 ${
+                isDarkMode ? 'text-white' : 'text-[#212529]'
+              }`}>
                 When did you lose it?*
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaCalendarAlt className="text-gray-400" />
+                  <FaCalendarAlt className={isDarkMode ? 'text-gray-400' : 'text-gray-400'} />
                 </div>
                 <input
                   type="date"
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 appearance-none"
+                  className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 appearance-none ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-white' 
+                      : 'bg-white border-[#E9ECEF] text-gray-900'
+                  }`}
                   required
                 />
               </div>
@@ -281,7 +327,9 @@ const ReportLostPage = () => {
 
             {/* Additional Details */}
             <div className="mb-6">
-              <label className="block text-[#212529] font-medium mb-2">
+              <label className={`block font-medium mb-2 ${
+                isDarkMode ? 'text-white' : 'text-[#212529]'
+              }`}>
                 Additional Details
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -292,7 +340,11 @@ const ReportLostPage = () => {
                     value={formData.additionalDetails.brand}
                     onChange={handleAdditionalDetailsChange}
                     placeholder="Brand (optional)"
-                    className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20"
+                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 ${
+                      isDarkMode 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                        : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                    }`}
                   />
                 </div>
                 <div>
@@ -302,7 +354,11 @@ const ReportLostPage = () => {
                     value={formData.additionalDetails.color}
                     onChange={handleAdditionalDetailsChange}
                     placeholder="Color (optional)"
-                    className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20"
+                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#F35B04] focus:outline-none focus:ring-2 focus:ring-[#F35B04]/20 ${
+                      isDarkMode 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                        : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                    }`}
                   />
                 </div>
               </div>
@@ -310,10 +366,16 @@ const ReportLostPage = () => {
 
             {/* Images */}
             <div className="mb-8">
-              <label className="block text-[#212529] font-medium mb-2">
+              <label className={`block font-medium mb-2 ${
+                isDarkMode ? 'text-white' : 'text-[#212529]'
+              }`}>
                 Upload Photos
               </label>
-              <div className="border-2 border-dashed border-[#E9ECEF] rounded-lg p-6 text-center cursor-pointer hover:border-[#F35B04] transition-colors">
+              <div className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                isDarkMode 
+                  ? 'border-gray-600 hover:border-[#F35B04]' 
+                  : 'border-[#E9ECEF] hover:border-[#F35B04]'
+              }`}>
                 <input
                   type="file"
                   id="item-images"
@@ -325,10 +387,12 @@ const ReportLostPage = () => {
                 <label htmlFor="item-images" className="cursor-pointer">
                   <div className="flex flex-col items-center justify-center space-y-2">
                     <FaCamera className="text-3xl text-[#F35B04]" />
-                    <p className="text-gray-600">
+                    <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
                       Click to upload or drag and drop
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className={`text-sm ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
                       Upload clear photos of the item (max 5 photos)
                     </p>
                   </div>
@@ -353,10 +417,14 @@ const ReportLostPage = () => {
             </div>
 
             {/* Additional Info */}
-            <div className="bg-[#F8F9FA] p-4 rounded-lg mb-8">
+            <div className={`p-4 rounded-lg mb-8 ${
+              isDarkMode ? 'bg-gray-700' : 'bg-[#F8F9FA]'
+            }`}>
               <div className="flex items-start">
                 <FaInfoCircle className="text-[#3D348B] mt-1 mr-3 flex-shrink-0" />
-                <p className="text-gray-600 text-sm">
+                <p className={`text-sm ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                }`}>
                   For valuable items, we recommend contacting local authorities in addition to posting here. Never share sensitive personal information in public listings.
                 </p>
               </div>

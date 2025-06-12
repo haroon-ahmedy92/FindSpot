@@ -1,7 +1,9 @@
 // src/pages/MyItemsPage.jsx
 import React, { useState, useEffect } from 'react';
-import { FaMobileAlt, FaWallet, FaKey, FaBook, FaPlus, FaEdit, FaCheck, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaMobileAlt, FaWallet, FaKey, FaBook, FaPlus, FaEdit, FaCheck, FaTrash, FaChevronLeft, FaChevronRight, FaEye } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../contexts/ThemeContext';
 import EditItemModal from '../components/items/EditItemModal';
 import ItemService from '../api/itemService';
 import Loading from '../components/ui/Loading';
@@ -11,6 +13,8 @@ import ConfirmModal from '../components/ui/ConfirmModal';
 // Mock data for testing
 
 const MyItemsPage = () => {
+    const navigate = useNavigate();
+    const { isDarkMode } = useTheme();
     const [activeTab, setActiveTab] = useState('lost');
     const [notifications, setNotifications] = useState({
         email: true,
@@ -335,13 +339,26 @@ const MyItemsPage = () => {
         }, 800);
     };
 
+    // Handle viewing item details
+    const handleViewItem = (itemId) => {
+        navigate(`/dashboard/item/${itemId}`);
+    };
+
     return (
-        <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#F8F9FA] to-white">
+        <div className={`min-h-screen flex flex-col ${
+            isDarkMode 
+                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+        }`}>
             {actionLoading && processingItemId === null && (
                 <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center">
-                    <div className="bg-white p-5 rounded-lg flex flex-col items-center">
+                    <div className={`p-5 rounded-lg flex flex-col items-center ${
+                        isDarkMode ? 'bg-gray-800' : 'bg-white'
+                    }`}>
                         <Loading size="lg" color="#3D348B" />
-                        <p className="mt-4 text-gray-600 font-medium">Processing...</p>
+                        <p className={`mt-4 font-medium ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Processing...</p>
                     </div>
                 </div>
             )}
@@ -353,41 +370,68 @@ const MyItemsPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h1 className="text-3xl font-bold text-[#212529] mb-6">My Items</h1>
+                        <h1 className={`text-3xl font-bold mb-6 ${
+                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                        }`}>My Items</h1>
 
                         {/* Tabs */}
-                        <div className="flex border-b border-[#E9ECEF] mb-6">
+                        <div className={`flex border-b mb-6 ${
+                            isDarkMode ? 'border-gray-700' : 'border-[#E9ECEF]'
+                        }`}>
                             <button
                                 onClick={() => setActiveTab('lost')}
-                                className={`px-6 py-4 font-medium text-lg ${activeTab === 'lost' ? 'text-[#F35B04] border-b-2 border-[#F35B04]' : 'text-gray-500 hover:text-[#F35B04]'}`}
+                                className={`px-6 py-4 font-medium text-lg ${
+                                    activeTab === 'lost' 
+                                        ? 'text-[#F35B04] border-b-2 border-[#F35B04]' 
+                                        : isDarkMode 
+                                            ? 'text-gray-400 hover:text-[#F35B04]' 
+                                            : 'text-gray-500 hover:text-[#F35B04]'
+                                }`}
                             >
                                 Items I've Lost ({lostItems.length})
                             </button>
                             <button
                                 onClick={() => setActiveTab('found')}
-                                className={`px-6 py-4 font-medium text-lg ${activeTab === 'found' ? 'text-[#00AFB9] border-b-2 border-[#00AFB9]' : 'text-gray-500 hover:text-[#00AFB9]'}`}
+                                className={`px-6 py-4 font-medium text-lg ${
+                                    activeTab === 'found' 
+                                        ? 'text-[#00AFB9] border-b-2 border-[#00AFB9]' 
+                                        : isDarkMode 
+                                            ? 'text-gray-400 hover:text-[#00AFB9]' 
+                                            : 'text-gray-500 hover:text-[#00AFB9]'
+                                }`}
                             >
                                 Items I've Found ({foundItems.length})
                             </button>
                             <button
                                 onClick={() => setActiveTab('resolved')}
-                                className={`px-6 py-4 font-medium text-lg ${activeTab === 'resolved' ? 'text-[#3D348B] border-b-2 border-[#3D348B]' : 'text-gray-500 hover:text-[#3D348B]'}`}
+                                className={`px-6 py-4 font-medium text-lg ${
+                                    activeTab === 'resolved' 
+                                        ? 'text-[#3D348B] border-b-2 border-[#3D348B]' 
+                                        : isDarkMode 
+                                            ? 'text-gray-400 hover:text-[#3D348B]' 
+                                            : 'text-gray-500 hover:text-[#3D348B]'
+                                }`}
                             >
                                 Resolved ({resolvedItems.length})
                             </button>
                         </div>
 
                         {/* Tab Content */}
-                        <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+                        <div className={`rounded-xl shadow-lg overflow-hidden mb-8 ${
+                            isDarkMode ? 'bg-gray-800' : 'bg-white'
+                        }`}>
                             {/* Lost Items Tab */}
                             {activeTab === 'lost' && (
                                 <div className="p-6">
                                     <div className="flex justify-between items-center mb-6">
-                                        <h2 className="text-2xl font-semibold text-[#212529]">Lost Items</h2>
+                                        <h2 className={`text-2xl font-semibold ${
+                                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                                        }`}>Lost Items</h2>
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.98 }}
                                             className="px-4 py-2 bg-[#F35B04] text-white rounded-lg flex items-center"
+                                            onClick={() => navigate('/dashboard/report-lost')}
                                         >
                                             <FaPlus className="mr-2" />
                                             Report New Lost Item
@@ -399,31 +443,55 @@ const MyItemsPage = () => {
                                             <Loading size="lg" color="#F35B04" />
                                         </div>
                                     ) : error ? (
-                                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-4">
-                                            <p className="text-red-700">{error}</p>
+                                        <div className={`border rounded-lg p-4 my-4 ${
+                                            isDarkMode 
+                                                ? 'bg-red-900/30 border-red-600/30 text-red-300' 
+                                                : 'bg-red-50 border-red-200 text-red-700'
+                                        }`}>
+                                            <p>{error}</p>
                                         </div>
                                     ) : lostItems.length === 0 ? (
                                         <div className="text-center py-8">
-                                            <p className="text-gray-500">You haven't reported any lost items yet.</p>
+                                            <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                                                You haven't reported any lost items yet.
+                                            </p>
                                         </div>
                                     ) : (
                                         <div className="overflow-x-auto">
-                                            <table className="min-w-full divide-y divide-[#E9ECEF]">
-                                                <thead className="bg-[#F8F9FA]">
+                                            <table className={`min-w-full divide-y ${
+                                                isDarkMode ? 'divide-gray-700' : 'divide-[#E9ECEF]'
+                                            }`}>
+                                                <thead className={isDarkMode ? 'bg-gray-700' : 'bg-[#F8F9FA]'}>
                                                 <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Item</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Location</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Date Lost</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Status</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Actions</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Item</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Location</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Date Lost</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Status</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Actions</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody className="bg-white divide-y divide-[#E9ECEF]">
+                                                <tbody className={`divide-y ${
+                                                    isDarkMode 
+                                                        ? 'bg-gray-800 divide-gray-700' 
+                                                        : 'bg-white divide-[#E9ECEF]'
+                                                }`}>
                                                 {lostItems.map((item) => (
                                                     <tr key={item.itemId}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <div className="flex items-center">
-                                                                <div className="h-10 w-10 flex-shrink-0 bg-[#F8F9FA] rounded-full flex items-center justify-center">
+                                                                <div className={`h-10 w-10 flex-shrink-0 rounded-full flex items-center justify-center ${
+                                                                    isDarkMode ? 'bg-gray-700' : 'bg-[#F8F9FA]'
+                                                                }`}>
                                                                     {item.category === 'Keys' && <FaKey className="text-[#F35B04]" />}
                                                                     {item.category === 'Wallet' && <FaWallet className="text-[#F35B04]" />}
                                                                     {item.category === 'Electronics' && <FaMobileAlt className="text-[#F35B04]" />}
@@ -432,15 +500,23 @@ const MyItemsPage = () => {
                                                                         <div className="text-[#F35B04] font-bold">{item.category?.charAt(0)}</div>}
                                                                 </div>
                                                                 <div className="ml-4">
-                                                                    <div className="text-sm font-medium text-[#212529]">{item.title}</div>
-                                                                    <div className="text-sm text-gray-500">{item.category}</div>
+                                                                    <div className={`text-sm font-medium ${
+                                                                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                                                                    }`}>{item.title}</div>
+                                                                    <div className={`text-sm ${
+                                                                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                                                                    }`}>{item.category}</div>
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                                                            isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                                                        }`}>
                                                             {item.location}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                                                            isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                                                        }`}>
                                                             {new Date(item.createdAt || item.date).toLocaleDateString()}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -487,11 +563,14 @@ const MyItemsPage = () => {
                             {activeTab === 'found' && (
                                 <div className="p-6">
                                     <div className="flex justify-between items-center mb-6">
-                                        <h2 className="text-2xl font-semibold text-[#212529]">Found Items</h2>
+                                        <h2 className={`text-2xl font-semibold ${
+                                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                                        }`}>Found Items</h2>
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.98 }}
                                             className="px-4 py-2 bg-[#00AFB9] text-white rounded-lg flex items-center"
+                                            onClick={() => navigate('/dashboard/report-found')}
                                         >
                                             <FaPlus className="mr-2" />
                                             Report New Found Item
@@ -503,31 +582,55 @@ const MyItemsPage = () => {
                                             <Loading size="lg" color="#00AFB9" />
                                         </div>
                                     ) : error ? (
-                                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-4">
-                                            <p className="text-red-700">{error}</p>
+                                        <div className={`border rounded-lg p-4 my-4 ${
+                                            isDarkMode 
+                                                ? 'bg-red-900/30 border-red-600/30 text-red-300' 
+                                                : 'bg-red-50 border-red-200 text-red-700'
+                                        }`}>
+                                            <p>{error}</p>
                                         </div>
                                     ) : foundItems.length === 0 ? (
                                         <div className="text-center py-8">
-                                            <p className="text-gray-500">You haven't reported any found items yet.</p>
+                                            <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                                                You haven't reported any found items yet.
+                                            </p>
                                         </div>
                                     ) : (
                                         <div className="overflow-x-auto">
-                                            <table className="min-w-full divide-y divide-[#E9ECEF]">
-                                                <thead className="bg-[#F8F9FA]">
+                                            <table className={`min-w-full divide-y ${
+                                                isDarkMode ? 'divide-gray-700' : 'divide-[#E9ECEF]'
+                                            }`}>
+                                                <thead className={isDarkMode ? 'bg-gray-700' : 'bg-[#F8F9FA]'}>
                                                 <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Item</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Location</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Date Found</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Status</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Actions</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Item</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Location</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Date Found</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Status</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Actions</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody className="bg-white divide-y divide-[#E9ECEF]">
+                                                <tbody className={`divide-y ${
+                                                    isDarkMode 
+                                                        ? 'bg-gray-800 divide-gray-700' 
+                                                        : 'bg-white divide-[#E9ECEF]'
+                                                }`}>
                                                 {foundItems.map((item) => (
                                                     <tr key={item.itemId}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <div className="flex items-center">
-                                                                <div className="h-10 w-10 flex-shrink-0 bg-[#F8F9FA] rounded-full flex items-center justify-center">
+                                                                <div className={`h-10 w-10 flex-shrink-0 rounded-full flex items-center justify-center ${
+                                                                    isDarkMode ? 'bg-gray-700' : 'bg-[#F8F9FA]'
+                                                                }`}>
                                                                     {item.category === 'Keys' && <FaKey className="text-[#00AFB9]" />}
                                                                     {item.category === 'Wallet' && <FaWallet className="text-[#00AFB9]" />}
                                                                     {item.category === 'Electronics' && <FaMobileAlt className="text-[#00AFB9]" />}
@@ -536,15 +639,23 @@ const MyItemsPage = () => {
                                                                         <div className="text-[#00AFB9] font-bold">{item.category?.charAt(0)}</div>}
                                                                 </div>
                                                                 <div className="ml-4">
-                                                                    <div className="text-sm font-medium text-[#212529]">{item.title}</div>
-                                                                    <div className="text-sm text-gray-500">{item.category}</div>
+                                                                    <div className={`text-sm font-medium ${
+                                                                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                                                                    }`}>{item.title}</div>
+                                                                    <div className={`text-sm ${
+                                                                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                                                                    }`}>{item.category}</div>
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                                                            isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                                                        }`}>
                                                             {item.location}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                                                            isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                                                        }`}>
                                                             {new Date(item.createdAt || item.date).toLocaleDateString()}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -587,38 +698,64 @@ const MyItemsPage = () => {
                             {/* Resolved Items Tab */}
                             {activeTab === 'resolved' && (
                                 <div className="p-6">
-                                    <h2 className="text-2xl font-semibold text-[#212529] mb-6">Resolved Items</h2>
+                                    <h2 className={`text-2xl font-semibold mb-6 ${
+                                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                                    }`}>Resolved Items</h2>
 
                                     {loading ? (
                                         <div className="flex justify-center py-8">
                                             <Loading size="lg" color="#3D348B" />
                                         </div>
                                     ) : error ? (
-                                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-4">
-                                            <p className="text-red-700">{error}</p>
+                                        <div className={`border rounded-lg p-4 my-4 ${
+                                            isDarkMode 
+                                                ? 'bg-red-900/30 border-red-600/30 text-red-300' 
+                                                : 'bg-red-50 border-red-200 text-red-700'
+                                        }`}>
+                                            <p>{error}</p>
                                         </div>
                                     ) : resolvedItems.length === 0 ? (
                                         <div className="text-center py-8">
-                                            <p className="text-gray-500">You don't have any resolved items yet.</p>
+                                            <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                                                You don't have any resolved items yet.
+                                            </p>
                                         </div>
                                     ) : (
                                         <div className="overflow-x-auto">
-                                            <table className="min-w-full divide-y divide-[#E9ECEF]">
-                                                <thead className="bg-[#F8F9FA]">
+                                            <table className={`min-w-full divide-y ${
+                                                isDarkMode ? 'divide-gray-700' : 'divide-[#E9ECEF]'
+                                            }`}>
+                                                <thead className={isDarkMode ? 'bg-gray-700' : 'bg-[#F8F9FA]'}>
                                                 <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Item</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Type</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Date</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Resolution Date</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-[#212529] uppercase tracking-wider">Actions</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Item</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Type</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Date</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Resolution Date</th>
+                                                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                                                        isDarkMode ? 'text-gray-300' : 'text-[#212529]'
+                                                    }`}>Actions</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody className="bg-white divide-y divide-[#E9ECEF]">
+                                                <tbody className={`divide-y ${
+                                                    isDarkMode 
+                                                        ? 'bg-gray-800 divide-gray-700' 
+                                                        : 'bg-white divide-[#E9ECEF]'
+                                                }`}>
                                                 {resolvedItems.map((item) => (
                                                     <tr key={item.itemId}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <div className="flex items-center">
-                                                                <div className="h-10 w-10 flex-shrink-0 bg-[#F8F9FA] rounded-full flex items-center justify-center">
+                                                                <div className={`h-10 w-10 flex-shrink-0 rounded-full flex items-center justify-center ${
+                                                                    isDarkMode ? 'bg-gray-700' : 'bg-[#F8F9FA]'
+                                                                }`}>
                                                                     {item.category === 'Keys' && <FaKey className="text-[#3D348B]" />}
                                                                     {item.category === 'Wallet' && <FaWallet className="text-[#3D348B]" />}
                                                                     {item.category === 'Electronics' && <FaMobileAlt className="text-[#3D348B]" />}
@@ -627,24 +764,37 @@ const MyItemsPage = () => {
                                                                         <div className="text-[#3D348B] font-bold">{item.category?.charAt(0)}</div>}
                                                                 </div>
                                                                 <div className="ml-4">
-                                                                    <div className="text-sm font-medium text-[#212529]">{item.title}</div>
-                                                                    <div className="text-sm text-gray-500">{item.category}</div>
+                                                                    <div className={`text-sm font-medium ${
+                                                                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                                                                    }`}>{item.title}</div>
+                                                                    <div className={`text-sm ${
+                                                                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                                                                    }`}>{item.category}</div>
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                                                            isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                                                        }`}>
                                                             {item.itemType === 'LOST' ? 'Lost' : 'Found'}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                                                            isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                                                        }`}>
                                                             {new Date(item.createdAt || item.date).toLocaleDateString()}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                                                            isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                                                        }`}>
                                                             {item.resolvedAt ? new Date(item.resolvedAt).toLocaleDateString() : 'N/A'}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                             <div className="flex space-x-3">
-                                                                <button className="text-[#3D348B] hover:text-[#2c2566]">
-                                                                    View
+                                                                <button 
+                                                                    className="text-[#3D348B] hover:text-[#2c2566] flex items-center"
+                                                                    onClick={() => handleViewItem(item.itemId)}
+                                                                >
+                                                                    <FaEye className="mr-1" /> View
                                                                 </button>
                                                                 <button 
                                                                     className="text-[#F35B04] hover:text-[#d95203]"
@@ -665,9 +815,13 @@ const MyItemsPage = () => {
                         </div>
 
                         {/* Notification Settings */}
-                        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div className={`rounded-xl shadow-lg overflow-hidden ${
+                            isDarkMode ? 'bg-gray-800' : 'bg-white'
+                        }`}>
                             <div className="p-6">
-                                <h2 className="text-2xl font-semibold text-[#212529] mb-6">Notification Settings</h2>
+                                <h2 className={`text-2xl font-semibold mb-6 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>Notification Settings</h2>
 
                                 <div className="space-y-4">
                                     <div className="flex items-start">
@@ -682,10 +836,12 @@ const MyItemsPage = () => {
                                             />
                                         </div>
                                         <div className="ml-3 text-sm">
-                                            <label htmlFor="email-notifications" className="font-medium text-[#212529]">
+                                            <label htmlFor="email-notifications" className={`font-medium ${
+                                                isDarkMode ? 'text-white' : 'text-[#212529]'
+                                            }`}>
                                                 Email Notifications
                                             </label>
-                                            <p className="text-gray-500">
+                                            <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
                                                 Receive email notifications when someone contacts you about your items.
                                             </p>
                                         </div>
@@ -703,10 +859,12 @@ const MyItemsPage = () => {
                                             />
                                         </div>
                                         <div className="ml-3 text-sm">
-                                            <label htmlFor="similar-items" className="font-medium text-[#212529]">
+                                            <label htmlFor="similar-items" className={`font-medium ${
+                                                isDarkMode ? 'text-white' : 'text-[#212529]'
+                                            }`}>
                                                 Similar Item Alerts
                                             </label>
-                                            <p className="text-gray-500">
+                                            <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
                                                 Get notified when similar items to your lost items are found.
                                             </p>
                                         </div>
@@ -724,10 +882,12 @@ const MyItemsPage = () => {
                                             />
                                         </div>
                                         <div className="ml-3 text-sm">
-                                            <label htmlFor="status-updates" className="font-medium text-[#212529]">
+                                            <label htmlFor="status-updates" className={`font-medium ${
+                                                isDarkMode ? 'text-white' : 'text-[#212529]'
+                                            }`}>
                                                 Status Updates
                                             </label>
-                                            <p className="text-gray-500">
+                                            <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
                                                 Receive notifications about the status of your items.
                                             </p>
                                         </div>

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCheckCircle, FaExclamationCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const toastVariants = {
   initial: { opacity: 0, y: 50 },
@@ -16,6 +17,8 @@ const Toast = ({
   duration = 4000, 
   onClose 
 }) => {
+  const { isDarkMode } = useTheme();
+
   // Set timeout to auto-dismiss the toast
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,31 +28,31 @@ const Toast = ({
     return () => clearTimeout(timer);
   }, [id, duration, onClose]);
 
-  // Determine toast color and icon based on type
+  // Determine toast color and icon based on type and theme
   const toastStyles = {
     success: {
-      bgColor: 'bg-green-100 border-green-300',
-      textColor: 'text-green-800',
+      bgColor: isDarkMode ? 'bg-green-900/80 border-green-700' : 'bg-green-100 border-green-300',
+      textColor: isDarkMode ? 'text-green-200' : 'text-green-800',
       icon: <FaCheckCircle className="text-green-500" />
     },
     info: {
-      bgColor: 'bg-blue-100 border-blue-300',
-      textColor: 'text-blue-800',
+      bgColor: isDarkMode ? 'bg-blue-900/80 border-blue-700' : 'bg-blue-100 border-blue-300',
+      textColor: isDarkMode ? 'text-blue-200' : 'text-blue-800',
       icon: <FaInfoCircle className="text-blue-500" />
     },
     warning: {
-      bgColor: 'bg-yellow-100 border-yellow-300',
-      textColor: 'text-yellow-800',
+      bgColor: isDarkMode ? 'bg-yellow-900/80 border-yellow-700' : 'bg-yellow-100 border-yellow-300',
+      textColor: isDarkMode ? 'text-yellow-200' : 'text-yellow-800',
       icon: <FaExclamationCircle className="text-yellow-500" />
     },
     error: {
-      bgColor: 'bg-red-100 border-red-300',
-      textColor: 'text-red-800',
+      bgColor: isDarkMode ? 'bg-red-900/80 border-red-700' : 'bg-red-100 border-red-300',
+      textColor: isDarkMode ? 'text-red-200' : 'text-red-800',
       icon: <FaTimesCircle className="text-red-500" />
     },
     primary: {
-      bgColor: 'bg-[#3D348B]/10 border-[#3D348B]/30',
-      textColor: 'text-[#3D348B]',
+      bgColor: isDarkMode ? 'bg-[#3D348B]/30 border-[#3D348B]/50' : 'bg-[#3D348B]/10 border-[#3D348B]/30',
+      textColor: isDarkMode ? 'text-blue-200' : 'text-[#3D348B]',
       icon: <FaInfoCircle className="text-[#3D348B]" />
     }
   };
@@ -59,7 +62,7 @@ const Toast = ({
   return (
     <AnimatePresence>
       <motion.div 
-        className={`max-w-md w-full ${style.bgColor} border rounded-lg shadow-lg px-4 py-3 flex items-start`}
+        className={`max-w-md w-full ${style.bgColor} border rounded-lg shadow-lg px-4 py-3 flex items-start backdrop-blur-sm`}
         variants={toastVariants}
         initial="initial"
         animate="animate"
@@ -74,7 +77,7 @@ const Toast = ({
         </div>
         <button 
           onClick={() => onClose(id)} 
-          className={`ml-4 flex-shrink-0 ${style.textColor} hover:text-gray-700 focus:outline-none`}
+          className={`ml-4 flex-shrink-0 ${style.textColor} hover:opacity-70 focus:outline-none transition-opacity`}
         >
           <span className="sr-only">Close</span>
           <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

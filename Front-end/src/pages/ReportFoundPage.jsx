@@ -4,11 +4,13 @@ import { FaCloudUploadAlt, FaTimes } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import ItemService from '../api/itemService';
 
 const ReportFoundPage = () => {
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
+    const { isDarkMode } = useTheme();
     const [formData, setFormData] = useState({
         title: '',
         category: '',
@@ -145,14 +147,20 @@ const ReportFoundPage = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#F8F9FA] to-white">
+        <div className={`min-h-screen flex flex-col ${
+            isDarkMode 
+                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+        }`}>
             <main className="flex-grow py-12">
                 <div className="container max-w-4xl mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                        className={`rounded-2xl shadow-lg overflow-hidden ${
+                            isDarkMode ? 'bg-gray-800' : 'bg-white'
+                        }`}
                     >
                         {/* Form Header */}
                         <div className="bg-[#00AFB9] py-6 px-8 text-white">
@@ -169,7 +177,11 @@ const ReportFoundPage = () => {
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-red-100 text-red-700 p-4 border-l-4 border-red-500"
+                                className={`p-4 border-l-4 ${
+                                    isDarkMode 
+                                        ? 'bg-red-900/30 border-red-600/30 text-red-300' 
+                                        : 'bg-red-100 text-red-700 border-red-500'
+                                }`}
                             >
                                 {error}
                             </motion.div>
@@ -178,7 +190,11 @@ const ReportFoundPage = () => {
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-green-100 text-green-700 p-4 border-l-4 border-green-500"
+                                className={`p-4 border-l-4 ${
+                                    isDarkMode 
+                                        ? 'bg-green-900/30 border-green-600/30 text-green-300' 
+                                        : 'bg-green-100 text-green-700 border-green-500'
+                                }`}
                             >
                                 {successMessage}
                             </motion.div>
@@ -188,7 +204,9 @@ const ReportFoundPage = () => {
                         <form onSubmit={handleSubmit} className="p-6 md:p-8">
                             {/* Item Title */}
                             <div className="mb-6">
-                                <label className="block text-[#212529] font-medium mb-2">
+                                <label className={`block font-medium mb-2 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>
                                     Item Title*
                                 </label>
                                 <input
@@ -197,21 +215,31 @@ const ReportFoundPage = () => {
                                     value={formData.title}
                                     onChange={handleChange}
                                     placeholder="Brief description of the found item"
-                                    className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20"
+                                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
+                                        isDarkMode 
+                                            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                            : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                    }`}
                                     required
                                 />
                             </div>
 
                             {/* Category */}
                             <div className="mb-6">
-                                <label className="block text-[#212529] font-medium mb-2">
+                                <label className={`block font-medium mb-2 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>
                                     Category*
                                 </label>
                                 <select
                                     name="category"
                                     value={formData.category}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM3NzgxODIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWRvd24iPjxwYXRoIGQ9Im03IDEwIDUgNSA1LTUiLz48L3N2Zz4=')] bg-no-repeat bg-[center_right_1rem]"
+                                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM3NzgxODIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWRvd24iPjxwYXRoIGQ9Im03IDEwIDUgNSA1LTUiLz48L3N2Zz4=')] bg-no-repeat bg-[center_right_1rem] ${
+                                        isDarkMode 
+                                            ? 'bg-gray-700 border-gray-600 text-white' 
+                                            : 'bg-white border-[#E9ECEF] text-gray-900'
+                                    }`}
                                     required
                                 >
                                     <option value="">Select a category</option>
@@ -228,7 +256,9 @@ const ReportFoundPage = () => {
 
                             {/* Description */}
                             <div className="mb-6">
-                                <label className="block text-[#212529] font-medium mb-2">
+                                <label className={`block font-medium mb-2 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>
                                     Detailed Description*
                                 </label>
                                 <textarea
@@ -237,7 +267,11 @@ const ReportFoundPage = () => {
                                     onChange={handleChange}
                                     rows="4"
                                     placeholder="Provide specific details about the item (brand, color, distinguishing features, etc.)"
-                                    className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20"
+                                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
+                                        isDarkMode 
+                                            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                            : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                    }`}
                                     required
                                 ></textarea>
                             </div>
@@ -245,7 +279,9 @@ const ReportFoundPage = () => {
                             {/* Location & Date */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
-                                    <label className="block text-[#212529] font-medium mb-2">
+                                    <label className={`block font-medium mb-2 ${
+                                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                                    }`}>
                                         Where did you find it?*
                                     </label>
                                     <input
@@ -254,12 +290,18 @@ const ReportFoundPage = () => {
                                         value={formData.location}
                                         onChange={handleChange}
                                         placeholder="Specific location (e.g., University Library)"
-                                        className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20"
+                                        className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
+                                            isDarkMode 
+                                                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                                : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                        }`}
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[#212529] font-medium mb-2">
+                                    <label className={`block font-medium mb-2 ${
+                                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                                    }`}>
                                         When did you find it?*
                                     </label>
                                     <input
@@ -267,7 +309,11 @@ const ReportFoundPage = () => {
                                         name="date"
                                         value={formData.date}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-lg border border-[#E9ECEF] focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20"
+                                        className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
+                                            isDarkMode 
+                                                ? 'bg-gray-700 border-gray-600 text-white' 
+                                                : 'bg-white border-[#E9ECEF] text-gray-900'
+                                        }`}
                                         required
                                     />
                                 </div>
@@ -275,10 +321,16 @@ const ReportFoundPage = () => {
 
                             {/* Images */}
                             <div className="mb-6">
-                                <label className="block text-[#212529] font-medium mb-2">
+                                <label className={`block font-medium mb-2 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>
                                     Upload Photos (Max 3)
                                 </label>
-                                <div className="border-2 border-dashed border-[#E9ECEF] rounded-lg p-6 text-center cursor-pointer hover:border-[#00AFB9] transition-colors">
+                                <div className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                                    isDarkMode 
+                                        ? 'border-gray-600 hover:border-[#00AFB9]' 
+                                        : 'border-[#E9ECEF] hover:border-[#00AFB9]'
+                                }`}>
                                     <input
                                         type="file"
                                         id="item-images"
@@ -290,10 +342,12 @@ const ReportFoundPage = () => {
                                     <label htmlFor="item-images" className="cursor-pointer">
                                         <div className="flex flex-col items-center justify-center space-y-2">
                                             <FaCloudUploadAlt className="text-3xl text-[#00AFB9]" />
-                                            <p className="text-gray-600">
+                                            <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
                                                 Click to upload or drag and drop
                                             </p>
-                                            <p className="text-sm text-gray-500">
+                                            <p className={`text-sm ${
+                                                isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                                            }`}>
                                                 Upload clear photos of the item (max 3 photos, 5MB each)
                                             </p>
                                         </div>
@@ -302,7 +356,9 @@ const ReportFoundPage = () => {
                                 {formData.images.length > 0 && (
                                     <div className="flex flex-wrap gap-4 mt-4">
                                         {formData.images.map((img, index) => (
-                                            <div key={index} className="relative w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
+                                            <div key={index} className={`relative w-24 h-24 rounded-lg overflow-hidden border ${
+                                                isDarkMode ? 'border-gray-600' : 'border-gray-200'
+                                            }`}>
                                                 <img
                                                     src={img.preview}
                                                     alt={`Preview ${index + 1}`}
@@ -323,7 +379,9 @@ const ReportFoundPage = () => {
 
                             {/* Item Status */}
                             <div className="mb-6">
-                                <label className="block text-[#212529] font-medium mb-2">
+                                <label className={`block font-medium mb-2 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>
                                     Current Item Status*
                                 </label>
                                 <div className="space-y-3">
@@ -336,7 +394,7 @@ const ReportFoundPage = () => {
                                             onChange={handleChange}
                                             className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
                                         />
-                                        <span>I'm keeping it safe</span>
+                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>I'm keeping it safe</span>
                                     </label>
                                     <label className="flex items-center space-x-3">
                                         <input
@@ -347,14 +405,16 @@ const ReportFoundPage = () => {
                                             onChange={handleChange}
                                             className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
                                         />
-                                        <span>Turned in to lost & found office</span>
+                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Turned in to lost & found office</span>
                                     </label>
                                 </div>
                             </div>
 
                             {/* Contact Preference */}
                             <div className="mb-6">
-                                <label className="block text-[#212529] font-medium mb-2">
+                                <label className={`block font-medium mb-2 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>
                                     Contact Preference*
                                 </label>
                                 <div className="space-y-3">
@@ -367,7 +427,7 @@ const ReportFoundPage = () => {
                                             onChange={handleChange}
                                             className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
                                         />
-                                        <span>Email</span>
+                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Email</span>
                                     </label>
                                     <label className="flex items-center space-x-3">
                                         <input
@@ -378,7 +438,7 @@ const ReportFoundPage = () => {
                                             onChange={handleChange}
                                             className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
                                         />
-                                        <span>Phone</span>
+                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Phone</span>
                                     </label>
                                     <label className="flex items-center space-x-3">
                                         <input
@@ -389,7 +449,7 @@ const ReportFoundPage = () => {
                                             onChange={handleChange}
                                             className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
                                         />
-                                        <span>Both</span>
+                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Both</span>
                                     </label>
                                 </div>
                             </div>
@@ -405,7 +465,9 @@ const ReportFoundPage = () => {
                                         className="mt-1 h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9] rounded"
                                         required
                                     />
-                                    <span className="ml-3 text-sm text-gray-600">
+                                    <span className={`ml-3 text-sm ${
+                                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                                    }`}>
                     I confirm that all information provided is accurate and I agree to the{' '}
                                         <a href="#" className="text-[#00AFB9] hover:underline">Terms of Service</a> and{' '}
                                         <a href="#" className="text-[#00AFB9] hover:underline">Privacy Policy</a>.
@@ -419,7 +481,9 @@ const ReportFoundPage = () => {
                                     type="button"
                                     whileHover={{ x: -3 }}
                                     onClick={() => navigate('/dashboard')}
-                                    className="px-6 py-3 bg-white border-2 border-[#F35B04] text-[#F35B04] rounded-lg font-medium hover:bg-[#F35B04]/10 transition-colors"
+                                    className={`px-6 py-3 border-2 border-[#F35B04] text-[#F35B04] rounded-lg font-medium hover:bg-[#F35B04]/10 transition-colors ${
+                                        isDarkMode ? 'bg-gray-800' : 'bg-white'
+                                    }`}
                                 >
                                     Cancel
                                 </motion.button>

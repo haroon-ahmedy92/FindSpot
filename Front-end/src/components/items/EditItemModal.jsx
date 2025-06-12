@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaSave, FaSpinner } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
+  const { isDarkMode } = useTheme();
   const [formData, setFormData] = useState({
     title: '',
     location: '',
@@ -141,7 +143,9 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
         
         {/* Modal content - solid, not blurred */}
         <motion.div
-          className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto z-10"
+          className={`rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto z-10 ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
@@ -149,10 +153,16 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
         >
           <div className="p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">Edit Item</h2>
+              <h2 className={`text-2xl font-bold ${
+                isDarkMode ? 'text-white' : 'text-gray-800'
+              }`}>Edit Item</h2>
               <button
                 onClick={onClose}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
+                className={`transition-colors ${
+                  isDarkMode 
+                    ? 'text-gray-400 hover:text-gray-200' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
                 disabled={loading}
               >
                 <FaTimes size={20} />
@@ -161,7 +171,9 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className={`block text-sm font-medium mb-1 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>
                   Title *
                 </label>
                 <input
@@ -169,8 +181,14 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.title ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                    isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400'
+                      : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500'
+                  } ${
+                    errors.title 
+                      ? 'border-red-500' 
+                      : isDarkMode ? 'border-gray-600' : 'border-gray-300'
                   }`}
                   disabled={loading}
                 />
@@ -178,7 +196,9 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className={`block text-sm font-medium mb-1 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>
                   Location *
                 </label>
                 <input
@@ -186,8 +206,14 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.location ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                    isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400'
+                      : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500'
+                  } ${
+                    errors.location 
+                      ? 'border-red-500' 
+                      : isDarkMode ? 'border-gray-600' : 'border-gray-300'
                   }`}
                   disabled={loading}
                 />
@@ -195,15 +221,23 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className={`block text-sm font-medium mb-1 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>
                   Category *
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.category ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                    isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400'
+                      : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500'
+                  } ${
+                    errors.category 
+                      ? 'border-red-500' 
+                      : isDarkMode ? 'border-gray-600' : 'border-gray-300'
                   }`}
                   disabled={loading}
                 >
@@ -216,7 +250,9 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className={`block text-sm font-medium mb-1 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>
                   Description
                 </label>
                 <textarea
@@ -224,13 +260,19 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                    isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400'
+                      : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className={`block text-sm font-medium mb-1 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>
                   Additional Details (Color, Brand, etc.)
                 </label>
                 <input
@@ -239,7 +281,11 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
                   value={formData.additionalDetails.color || ''}
                   onChange={handleInputChange}
                   placeholder="Color"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 mb-2 transition-colors ${
+                    isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-blue-400 focus:border-blue-400'
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                   disabled={loading}
                 />
                 <input
@@ -248,14 +294,20 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
                   value={formData.additionalDetails.brand || ''}
                   onChange={handleInputChange}
                   placeholder="Brand"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                    isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-blue-400 focus:border-blue-400'
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                   disabled={loading}
                 />
               </div>
 
               {errors.submit && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                  <p className="text-red-700 text-sm">{errors.submit}</p>
+                <div className={`border rounded-lg p-3 ${
+                  isDarkMode ? 'bg-red-900/20 border-red-800' : 'bg-red-50 border-red-200'
+                }`}>
+                  <p className="text-red-500 text-sm">{errors.submit}</p>
                 </div>
               )}
 
@@ -263,7 +315,11 @@ const EditItemModal = ({ item, isOpen, onClose, onSave }) => {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className={`flex-1 px-4 py-2 border rounded-lg transition-colors ${
+                    isDarkMode
+                      ? 'border-gray-600 text-gray-200 hover:bg-gray-700'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
                   disabled={loading}
                 >
                   Cancel

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaSearch, FaBullhorn, FaHandshake, FaBell } from 'react-icons/fa';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const steps = [
     {
@@ -30,8 +31,10 @@ const steps = [
 ];
 
 const HowItWorks = () => {
+    const { isDarkMode } = useTheme();
+    
     return (
-        <section className="py-20 bg-white">
+        <section className={`py-20 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
             <div className="container max-w-7xl mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -40,10 +43,14 @@ const HowItWorks = () => {
                     transition={{ duration: 0.5 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-[#212529] mb-4">
+                    <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${
+                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                    }`}>
                         How <span className="text-[#F35B04]">FindSpot</span> Works
                     </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto">
+                    <p className={`max-w-2xl mx-auto ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
                         Our simple 4-step process makes it easy to report and recover lost items.
                     </p>
                 </motion.div>
@@ -64,8 +71,12 @@ const HowItWorks = () => {
                             >
                                 <step.icon className="w-8 h-8" />
                             </div>
-                            <h3 className="text-xl font-bold text-[#212529] mb-2">{step.title}</h3>
-                            <p className="text-gray-600">{step.description}</p>
+                            <h3 className={`text-xl font-bold mb-2 ${
+                                isDarkMode ? 'text-white' : 'text-[#212529]'
+                            }`}>{step.title}</h3>
+                            <p className={`${
+                                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                            }`}>{step.description}</p>
 
                             {/* Step number */}
                             <div

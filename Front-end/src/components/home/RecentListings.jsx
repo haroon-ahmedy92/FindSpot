@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import ItemCard from '../ui/ItemCard';
 import ItemService from '../../api/itemService';
 import { FaChevronLeft, FaChevronRight, FaSpinner } from 'react-icons/fa';
@@ -13,6 +14,7 @@ const RecentListings = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { isDarkMode } = useTheme();
 
   // Fetch items when tab changes or component mounts
   useEffect(() => {
@@ -77,11 +79,15 @@ const RecentListings = () => {
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className={`py-20 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-white'
+    }`}>
       <div className="container max-w-7xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-12">
           <motion.h2
-            className="text-3xl md:text-4xl font-bold text-[#212529] mb-4 md:mb-0"
+            className={`text-3xl md:text-4xl font-bold mb-4 md:mb-0 ${
+              isDarkMode ? 'text-white' : 'text-[#212529]'
+            }`}
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -91,7 +97,9 @@ const RecentListings = () => {
           </motion.h2>
 
           <motion.div
-            className="flex p-1 bg-[#F8F9FA] rounded-full"
+            className={`flex p-1 rounded-full ${
+              isDarkMode ? 'bg-gray-800' : 'bg-[#F8F9FA]'
+            }`}
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -101,7 +109,9 @@ const RecentListings = () => {
               className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
                 activeTab === 'lost-items'
                   ? 'bg-[#F35B04] text-white shadow-md'
-                  : 'text-gray-600 hover:text-[#F35B04]'
+                  : isDarkMode 
+                    ? 'text-gray-300 hover:text-[#F35B04]' 
+                    : 'text-gray-600 hover:text-[#F35B04]'
               }`}
               onClick={() => handleTabClick('lost-items')}
             >
@@ -111,7 +121,9 @@ const RecentListings = () => {
               className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
                 activeTab === 'found-items'
                   ? 'bg-[#00AFB9] text-white shadow-md'
-                  : 'text-gray-600 hover:text-[#00AFB9]'
+                  : isDarkMode 
+                    ? 'text-gray-300 hover:text-[#00AFB9]' 
+                    : 'text-gray-600 hover:text-[#00AFB9]'
               }`}
               onClick={() => handleTabClick('found-items')}
             >
@@ -122,7 +134,11 @@ const RecentListings = () => {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-6 border border-red-200 text-center">
+          <div className={`p-4 rounded-lg mb-6 border text-center ${
+            isDarkMode 
+              ? 'bg-red-900/30 text-red-300 border-red-600/30' 
+              : 'bg-red-100 text-red-700 border-red-200'
+          }`}>
             {error}
           </div>
         )}
@@ -131,7 +147,9 @@ const RecentListings = () => {
         {loading && (
           <div className="flex justify-center items-center py-12">
             <FaSpinner className="animate-spin text-3xl text-[#F35B04]" />
-            <span className="ml-3 text-lg text-gray-600">Loading recent items...</span>
+            <span className={`ml-3 text-lg ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            }`}>Loading recent items...</span>
           </div>
         )}
 
@@ -152,9 +170,13 @@ const RecentListings = () => {
                   </motion.div>
                 ))}
                 {items.length === 0 && !loading && (
-                  <div className="col-span-full text-center text-[#212529]/60 py-10">
-                    <p className="text-xl mb-2">No recent {activeTab === 'lost-items' ? 'lost' : 'found'} items</p>
-                    <p className="text-gray-500">
+                  <div className="col-span-full text-center py-10">
+                    <p className={`text-xl mb-2 ${
+                      isDarkMode ? 'text-gray-300' : 'text-[#212529]/60'
+                    }`}>No recent {activeTab === 'lost-items' ? 'lost' : 'found'} items</p>
+                    <p className={`${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
                       Be the first to report a {activeTab === 'lost-items' ? 'lost' : 'found'} item!
                     </p>
                   </div>
@@ -162,8 +184,12 @@ const RecentListings = () => {
               </motion.div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-xl text-[#212529] mb-4">Log in to view recent listings</p>
-                <p className="text-gray-600 mb-6">Join our community to see the latest lost and found items</p>
+                <p className={`text-xl mb-4 ${
+                  isDarkMode ? 'text-white' : 'text-[#212529]'
+                }`}>Log in to view recent listings</p>
+                <p className={`mb-6 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                }`}>Join our community to see the latest lost and found items</p>
                 <button 
                   onClick={() => navigate('/login')}
                   className="bg-[#F35B04] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#d95203] transition-colors"
@@ -186,7 +212,9 @@ const RecentListings = () => {
           >
             <button
               onClick={() => navigate('/listings/all')}
-              className="flex items-center px-6 py-3 bg-white border-2 border-[#F35B04] text-[#F35B04] rounded-full font-medium hover:bg-[#F35B04] hover:text-white transition-all duration-300"
+              className={`flex items-center px-6 py-3 border-2 border-[#F35B04] text-[#F35B04] rounded-full font-medium hover:bg-[#F35B04] hover:text-white transition-all duration-300 ${
+                isDarkMode ? 'bg-gray-900 hover:bg-[#F35B04]' : 'bg-white hover:bg-[#F35B04]'
+              }`}
             >
               See All Items
               <FaChevronRight className="ml-2" />

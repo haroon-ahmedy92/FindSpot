@@ -1,6 +1,12 @@
 import React from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 
-const Loading = ({ size = 'md', color = '#3D348B', className = '' }) => {
+const Loading = ({ size = 'md', color, className = '' }) => {
+  const { isDarkMode } = useTheme();
+  
+  // Default color based on theme if not provided
+  const defaultColor = color || (isDarkMode ? '#00AFB9' : '#3D348B');
+  
   // Size variants
   const sizeClasses = {
     'xs': 'w-4 h-4 border-2',
@@ -16,7 +22,7 @@ const Loading = ({ size = 'md', color = '#3D348B', className = '' }) => {
     <div className={`${className} flex items-center justify-center`}>
       <div
         className={`${sizeClass} rounded-full border-t-transparent animate-spin`}
-        style={{ borderColor: `${color}33`, borderTopColor: color }}
+        style={{ borderColor: `${defaultColor}33`, borderTopColor: defaultColor }}
         role="status"
         aria-label="loading"
       >

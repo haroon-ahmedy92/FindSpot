@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import UserService from '../../api/userService';
 
 const ProfileMenu = () => {
@@ -10,6 +11,7 @@ const ProfileMenu = () => {
   const ref = useRef();
   const navigate = useNavigate();
   const { logout, isAuthenticated } = useAuth();
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -64,36 +66,60 @@ const ProfileMenu = () => {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(prev => !prev)}
-        className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100"
+        className={`flex items-center space-x-2 p-2 rounded-full transition-colors duration-200 ${
+          isDarkMode 
+            ? 'hover:bg-gray-700' 
+            : 'hover:bg-gray-100'
+        }`}
       >
-        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+          isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+        }`}>
           {loading ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
           ) : (
             <span className="text-white font-medium">{user.initials}</span>
           )}
         </div>
-        <span className="text-gray-700 font-medium">
+        <span className={`font-medium ${
+          isDarkMode ? 'text-gray-200' : 'text-gray-700'
+        }`}>
           {loading ? 'Loading...' : user.name}
         </span>
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+        <div className={`absolute right-0 mt-2 w-48 shadow-lg rounded-lg overflow-hidden z-50 border ${
+          isDarkMode 
+            ? 'bg-gray-800 border-gray-600' 
+            : 'bg-white border-gray-200'
+        }`}>
           <button
             onClick={() => { navigate('/dashboard/profile'); setOpen(false); }}
-            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+            className={`w-full text-left px-4 py-2 transition-colors duration-200 ${
+              isDarkMode 
+                ? 'text-gray-200 hover:bg-gray-700' 
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
           >
             Profile
           </button>
           <button
             onClick={() => { navigate('/dashboard/settings'); setOpen(false); }}
-            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+            className={`w-full text-left px-4 py-2 transition-colors duration-200 ${
+              isDarkMode 
+                ? 'text-gray-200 hover:bg-gray-700' 
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
           >
             Settings
           </button>
           <button
             onClick={handleLogout}
-            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+            className={`w-full text-left px-4 py-2 transition-colors duration-200 ${
+              isDarkMode 
+                ? 'text-gray-200 hover:bg-gray-700' 
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
           >
             Logout
           </button>

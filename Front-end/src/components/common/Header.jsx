@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaSearchLocation, FaBars, FaTimes } from 'react-icons/fa';
+import ThemeToggle from '../ui/ThemeToggle';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,7 +37,7 @@ const Header = () => {
     <header 
       className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
         scrolled 
-          ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/20 shadow-sm' 
+          ? `${isDarkMode ? 'bg-gray-900/80' : 'bg-white/80'} backdrop-blur-xl border-b ${isDarkMode ? 'border-gray-700/20' : 'border-gray-200/20'} shadow-sm` 
           : 'bg-transparent'
       }`}
     >
@@ -53,7 +56,7 @@ const Header = () => {
             </div>
             <span 
               className={`font-bold text-2xl tracking-tight transition-all duration-300 ${
-                scrolled ? 'text-gray-900' : 'text-gray-900'
+                scrolled ? (isDarkMode ? 'text-white' : 'text-gray-900') : (isDarkMode ? 'text-white' : 'text-gray-900')
               }`}
             >
               FindSpot
@@ -66,8 +69,10 @@ const Header = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 hover:bg-gray-100/80 hover:backdrop-blur-sm ${
-                  scrolled ? 'text-gray-700 hover:text-gray-900' : 'text-gray-700 hover:text-gray-900'
+                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                  isDarkMode ? 'hover:bg-gray-800/80' : 'hover:bg-gray-100/80'
+                } hover:backdrop-blur-sm ${
+                  scrolled ? (isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900') : (isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900')
                 }`}
                 onClick={closeMobileMenu}
               >
@@ -77,14 +82,15 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons and Theme Toggle */}
           <div className="hidden md:flex items-center space-x-3">
+            <ThemeToggle />
             <Link
               to="/login"
               className={`px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 active:scale-95 ${
                 scrolled 
-                  ? 'text-gray-700 hover:text-gray-900 hover:bg-gray-100/80' 
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100/80'
+                  ? (isDarkMode ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100/80')
+                  : (isDarkMode ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100/80')
               }`}
             >
               Sign In
@@ -98,22 +104,27 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2 rounded-full transition-all duration-200 hover:bg-gray-100/80 active:scale-95"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-          >
-            <div className="relative w-6 h-6">
-              <span className={`absolute inset-0 transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-0' : ''}`}>
-                {isMobileMenuOpen ? (
-                  <FaTimes className="w-6 h-6 text-gray-700" />
-                ) : (
-                  <FaBars className="w-6 h-6 text-gray-700" />
-                )}
-              </span>
-            </div>
-          </button>
+          {/* Mobile Menu Button and Theme Toggle */}
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
+            <button 
+              className={`p-2 rounded-full transition-all duration-200 ${
+                isDarkMode ? 'hover:bg-gray-800/80' : 'hover:bg-gray-100/80'
+              } active:scale-95`}
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+            >
+              <div className="relative w-6 h-6">
+                <span className={`absolute inset-0 transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-0' : ''}`}>
+                  {isMobileMenuOpen ? (
+                    <FaTimes className={`w-6 h-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} />
+                  ) : (
+                    <FaBars className={`w-6 h-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} />
+                  )}
+                </span>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -123,13 +134,17 @@ const Header = () => {
           ? 'opacity-100 translate-y-0' 
           : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}>
-        <div className="bg-white/95 backdrop-blur-xl border-t border-gray-200/20 shadow-lg">
+        <div className={`${isDarkMode ? 'bg-gray-900/95' : 'bg-white/95'} backdrop-blur-xl border-t ${isDarkMode ? 'border-gray-700/20' : 'border-gray-200/20'} shadow-lg`}>
           <nav className="px-6 py-6 space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={`mobile-${link.path}`}
                 to={link.path}
-                className="block px-4 py-3 text-base font-medium text-gray-700 rounded-xl transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900 active:scale-95"
+                className={`block px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 active:scale-95 ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:bg-gray-800/80 hover:text-white' 
+                    : 'text-gray-700 hover:bg-gray-100/80 hover:text-gray-900'
+                }`}
                 onClick={closeMobileMenu}
               >
                 {link.name}
@@ -137,10 +152,14 @@ const Header = () => {
             ))}
             
             {/* Mobile Auth Buttons */}
-            <div className="pt-4 space-y-3 border-t border-gray-200/30">
+            <div className={`pt-4 space-y-3 border-t ${isDarkMode ? 'border-gray-700/30' : 'border-gray-200/30'}`}>
               <Link
                 to="/login"
-                className="block px-4 py-3 text-base font-medium text-gray-700 rounded-xl transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900 active:scale-95"
+                className={`block px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 active:scale-95 ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:bg-gray-800/80 hover:text-white' 
+                    : 'text-gray-700 hover:bg-gray-100/80 hover:text-gray-900'
+                }`}
                 onClick={closeMobileMenu}
               >
                 Sign In

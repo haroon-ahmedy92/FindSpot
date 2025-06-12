@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaQuoteLeft } from 'react-icons/fa';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const testimonials = [
     {
@@ -27,8 +28,14 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => {
+    const { isDarkMode } = useTheme();
+    
     return (
-        <section className="py-20 bg-gradient-to-b from-white to-[#F8F9FA]">
+        <section className={`py-20 ${
+            isDarkMode 
+                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                : 'bg-gradient-to-b from-white to-[#F8F9FA]'
+        }`}>
             <div className="container max-w-7xl mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -37,10 +44,14 @@ const TestimonialsSection = () => {
                     transition={{ duration: 0.5 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-[#212529] mb-4">
+                    <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${
+                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                    }`}>
                         What Our <span className="text-[#F35B04]">Community</span> Says
                     </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto">
+                    <p className={`max-w-2xl mx-auto ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
                         Hear from people who have used FindSpot to recover lost items or help others.
                     </p>
                 </motion.div>
@@ -53,20 +64,30 @@ const TestimonialsSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                            className={`p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 ${
+                                isDarkMode 
+                                    ? 'bg-gray-800 hover:bg-gray-750' 
+                                    : 'bg-white'
+                            }`}
                         >
                             <div className="flex flex-col h-full">
                                 <FaQuoteLeft className="text-[#3D348B] text-3xl mb-6 opacity-30" />
-                                <p className="text-gray-600 mb-6 flex-grow">{testimonial.content}</p>
+                                <p className={`mb-6 flex-grow ${
+                                    isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                                }`}>{testimonial.content}</p>
                                 <div className="flex items-center">
                                     <img
                                         src={testimonial.avatar}
                                         alt={testimonial.name}
-                                        className="w-12 h-12 rounded-full mr-4 object-cover border-2 border-[#F35B04]"
+                                        className="w-12 h-12 rounded-full mr-4"
                                     />
                                     <div>
-                                        <h4 className="font-bold text-[#212529]">{testimonial.name}</h4>
-                                        <p className="text-sm text-gray-500">{testimonial.role}</p>
+                                        <h4 className={`font-bold ${
+                                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                                        }`}>{testimonial.name}</h4>
+                                        <p className={`text-sm ${
+                                            isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                                        }`}>{testimonial.role}</p>
                                     </div>
                                 </div>
                             </div>

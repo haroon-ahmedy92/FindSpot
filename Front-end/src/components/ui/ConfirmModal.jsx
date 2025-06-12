@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaExclamationTriangle } from 'react-icons/fa';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const ConfirmModal = ({
   isOpen,
@@ -12,6 +13,8 @@ const ConfirmModal = ({
   cancelText = 'Cancel',
   type = 'danger' // 'danger', 'warning', 'info'
 }) => {
+  const { isDarkMode } = useTheme();
+
   if (!isOpen) return null;
 
   const modalVariants = {
@@ -72,7 +75,9 @@ const ConfirmModal = ({
         
         {/* Modal content - solid, not blurred */}
         <motion.div
-          className="bg-white rounded-lg shadow-xl max-w-md w-full z-10 overflow-hidden"
+          className={`rounded-lg shadow-xl max-w-md w-full z-10 overflow-hidden ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}
           variants={modalVariants}
           initial="hidden"
           animate="visible"
@@ -90,13 +95,19 @@ const ConfirmModal = ({
           
           {/* Body */}
           <div className="px-6 py-4">
-            <p className="text-gray-700">{message}</p>
+            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{message}</p>
           </div>
           
           {/* Footer */}
-          <div className="px-6 py-3 bg-gray-50 flex justify-end space-x-3">
+          <div className={`px-6 py-3 flex justify-end space-x-3 ${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+          }`}>
             <button
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+              className={`px-4 py-2 rounded transition-colors ${
+                isDarkMode 
+                  ? 'bg-gray-600 text-gray-200 hover:bg-gray-500' 
+                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+              }`}
               onClick={onClose}
             >
               {cancelText}

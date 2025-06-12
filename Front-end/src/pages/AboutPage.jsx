@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaUsers, FaHandshake, FaShieldAlt, FaMapMarkedAlt } from 'react-icons/fa';
+import { useTheme } from '../contexts/ThemeContext';
 
 const AboutPage = () => {
+    const { isDarkMode } = useTheme();
+    
     const features = [
         {
             icon: FaUsers,
@@ -52,7 +55,11 @@ const AboutPage = () => {
     ];
 
     return (
-        <div className="bg-gradient-to-b from-[#F8F9FA] to-white">
+        <div className={`${
+            isDarkMode 
+                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+        }`}>
             {/* Hero Section */}
             <section className="py-20 bg-gradient-to-b from-[#3D348B] to-[#F35B04] text-white">
                 <div className="container max-w-7xl mx-auto px-4 text-center">
@@ -70,7 +77,7 @@ const AboutPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-xl max-w-3xl mx-auto"
+                        className="text-xl max-w-3xl mx-auto opacity-90"
                     >
                         Our mission is to create a trusted community platform that helps reunite lost items with their owners in Dodoma.
                     </motion.p>
@@ -88,16 +95,22 @@ const AboutPage = () => {
                             transition={{ duration: 0.5 }}
                             className="lg:w-1/2"
                         >
-                            <h2 className="text-3xl md:text-4xl font-bold text-[#212529] mb-6">
+                            <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${
+                                isDarkMode ? 'text-white' : 'text-[#212529]'
+                            }`}>
                                 Our <span className="text-[#F35B04]">Story</span>
                             </h2>
-                            <p className="text-gray-600 mb-4">
+                            <p className={`mb-4 ${
+                                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                            }`}>
                                 FindSpot was born out of a personal experience. After losing an important bag on campus and struggling to find it through traditional methods, our founder realized there had to be a better way.
                             </p>
-                            <p className="text-gray-600 mb-4">
+                            <p className={`mb-4 ${
+                                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                            }`}>
                                 In 2022, we launched FindSpot as a small university project focused on helping students reconnect with lost items. The positive response was overwhelming, and we quickly expanded to serve the entire Dodoma community.
                             </p>
-                            <p className="text-gray-600">
+                            <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
                                 Today, FindSpot has become the go-to platform for lost and found items in Dodoma, with thousands of successful reunions and a growing community of users who believe in helping one another.
                             </p>
                         </motion.div>
@@ -106,7 +119,9 @@ const AboutPage = () => {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.2 }}
-                            className="lg:w-1/2 bg-white p-8 rounded-2xl shadow-lg"
+                            className={`lg:w-1/2 p-8 rounded-2xl shadow-lg ${
+                                isDarkMode ? 'bg-gray-800' : 'bg-white'
+                            }`}
                         >
                             <img
                                 src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
@@ -119,7 +134,9 @@ const AboutPage = () => {
             </section>
 
             {/* Features */}
-            <section className="py-20 bg-[#F8F9FA]">
+            <section className={`py-20 ${
+                isDarkMode ? 'bg-gray-900/50' : 'bg-[#F8F9FA]'
+            }`}>
                 <div className="container max-w-7xl mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -128,10 +145,14 @@ const AboutPage = () => {
                         transition={{ duration: 0.5 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-[#212529] mb-4">
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${
+                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                        }`}>
                             Why <span className="text-[#F35B04]">Choose</span> FindSpot
                         </h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">
+                        <p className={`max-w-2xl mx-auto ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                        }`}>
                             We're different from other lost and found platforms. Here's why our community loves us.
                         </p>
                     </motion.div>
@@ -144,7 +165,9 @@ const AboutPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
+                                className={`p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow ${
+                                    isDarkMode ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white'
+                                }`}
                             >
                                 <div
                                     className="w-16 h-16 rounded-2xl mb-6 flex items-center justify-center text-white"
@@ -152,10 +175,14 @@ const AboutPage = () => {
                                 >
                                     <feature.icon className="text-2xl" />
                                 </div>
-                                <h3 className="text-xl font-bold text-[#212529] mb-3">
+                                <h3 className={`text-xl font-bold mb-3 ${
+                                    isDarkMode ? 'text-white' : 'text-[#212529]'
+                                }`}>
                                     {feature.title}
                                 </h3>
-                                <p className="text-gray-600">{feature.description}</p>
+                                <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                                    {feature.description}
+                                </p>
                             </motion.div>
                         ))}
                     </div>
@@ -172,10 +199,14 @@ const AboutPage = () => {
                         transition={{ duration: 0.5 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-[#212529] mb-4">
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${
+                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                        }`}>
                             Meet Our <span className="text-[#F35B04]">Team</span>
                         </h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">
+                        <p className={`max-w-2xl mx-auto ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                        }`}>
                             The passionate people working to make Dodoma a better place, one found item at a time.
                         </p>
                     </motion.div>
@@ -188,7 +219,9 @@ const AboutPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="bg-white rounded-2xl shadow-sm hover:shadow-md overflow-hidden transition-shadow"
+                                className={`rounded-2xl shadow-sm hover:shadow-md overflow-hidden transition-shadow ${
+                                    isDarkMode ? 'bg-gray-800' : 'bg-white'
+                                }`}
                             >
                                 <div className="h-64 overflow-hidden">
                                     <img
@@ -198,13 +231,17 @@ const AboutPage = () => {
                                     />
                                 </div>
                                 <div className="p-6">
-                                    <h3 className="text-xl font-bold text-[#212529] mb-1">
+                                    <h3 className={`text-xl font-bold mb-1 ${
+                                        isDarkMode ? 'text-white' : 'text-[#212529]'
+                                    }`}>
                                         {member.name}
                                     </h3>
                                     <p className="text-[#F35B04] font-medium mb-3">
                                         {member.role}
                                     </p>
-                                    <p className="text-gray-600">{member.bio}</p>
+                                    <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                                        {member.bio}
+                                    </p>
                                 </div>
                             </motion.div>
                         ))}
@@ -229,7 +266,7 @@ const AboutPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-xl max-w-2xl mx-auto mb-8"
+                        className="text-xl max-w-2xl mx-auto mb-8 opacity-90"
                     >
                         Whether you've lost something or found an item, you can make a difference today.
                     </motion.p>

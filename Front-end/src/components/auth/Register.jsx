@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock, FaEnvelope, FaPhone, FaCheck } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Register = () => {
     const navigate = useNavigate();
     const { register, isLoading, error, clearError } = useAuth();
+    const { isDarkMode } = useTheme();
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -96,12 +98,18 @@ const Register = () => {
     const displayError = error || localError;
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#F8F9FA] to-white p-4">
+        <div className={`min-h-screen flex items-center justify-center p-4 ${
+            isDarkMode 
+                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+        }`}>
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col md:flex-row"
+                className={`w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-white'
+                }`}
             >
                 {/* Welcome Section */}
                 <div className="hidden md:block md:w-1/2 bg-gradient-to-br from-[#3D348B] to-[#F35B04] p-10 text-white">
@@ -133,12 +141,16 @@ const Register = () => {
                 </div>
 
                 {/* Form Section */}
-                <div className="w-full md:w-1/2 bg-white p-8 md:p-12">
+                <div className={`w-full md:w-1/2 p-8 md:p-12 ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-white'
+                }`}>
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-3xl font-bold text-[#212529]">Create Account</h2>
+                        <h2 className={`text-3xl font-bold ${
+                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                        }`}>Create Account</h2>
                         <div className="flex">
-                            <div className={`w-3 h-3 rounded-full mx-1 ${currentStep >= 1 ? 'bg-[#00AFB9]' : 'bg-gray-300'}`}></div>
-                            <div className={`w-3 h-3 rounded-full mx-1 ${currentStep >= 2 ? 'bg-[#00AFB9]' : 'bg-gray-300'}`}></div>
+                            <div className={`w-3 h-3 rounded-full mx-1 ${currentStep >= 1 ? 'bg-[#00AFB9]' : (isDarkMode ? 'bg-gray-600' : 'bg-gray-300')}`}></div>
+                            <div className={`w-3 h-3 rounded-full mx-1 ${currentStep >= 2 ? 'bg-[#00AFB9]' : (isDarkMode ? 'bg-gray-600' : 'bg-gray-300')}`}></div>
                         </div>
                     </div>
                     
@@ -148,7 +160,11 @@ const Register = () => {
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                className="bg-red-100 text-red-700 p-3 rounded-lg mb-4"
+                                className={`p-3 rounded-lg mb-4 ${
+                                    isDarkMode 
+                                        ? 'bg-red-900/50 text-red-300 border border-red-700/50' 
+                                        : 'bg-red-100 text-red-700'
+                                }`}
                             >
                                 {displayError}
                             </motion.div>
@@ -158,151 +174,190 @@ const Register = () => {
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                className="bg-green-100 text-green-700 p-3 rounded-lg mb-4"
+                                className={`p-3 rounded-lg mb-4 ${
+                                    isDarkMode 
+                                        ? 'bg-green-900/50 text-green-300 border border-green-700/50' 
+                                        : 'bg-green-100 text-green-700'
+                                }`}
                             >
                                 {successMessage}
                             </motion.div>
                         )}
                     </AnimatePresence>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={currentStep === 1 ? (e) => { e.preventDefault(); nextStep(); } : handleSubmit}>
                         <AnimatePresence mode="wait">
                             {currentStep === 1 && (
                                 <motion.div
                                     key="step1"
-                                    initial={{ opacity: 0, x: 20 }}
+                                    initial={{ opacity: 0, x: 50 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.4 }}
+                                    exit={{ opacity: 0, x: -50 }}
+                                    className="space-y-4"
                                 >
                                     <div className="relative">
-                                        <FaUser className="absolute top-1/2 left-4 transform -translate-y-1/2 text-[#3D348B]" />
+                                        <FaUser className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                                            isDarkMode ? 'text-gray-400' : 'text-gray-400'
+                                        }`} />
                                         <input
                                             type="text"
                                             name="fullName"
                                             placeholder="Full Name"
                                             value={formData.fullName}
                                             onChange={handleChange}
+                                            className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none transition-colors ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-[#00AFB9] focus:bg-gray-600' 
+                                                    : 'bg-gray-50 border-gray-300 text-gray-900 focus:border-[#00AFB9] focus:bg-white'
+                                            }`}
                                             required
-                                            className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
                                         />
                                     </div>
-                                    <div className="relative mt-6">
-                                        <FaEnvelope className="absolute top-1/2 left-4 transform -translate-y-1/2 text-[#3D348B]" />
+
+                                    <div className="relative">
+                                        <FaEnvelope className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                                            isDarkMode ? 'text-gray-400' : 'text-gray-400'
+                                        }`} />
                                         <input
                                             type="email"
                                             name="email"
                                             placeholder="Email Address"
                                             value={formData.email}
                                             onChange={handleChange}
+                                            className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none transition-colors ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-[#00AFB9] focus:bg-gray-600' 
+                                                    : 'bg-gray-50 border-gray-300 text-gray-900 focus:border-[#00AFB9] focus:bg-white'
+                                            }`}
                                             required
-                                            className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
                                         />
                                     </div>
-                                    <div className="relative mt-6">
-                                        <FaPhone className="absolute top-1/2 left-4 transform -translate-y-1/2 text-[#3D348B]" />
+
+                                    <div className="relative">
+                                        <FaPhone className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                                            isDarkMode ? 'text-gray-400' : 'text-gray-400'
+                                        }`} />
                                         <input
                                             type="tel"
                                             name="phone"
-                                            placeholder="Phone Number"
+                                            placeholder="Phone Number (Optional)"
                                             value={formData.phone}
                                             onChange={handleChange}
-                                            className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
+                                            className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none transition-colors ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-[#00AFB9] focus:bg-gray-600' 
+                                                    : 'bg-gray-50 border-gray-300 text-gray-900 focus:border-[#00AFB9] focus:bg-white'
+                                            }`}
                                         />
                                     </div>
+
                                     <button
-                                        type="button"
-                                        onClick={nextStep}
-                                        className="w-full py-3 mt-6 rounded-full bg-[#3D348B] text-white font-medium hover:bg-gradient-to-r hover:from-[#FFBE0B] hover:to-[#F35B04] transition-all duration-300"
+                                        type="submit"
+                                        className="w-full bg-gradient-to-r from-[#00AFB9] to-[#3D348B] text-white py-3 rounded-lg font-semibold hover:from-[#008B94] hover:to-[#2E2A6B] transition-all duration-300 transform hover:scale-105"
                                     >
-                                        Continue
+                                        Next Step
                                     </button>
                                 </motion.div>
                             )}
+
                             {currentStep === 2 && (
                                 <motion.div
                                     key="step2"
-                                    initial={{ opacity: 0, x: 20 }}
+                                    initial={{ opacity: 0, x: 50 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.4 }}
+                                    exit={{ opacity: 0, x: -50 }}
+                                    className="space-y-4"
                                 >
                                     <div className="relative">
-                                        <FaUser className="absolute top-1/2 left-4 transform -translate-y-1/2 text-[#3D348B]" />
+                                        <FaUser className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                                            isDarkMode ? 'text-gray-400' : 'text-gray-400'
+                                        }`} />
                                         <input
                                             type="text"
                                             name="username"
                                             placeholder="Username"
                                             value={formData.username}
                                             onChange={handleChange}
+                                            className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none transition-colors ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-[#00AFB9] focus:bg-gray-600' 
+                                                    : 'bg-gray-50 border-gray-300 text-gray-900 focus:border-[#00AFB9] focus:bg-white'
+                                            }`}
                                             required
-                                            className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
                                         />
                                     </div>
-                                    <div className="relative mt-6">
-                                        <FaLock className="absolute top-1/2 left-4 transform -translate-y-1/2 text-[#3D348B]" />
+
+                                    <div className="relative">
+                                        <FaLock className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                                            isDarkMode ? 'text-gray-400' : 'text-gray-400'
+                                        }`} />
                                         <input
                                             type="password"
                                             name="password"
                                             placeholder="Password"
                                             value={formData.password}
                                             onChange={handleChange}
+                                            className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none transition-colors ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-[#00AFB9] focus:bg-gray-600' 
+                                                    : 'bg-gray-50 border-gray-300 text-gray-900 focus:border-[#00AFB9] focus:bg-white'
+                                            }`}
                                             required
-                                            className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
                                         />
                                     </div>
-                                    <div className="relative mt-6">
-                                        <FaLock className="absolute top-1/2 left-4 transform -translate-y-1/2 text-[#3D348B]" />
+
+                                    <div className="relative">
+                                        <FaLock className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                                            isDarkMode ? 'text-gray-400' : 'text-gray-400'
+                                        }`} />
                                         <input
                                             type="password"
                                             name="confirmPassword"
                                             placeholder="Confirm Password"
                                             value={formData.confirmPassword}
                                             onChange={handleChange}
+                                            className={`w-full pl-10 pr-4 py-3 rounded-lg border focus:outline-none transition-colors ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-[#00AFB9] focus:bg-gray-600' 
+                                                    : 'bg-gray-50 border-gray-300 text-gray-900 focus:border-[#00AFB9] focus:bg-white'
+                                            }`}
                                             required
-                                            className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
                                         />
                                     </div>
-                                    <div className="flex space-x-4 mt-6">
+
+                                    <div className="flex space-x-4">
                                         <button
                                             type="button"
                                             onClick={prevStep}
-                                            className="w-1/3 py-3 rounded-full border-2 border-[#3D348B] text-[#3D348B] font-medium hover:bg-[#3D348B]/10 transition-all duration-300"
+                                            className={`flex-1 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600' 
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
                                         >
                                             Back
                                         </button>
                                         <button
                                             type="submit"
                                             disabled={isLoading}
-                                            className="w-2/3 py-3 rounded-full bg-[#F35B04] text-white font-medium hover:bg-gradient-to-r hover:from-[#FFBE0B] hover:to-[#F35B04] transition-all duration-300 flex items-center justify-center disabled:opacity-50"
+                                            className="flex-1 bg-gradient-to-r from-[#00AFB9] to-[#3D348B] text-white py-3 rounded-lg font-semibold hover:from-[#008B94] hover:to-[#2E2A6B] transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                            {isLoading && (
-                                                <svg
-                                                    className="animate-spin mr-2 h-5 w-5 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                    <path
-                                                        className="opacity-75"
-                                                        fill="currentColor"
-                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                                    ></path>
-                                                </svg>
-                                            )}
-                                            {isLoading ? 'Creating Account...' : 'Register'}
+                                            {isLoading ? 'Creating Account...' : 'Create Account'}
                                         </button>
                                     </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </form>
-                    <div className="mt-6 text-center text-[#212529]">
-                        <p>
+
+                    <div className="mt-6 text-center">
+                        <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                             Already have an account?{' '}
-                            <Link to="/login" className="text-[#3D348B] hover:text-[#F35B04] transition-colors duration-300">
-                                Log In
+                            <Link 
+                                to="/login" 
+                                className="text-[#00AFB9] hover:text-[#008B94] font-semibold transition-colors"
+                            >
+                                Sign In
                             </Link>
                         </p>
                     </div>

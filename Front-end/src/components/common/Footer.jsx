@@ -2,8 +2,11 @@ import React from 'react';
 // import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { FaSearchLocation, FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Footer = () => {
+  const { isDarkMode } = useTheme();
+
   const footerLinks = [
     {
       title: "Quick Links",
@@ -23,7 +26,9 @@ const Footer = () => {
   ];
 
   return (
-      <footer className="bg-[#212529] text-white pt-16 pb-8">
+      <footer className={`pt-16 pb-8 ${
+        isDarkMode ? 'bg-gray-900 text-white' : 'bg-[#212529] text-white'
+      }`}>
         <div className="container max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {/* Logo and Description */}
@@ -38,7 +43,7 @@ const Footer = () => {
                 <FaSearchLocation className="w-6 h-6 mr-2 text-[#F35B04]" />
                 <span className="font-bold text-xl">FindSpot</span>
               </div>
-              <p className="text-gray-400 mb-6">
+              <p className={`mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-400'}`}>
                 Connecting the Dodoma community to reunite lost items with their owners.
               </p>
               <div className="flex space-x-4">
@@ -71,7 +76,11 @@ const Footer = () => {
                         <li key={linkIndex}>
                           <a
                               href={link.path || '#'}
-                              className="text-gray-400 hover:text-white transition-colors duration-300"
+                              className={`transition-colors duration-300 ${
+                                isDarkMode 
+                                  ? 'text-gray-300 hover:text-white' 
+                                  : 'text-gray-400 hover:text-white'
+                              }`}
                           >
                             {link.name || link}
                           </a>
@@ -90,14 +99,16 @@ const Footer = () => {
                 className="lg:col-span-1"
             >
               <h3 className="text-lg font-semibold mb-4 text-[#F35B04]">Newsletter</h3>
-              <p className="text-gray-400 mb-4">
+              <p className={`mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-400'}`}>
                 Subscribe to get updates on lost items in your area.
               </p>
               <div className="flex">
                 <input
                     type="email"
                     placeholder="Your email"
-                    className="px-4 py-2 rounded-l-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#F35B04] w-full"
+                    className={`px-4 py-2 rounded-l-lg text-white focus:outline-none focus:ring-2 focus:ring-[#F35B04] w-full ${
+                      isDarkMode ? 'bg-gray-800' : 'bg-gray-700'
+                    }`}
                 />
                 <button className="bg-[#F35B04] hover:bg-[#d95203] text-white px-4 py-2 rounded-r-lg transition-colors duration-300">
                   Subscribe
@@ -112,7 +123,11 @@ const Footer = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500"
+              className={`border-t mt-12 pt-8 text-center ${
+                isDarkMode 
+                  ? 'border-gray-700 text-gray-400' 
+                  : 'border-gray-800 text-gray-500'
+              }`}
           >
             <p>© {new Date().getFullYear()} FindSpot. All rights reserved.</p>
           </motion.div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../contexts/ThemeContext';
 
 // Example statistics data structure if you're not importing it
 // const statistics = [
@@ -10,6 +11,8 @@ import { motion } from 'framer-motion';
 // ];
 
 const StatisticsSection = ({ statistics = [] }) => {
+    const { isDarkMode } = useTheme();
+    
     // Fallback data in case statistics prop is empty
     const statsData = statistics.length > 0 ? statistics : [
         { number: "500+", label: "Items Reunited" },
@@ -19,11 +22,19 @@ const StatisticsSection = ({ statistics = [] }) => {
     ];
 
     return (
-        <section className="py-20 bg-[#3D348B] relative overflow-hidden">
+        <section className={`py-20 relative overflow-hidden ${
+            isDarkMode 
+                ? 'bg-gradient-to-br from-[#3D348B] to-gray-800' 
+                : 'bg-gradient-to-br from-[#3D348B] to-[#2a2571]'
+        }`}>
             {/* Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#FFBE0B]/20 blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-[#F35B04]/20 blur-3xl"></div>
+                <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl ${
+                    isDarkMode ? 'bg-[#FFBE0B]/10' : 'bg-[#FFBE0B]/20'
+                }`}></div>
+                <div className={`absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl ${
+                    isDarkMode ? 'bg-[#F35B04]/10' : 'bg-[#F35B04]/20'
+                }`}></div>
             </div>
 
             <div className="container max-w-7xl mx-auto px-4 relative z-10">
@@ -45,10 +56,12 @@ const StatisticsSection = ({ statistics = [] }) => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="p-6 bg-white/10 rounded-2xl text-center border border-white/20 hover:bg-white/20 transition-all duration-300"
+                            className={`p-6 rounded-2xl text-center border transition-all duration-300 ${
+                                isDarkMode 
+                                    ? 'bg-gray-800/60 border-gray-600/30 hover:bg-gray-700/60' 
+                                    : 'bg-white/10 border-white/20 hover:bg-white/20'
+                            }`}
                             style={{
-                                // Fallback for backdrop-filter
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                                 backdropFilter: 'blur(12px)',
                                 WebkitBackdropFilter: 'blur(12px)'
                             }}
@@ -66,7 +79,9 @@ const StatisticsSection = ({ statistics = [] }) => {
                             >
                                 {stat.number}
                             </motion.h3>
-                            <p className="text-white text-base md:text-lg">{stat.label}</p>
+                            <p className={`text-base md:text-lg ${
+                                isDarkMode ? 'text-gray-200' : 'text-white'
+                            }`}>{stat.label}</p>
                         </motion.div>
                     ))}
                 </div>

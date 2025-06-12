@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Login = () => {
     const navigate = useNavigate();
     const { login, isLoading, error, clearError } = useAuth();
+    const { isDarkMode } = useTheme();
     const [formData, setFormData] = useState({ username: '', password: '' });
 
     const handleChange = (e) => {
@@ -32,12 +34,18 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#F8F9FA] to-white p-4">
+        <div className={`min-h-screen flex items-center justify-center p-4 ${
+            isDarkMode 
+                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
+                : 'bg-gradient-to-b from-[#F8F9FA] to-white'
+        }`}>
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col md:flex-row"
+                className={`w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-white'
+                }`}
             >
                 <div className="hidden md:block md:w-1/2 bg-gradient-to-br from-[#3D348B] to-[#F35B04] p-10 text-white">
                     <motion.div
@@ -66,13 +74,17 @@ const Login = () => {
                     </motion.div>
                     <div className="absolute bottom-10 left-10 w-20 h-20 rounded-full bg-white/10"></div>
                 </div>
-                <div className="w-full md:w-1/2 bg-white p-8 md:p-12">
+                <div className={`w-full md:w-1/2 p-8 md:p-12 ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-white'
+                }`}>
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.4 }}
                     >
-                        <h2 className="text-3xl font-bold text-[#212529] mb-6">Login</h2>
+                        <h2 className={`text-3xl font-bold mb-6 ${
+                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                        }`}>Login</h2>
                         <AnimatePresence>
                             {error && (
                                 <motion.div
@@ -95,7 +107,11 @@ const Login = () => {
                                     value={formData.username}
                                     onChange={handleChange}
                                     required
-                                    className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
+                                    className={`w-full pl-12 pr-4 py-3 border-b-2 focus:outline-none transition-all duration-300 placeholder-gray-400 ${
+                                        isDarkMode 
+                                            ? 'border-gray-600 text-white bg-transparent focus:border-[#F35B04]' 
+                                            : 'border-[#E9ECEF] text-[#212529] focus:border-[#F35B04]'
+                                    }`}
                                 />
                             </div>
                             <div className="relative">
@@ -107,7 +123,11 @@ const Login = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     required
-                                    className="w-full pl-12 pr-4 py-3 border-b-2 border-[#E9ECEF] text-[#212529] focus:border-[#F35B04] focus:outline-none transition-all duration-300 placeholder-gray-400"
+                                    className={`w-full pl-12 pr-4 py-3 border-b-2 focus:outline-none transition-all duration-300 placeholder-gray-400 ${
+                                        isDarkMode 
+                                            ? 'border-gray-600 text-white bg-transparent focus:border-[#F35B04]' 
+                                            : 'border-[#E9ECEF] text-[#212529] focus:border-[#F35B04]'
+                                    }`}
                                 />
                             </div>
                             <button
@@ -133,7 +153,9 @@ const Login = () => {
                                 {isLoading ? 'Logging in...' : 'Login'}
                             </button>
                         </form>
-                        <div className="mt-6 text-center text-[#212529]">
+                        <div className={`mt-6 text-center ${
+                            isDarkMode ? 'text-white' : 'text-[#212529]'
+                        }`}>
                             <p>
                                 Don't have an account?{' '}
                                 <Link to="/register" className="text-[#3D348B] hover:text-[#F35B04] transition-colors duration-300">
@@ -142,7 +164,9 @@ const Login = () => {
                             </p>
                             <Link
                                 to="/forgot-password"
-                                className="block mt-2 text-sm text-gray-500 hover:text-[#F35B04] transition-colors duration-300"
+                                className={`block mt-2 text-sm hover:text-[#F35B04] transition-colors duration-300 ${
+                                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                                }`}
                             >
                                 Forgot Password?
                             </Link>
