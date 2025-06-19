@@ -32,6 +32,11 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("GET", "/api/items/**").permitAll() // Allow public access to view items
+                .requestMatchers("POST", "/api/items/**").authenticated() // Require auth for creating items
+                .requestMatchers("PUT", "/api/items/**").authenticated() // Require auth for updating items
+                .requestMatchers("DELETE", "/api/items/**").authenticated() // Require auth for deleting items
+                .requestMatchers("/api/users/**").authenticated() // Require auth for user profile operations
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
@@ -50,7 +55,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public JWTAuthenticationFilter jwtAuthenticationFilter(){

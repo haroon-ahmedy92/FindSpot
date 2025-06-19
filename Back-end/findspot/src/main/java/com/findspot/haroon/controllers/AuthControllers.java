@@ -1,6 +1,7 @@
 package com.findspot.haroon.controllers;
 
 import com.findspot.haroon.dto.AuthResponseDto;
+import com.findspot.haroon.dto.ForgotPasswordRequestDto;
 import com.findspot.haroon.dto.LoginDto;
 import com.findspot.haroon.dto.RegisterDto;
 import com.findspot.haroon.dto.TokenRefreshRequest;
@@ -11,6 +12,7 @@ import com.findspot.haroon.security.JWTGenerator;
 import com.findspot.haroon.security.SecurityConstant;
 import com.findspot.haroon.services.AuthService;
 import com.findspot.haroon.services.RefreshTokenService;
+import com.findspot.haroon.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,11 +26,13 @@ public class AuthControllers {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
     private final JWTGenerator jwtGenerator;
+    private final UserService userService;
 
-    public AuthControllers(AuthService authService, RefreshTokenService refreshTokenService, JWTGenerator jwtGenerator) {
+    public AuthControllers(AuthService authService, RefreshTokenService refreshTokenService, JWTGenerator jwtGenerator, UserService userService) {
         this.authService = authService;
         this.refreshTokenService = refreshTokenService;
         this.jwtGenerator = jwtGenerator;
+        this.userService = userService;
     }
 
     @PostMapping("login")
@@ -107,6 +111,11 @@ public class AuthControllers {
         response.addCookie(refreshCookie);
 
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @PostMapping("forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequestDto request) {
+        return userService.forgotPassword(request.getEmail());
     }
 
     private String getRefreshTokenFromCookies(HttpServletRequest request) {

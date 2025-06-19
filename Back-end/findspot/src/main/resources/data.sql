@@ -1,0 +1,411 @@
+-- -- src/main/resources/data.sql
+--
+-- -- Roles
+-- INSERT INTO roles (name) VALUES ('USER');
+--
+-- -- Users
+-- -- Note: Passwords are plain text here. Your application should handle hashing.
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Aisha Mwangi', 'aisha.mwangi@example.com', '254701234567', 'aishamwangi', 'pass123', '2024-01-10 08:00:00', 'Nairobi', 'Community helper, loves finding lost treasures.', 'http://example.com/avatars/aisha.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('John Kamau', 'john.kamau@example.com', '254712345678', 'johnkamau', 'securepass', '2024-01-15 09:30:00', 'Mombasa', 'Avid traveler, always on the lookout.', 'http://example.com/avatars/john.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Fatuma Ali', 'fatuma.ali@example.com', '254723456789', 'fatumaali', 'password456', '2024-02-01 10:00:00', 'Kisumu', 'Loves helping reunite people with their items.', 'http://example.com/avatars/fatuma.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('David Ochieng', 'david.ochieng@example.com', '254734567890', 'davidochieng', 'mypassword', '2024-02-10 11:15:00', 'Nakuru', 'Tech enthusiast and problem solver.', 'http://example.com/avatars/david.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Mary Wanjiku', 'mary.wanjiku@example.com', '254745678901', 'marywanjiku', 'pass789', '2024-03-01 12:00:00', 'Eldoret', 'Dedicated to making the community better.', 'http://example.com/avatars/mary.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Peter Njoroge', 'peter.njoroge@example.com', '254756789012', 'peternjoroge', 'secure123', '2024-03-15 13:30:00', 'Thika', 'Cyclist and community volunteer.', 'http://example.com/avatars/peter.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Esther Nyaboke', 'esther.nyaboke@example.com', '254767890123', 'esthernyaboke', 'password321', '2024-04-01 14:00:00', 'Nyeri', 'Artist and nature lover.', 'http://example.com/avatars/esther.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Joseph Otieno', 'joseph.otieno@example.com', '254778901234', 'josephotieno', 'pass654', '2024-04-10 15:15:00', 'Kakamega', 'Teacher and avid reader.', 'http://example.com/avatars/joseph.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Grace Wambui', 'grace.wambui@example.com', '254789012345', 'gracewambui', 'secure789', '2024-05-01 16:00:00', 'Machakos', 'Entrepreneur with a passion for helping.', 'http://example.com/avatars/grace.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Samuel Kiptoo', 'samuel.kiptoo@example.com', '254790123456', 'samuelkiptoo', 'password987', '2024-05-15 17:30:00', 'Kitale', 'Farmer and community organizer.', 'http://example.com/avatars/samuel.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Lucy Achieng', 'lucy.achieng@example.com', '254701234568', 'lucyachieng', 'pass111', '2024-06-01 08:00:00', 'Nairobi', 'Loves music and helping others.', 'http://example.com/avatars/lucy.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Michael Maina', 'michael.maina@example.com', '254712345679', 'michaelmaina', 'secure222', '2024-06-10 09:00:00', 'Mombasa', 'Fitness enthusiast.', 'http://example.com/avatars/michael.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Hellen Adhiambo', 'hellen.adhiambo@example.com', '254723456790', 'hellenadhiambo', 'pass333', '2024-06-15 10:00:00', 'Kisumu', 'Nurse with a caring heart.', 'http://example.com/avatars/hellen.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Brian Mutua', 'brian.mutua@example.com', '254734567901', 'brianmutua', 'secure444', '2024-06-20 11:00:00', 'Nakuru', 'Tech startup founder.', 'http://example.com/avatars/brian.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Mercy Chebet', 'mercy.chebet@example.com', '254745678912', 'mercychebet', 'pass555', '2024-06-25 12:00:00', 'Eldoret', 'Fashion designer.', 'http://example.com/avatars/mercy.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Thomas Mwaura', 'thomas.mwaura@example.com', '254756789123', 'thomasmwaura', 'secure666', '2024-07-01 13:00:00', 'Thika', 'Engineer and problem solver.', 'http://example.com/avatars/thomas.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Rose Atieno', 'rose.atieno@example.com', '254767890234', 'roseatieno', 'pass777', '2024-07-05 14:00:00', 'Nyeri', 'Loves gardening.', 'http://example.com/avatars/rose.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Isaac Omondi', 'isaac.omondi@example.com', '254778901345', 'isaacomondi', 'secure888', '2024-07-10 15:00:00', 'Kakamega', 'Photographer.', 'http://example.com/avatars/isaac.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Joyce Wairimu', 'joyce.wairimu@example.com', '254789012456', 'joycewairimu', 'pass999', '2024-07-15 16:00:00', 'Machakos', 'Social worker.', 'http://example.com/avatars/joyce.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Daniel Kiprono', 'daniel.kiprono@example.com', '254790123567', 'danielkiprono', 'secure000', '2024-07-20 17:00:00', 'Kitale', 'Athlete.', 'http://example.com/avatars/daniel.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Eunice Njeri', 'eunice.njeri@example.com', '254701234569', 'eunicenjeri', 'pass101', '2024-07-25 08:00:00', 'Nairobi', 'Loves baking.', 'http://example.com/avatars/eunice.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Patrick Ndungu', 'patrick.ndungu@example.com', '254712345680', 'patrickndungu', 'secure202', '2024-07-30 09:00:00', 'Mombasa', 'Tour guide.', 'http://example.com/avatars/patrick.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Ann Mumbi', 'ann.mumbi@example.com', '254723456791', 'annmumbi', 'pass303', '2024-08-01 10:00:00', 'Kisumu', 'Loves animals.', 'http://example.com/avatars/ann.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Victor Kemboi', 'victor.kemboi@example.com', '254734567902', 'victorkemboi', 'secure404', '2024-08-05 11:00:00', 'Nakuru', 'Software developer.', 'http://example.com/avatars/victor.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Lydia Cherono', 'lydia.cherono@example.com', '254745678913', 'lydiacherono', 'pass505', '2024-08-10 12:00:00', 'Eldoret', 'Teacher.', 'http://example.com/avatars/lydia.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Simon Gichuhi', 'simon.gichuhi@example.com', '254756789124', 'simongichuhi', 'secure606', '2024-08-15 13:00:00', 'Thika', 'Carpenter.', 'http://example.com/avatars/simon.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Nancy Anyango', 'nancy.anyango@example.com', '254767890235', 'nancyanyango', 'pass707', '2024-08-20 14:00:00', 'Nyeri', 'Loves hiking.', 'http://example.com/avatars/nancy.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Mark Owino', 'mark.owino@example.com', '254778901346', 'markowino', 'secure808', '2024-08-25 15:00:00', 'Kakamega', 'Musician.', 'http://example.com/avatars/mark.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Beatrice Muthoni', 'beatrice.muthoni@example.com', '254789012457', 'beatricemuthoni', 'pass909', '2024-08-30 16:00:00', 'Machakos', 'Loves crafts.', 'http://example.com/avatars/beatrice.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Geoffrey Korir', 'geoffrey.korir@example.com', '254790123568', 'geoffreykorir', 'secure010', '2024-09-01 17:00:00', 'Kitale', 'Businessman.', 'http://example.com/avatars/geoffrey.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Caroline Wanjiru', 'caroline.wanjiru@example.com', '254701234570', 'carolinewanjiru', 'pass1111', '2024-09-05 08:00:00', 'Nairobi', 'Loves reading.', 'http://example.com/avatars/caroline.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Paul Muigai', 'paul.muigai@example.com', '254712345681', 'paulmuigai', 'secure1212', '2024-09-10 09:00:00', 'Mombasa', 'Fisherman.', 'http://example.com/avatars/paul.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Winnie Adongo', 'winnie.adongo@example.com', '254723456792', 'winnieadongo', 'pass1313', '2024-09-15 10:00:00', 'Kisumu', 'Loves cooking.', 'http://example.com/avatars/winnie.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Felix Kiptanui', 'felix.kiptanui@example.com', '254734567903', 'felixkiptanui', 'secure1414', '2024-09-20 11:00:00', 'Nakuru', 'Accountant.', 'http://example.com/avatars/felix.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Jane Naserian', 'jane.naserian@example.com', '254745678914', 'janenaserian', 'pass1515', '2024-09-25 12:00:00', 'Eldoret', 'Loves dancing.', 'http://example.com/avatars/jane.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Martin Waweru', 'martin.waweru@example.com', '254756789125', 'martinwaweru', 'secure1616', '2024-09-30 13:00:00', 'Thika', 'Mechanic.', 'http://example.com/avatars/martin.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Faith Auma', 'faith.auma@example.com', '254767890236', 'faithauma', 'pass1717', '2024-10-01 14:00:00', 'Nyeri', 'Loves painting.', 'http://example.com/avatars/faith.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Benard Odhiambo', 'benard.odhiambo@example.com', '254778901347', 'benardodhiambo', 'secure1818', '2024-10-05 15:00:00', 'Kakamega', 'Loves sports.', 'http://example.com/avatars/benard.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Ruth Wangari', 'ruth.wangari@example.com', '254789012458', 'ruthwangari', 'pass1919', '2024-10-10 16:00:00', 'Machakos', 'Loves sewing.', 'http://example.com/avatars/ruth.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Kevin Muriuki', 'kevin.muriuki@example.com', '254790123569', 'kevinmuriuki', 'secure2020', '2024-10-15 17:00:00', 'Kitale', 'Loves adventure.', 'http://example.com/avatars/kevin.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Sarah Nduku', 'sarah.nduku@example.com', '254701234571', 'sarahnduku', 'pass2121', '2024-10-20 08:00:00', 'Nairobi', 'Loves writing.', 'http://example.com/avatars/sarah.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('James Kariuki', 'james.kariuki@example.com', '254712345682', 'jameskariuki', 'secure2222', '2024-10-25 09:00:00', 'Mombasa', 'Loves fishing.', 'http://example.com/avatars/james.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Monica Atieno', 'monica.atieno@example.com', '254723456793', 'monicaatieno', 'pass2323', '2024-10-30 10:00:00', 'Kisumu', 'Loves volunteering.', 'http://example.com/avatars/monica.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Dennis Kipchumba', 'dennis.kipchumba@example.com', '254734567904', 'denniskipchumba', 'secure2424', '2024-11-01 11:00:00', 'Nakuru', 'Loves running.', 'http://example.com/avatars/dennis.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Agnes Wanjala', 'agnes.wanjala@example.com', '254745678915', 'agneswanjala', 'pass2525', '2024-11-05 12:00:00', 'Eldoret', 'Loves teaching.', 'http://example.com/avatars/agnes.jpg', false, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('George Mwaura', 'george.mwaura@example.com', '254756789126', 'georgemwaura', 'secure2626', '2024-11-10 13:00:00', 'Thika', 'Loves carpentry.', 'http://example.com/avatars/george.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Dorothy Aoko', 'dorothy.aoko@example.com', '254767890237', 'dorothyaoko', 'pass2727', '2024-11-15 14:00:00', 'Nyeri', 'Loves hiking.', 'http://example.com/avatars/dorothy.jpg', false, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Charles Onyango', 'charles.onyango@example.com', '254778901348', 'charlesonyango', 'secure2828', '2024-11-20 15:00:00', 'Kakamega', 'Loves music.', 'http://example.com/avatars/charles.jpg', true, false);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Mercy Wamboi', 'mercy.wamboi@example.com', '254789012459', 'mercywamboi', 'pass2929', '2024-11-25 16:00:00', 'Machakos', 'Loves crafting.', 'http://example.com/avatars/mercyw.jpg', true, true);
+-- INSERT INTO users (full_name, email, phone, username, password, join_date, location, bio, avatar_url, email_notifications, push_notifications)
+-- VALUES ('Eliud Kiprop', 'eliud.kiprop@example.com', '254790123570', 'eliudkiprop', 'secure3030', '2024-11-30 17:00:00', 'Kitale', 'Loves farming.', 'http://example.com/avatars/eliud.jpg', false, false);
+--
+-- -- User Roles
+-- -- Assign USER role to all Users (1-50)
+-- INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (2, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (3, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (4, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (5, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (6, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (7, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (8, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (9, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (10, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (11, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (12, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (13, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (14, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (15, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (16, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (17, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (18, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (19, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (20, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (21, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (22, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (23, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (24, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (25, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (26, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (27, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (28, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (29, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (30, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (31, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (32, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (33, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (34, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (35, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (36, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (37, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (38, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (39, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (40, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (41, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (42, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (43, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (44, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (45, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (46, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (47, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (48, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (49, 1);
+-- INSERT INTO user_roles (user_id, role_id) VALUES (50, 1);
+--
+-- -- Items
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Simu Iliyopotea', 'Simu ya Samsung Galaxy A12, nyeusi', 'Nimepoteza simu yangu ya Samsung Galaxy A12 ya rangi nyeusi kwenye basi la matatu mjini Nairobi. Simu ina kipochi cha bluu.', 'Electronics', 'Nairobi CBD', '2025-05-01', 'LOST', 'ACTIVE', 1, '2025-05-01 09:00:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Funguo Zilizopatikana', 'Seti ya funguo tatu kwenye fob nyekundu', 'Nilipata seti ya funguo tatu zilizofungwa kwenye fob ya rangi nyekundu karibu na mlango wa Hifadhi ya Uhuru.', 'Keys', 'Uhuru Park', '2025-05-02', 'FOUND', 'ACTIVE', 2, '2025-05-02 10:30:00', 'email', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Mkufu Uliyopotea', 'Mkufu wa dhahabu wenye jiwe la zumaridi', 'Nimepoteza mkufu wangu wa dhahabu ulio na jiwe la zumaridi. Ulikuwa na thamani ya kihisia sana. Mwisho kuonekana katika soko la Kisumu.', 'Jewelry', 'Kisumu Market', '2025-05-03', 'LOST', 'ACTIVE', 3, '2025-05-03 11:00:00', NULL, NULL);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Laptop Iliyopatikana', 'Laptop ya HP, rangi ya fedha', 'Nilipata laptop ya HP ya rangi ya fedha kwenye mkahawa wa Nakuru. Inahitaji nenosiri kufungua.', 'Electronics', 'Nakuru Cafe', '2025-05-04', 'FOUND', 'ACTIVE', 4, '2025-05-04 12:15:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Skafu Iliyopotea', 'Skafu ya pamba ya rangi ya manjano', 'Nimepoteza skafu yangu ya pamba ya rangi ya manjano, labda kwenye basi au duka la Eldoret.', 'Apparel', 'Eldoret Town', '2025-05-05', 'LOST', 'ACTIVE', 5, '2025-05-05 13:00:00', NULL, NULL);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Kitabu Kilichopatikana', 'Kitabu cha "Siku Njema" na Ken Walibora', 'Nilipata kitabu cha "Siku Njema" na Ken Walibora kwenye benchi la Hifadhi ya Thika. Kina alama za rangi kwenye kurasa zake.', 'Books', 'Thika Park', '2025-05-06', 'FOUND', 'ACTIVE', 6, '2025-05-06 14:30:00', 'email', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Miwani Iliyopotea', 'Miwani ya kusoma ya fremu nyeusi', 'Nimepoteza miwani yangu ya kusoma yenye fremu nyeusi kwenye maktaba ya Nyeri. Ni muhimu sana kwangu.', 'Eyewear', 'Nyeri Library', '2025-05-07', 'LOST', 'ACTIVE', 7, '2025-05-07 15:00:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Paka Aliyepatikana', 'Paka mweupe mwenye macho ya bluu', 'Nilipata paka mdogo mweupe mwenye macho ya bluu karibu na ofisi ya Kakamega. Anaonekana kuhitaji mmiliki wake.', 'Pets', 'Kakamega Office', '2025-05-08', 'FOUND', 'ACTIVE', 8, '2025-05-08 16:00:00', 'email', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Mkoba Uliyopotea', 'Mkoba wa ngozi wa kahawia', 'Nimepoteza mkoba wangu wa ngozi wa rangi ya kahawia kwenye duka la Machakos. Una picha za familia ndani yake.', 'Bags', 'Machakos Shop', '2025-05-09', 'LOST', 'ACTIVE', 9, '2025-05-09 17:00:00', NULL, NULL);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Saa Iliyopatikana', 'Saa ya mkono ya Casio, nyeusi', 'Nilipata saa ya mkono ya Casio ya rangi nyeusi kwenye uwanja wa michezo wa Kitale. Inafanya kazi vizuri.', 'Watches', 'Kitale Sports Ground', '2025-05-10', 'FOUND', 'ACTIVE', 10, '2025-05-10 18:00:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Pete Iliyopotea', 'Pete ya fedha yenye jiwe jekundu', 'Nimepoteza pete yangu ya fedha iliyo na jiwe la rangi nyekundu kwenye hoteli ya Nairobi.', 'Jewelry', 'Nairobi Hotel', '2025-05-11', 'LOST', 'ACTIVE', 11, '2025-05-11 09:00:00', 'email', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Kamera Iliyopatikana', 'Kamera ya Canon EOS, nyeusi', 'Nilipata kamera ya Canon EOS ya rangi nyeusi kwenye pwani ya Mombasa.', 'Electronics', 'Mombasa Beach', '2025-05-12', 'FOUND', 'ACTIVE', 12, '2025-05-12 10:00:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Jacket Iliyopotea', 'Jacket ya ngozi ya nyeusi', 'Nimepoteza jacket yangu ya ngozi ya rangi nyeusi kwenye klabu ya Kisumu.', 'Apparel', 'Kisumu Club', '2025-05-13', 'LOST', 'ACTIVE', 13, '2025-05-13 11:00:00', NULL, NULL);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Daflari Lililopatikana', 'Daflari la bluu lenye michoro', 'Nilipata daflari la rangi ya bluu lenye michoro ya mandhari kwenye duka la Nakuru.', 'Art Supplies', 'Nakuru Store', '2025-05-14', 'FOUND', 'ACTIVE', 14, '2025-05-14 12:00:00', 'email', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Kofia Iliyopotea', 'Kofia ya baseball ya nyekundu', 'Nimepoteza kofia yangu ya baseball ya rangi nyekundu kwenye uwanja wa Eldoret.', 'Apparel', 'Eldoret Field', '2025-05-15', 'LOST', 'ACTIVE', 15, '2025-05-15 13:00:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Funguo za Gari Zilizopatikana', 'Funguo za Toyota na fob nyeusi', 'Nilipata funguo za gari za Toyota na fob ya rangi nyeusi kwenye maegesho ya Thika.', 'Keys', 'Thika Parking', '2025-05-16', 'FOUND', 'ACTIVE', 16, '2025-05-16 14:00:00', 'email', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Kitambaa cha Shingo Kilichopotea', 'Kitambaa cha shingo cha kijani', 'Nimepoteza kitambaa changu cha shingo cha rangi ya kijani kwenye soko la Nyeri.', 'Apparel', 'Nyeri Market', '2025-05-17', 'LOST', 'ACTIVE', 17, '2025-05-17 15:00:00', NULL, NULL);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Mbwa Aliyepatikana', 'Mbwa mdogo wa rangi ya kahawia', 'Nilipata mbwa mdogo wa rangi ya kahawia karibu na shule ya Kakamega.', 'Pets', 'Kakamega School', '2025-05-18', 'FOUND', 'ACTIVE', 18, '2025-05-18 16:00:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Begi la Laptop Liliopotea', 'Begi la laptop la nyeusi', 'Nimepoteza begi langu la laptop la rangi nyeusi kwenye kituo cha basi cha Machakos.', 'Bags', 'Machakos Bus Station', '2025-05-19', 'LOST', 'ACTIVE', 19, '2025-05-19 17:00:00', 'email', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date, contact_preference, agreed_to_terms)
+-- VALUES ('Sunglasses Zilizopatikana', 'Sunglasses za Ray-Ban, nyeusi', 'Nilipata sunglasses za Ray-Ban za rangi nyeusi kwenye mkahawa wa Kitale.', 'Eyewear', 'Kitale Cafe', '2025-05-20', 'FOUND', 'ACTIVE', 20, '2025-05-20 18:00:00', 'phone', true);
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Vitabu vya Chuo Kilichopotea', 'Seti ya vitabu vya chuo', 'Nimepoteza seti ya vitabu vyangu vya chuo kwenye maktaba ya Nairobi.', 'Books', 'Nairobi Library', '2025-05-21', 'LOST', 'ACTIVE', 21, '2025-05-21 09:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Mbrella Iliyopatikana', 'Mbrella ya nyekundu', 'Nilipata mbrella ya rangi nyekundu kwenye stesheni ya treni ya Mombasa.', 'Household Items', 'Mombasa Train Station', '2025-05-22', 'FOUND', 'ACTIVE', 22, '2025-05-22 10:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Jezi Iliyopotea', 'Jezi ya timu ya soka ya bluu', 'Nimepoteza jezi yangu ya timu ya soka ya rangi ya bluu kwenye uwanja wa Kisumu.', 'Apparel', 'Kisumu Stadium', '2025-05-23', 'LOST', 'ACTIVE', 23, '2025-05-23 11:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Kalamu Iliyopatikana', 'Kalamu ya dhahabu', 'Nilipata kalamu ya rangi ya dhahabu kwenye ofisi ya Nakuru.', 'Office Supplies', 'Nakuru Office', '2025-05-24', 'FOUND', 'ACTIVE', 24, '2025-05-24 12:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Sanduku la Zao Liliopotea', 'Sanduku la zao la bluu', 'Nimepoteza sanduku langu la zao la rangi ya bluu kwenye soko la Eldoret.', 'Jewelry', 'Eldoret Market', '2025-05-25', 'LOST', 'ACTIVE', 25, '2025-05-25 13:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Chaja ya Simu Iliyopatikana', 'Chaja ya iPhone, nyeupe', 'Nilipata chaja ya iPhone ya rangi nyeupe kwenye duka la Thika.', 'Electronics', 'Thika Shop', '2025-05-26', 'FOUND', 'ACTIVE', 26, '2025-05-26 14:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Picha Iliyopotea', 'Picha ya familia kwenye fremu', 'Nimepoteza picha ya familia yangu kwenye fremu ya mbao kwenye hoteli ya Nyeri.', 'Personal Items', 'Nyeri Hotel', '2025-05-27', 'LOST', 'ACTIVE', 27, '2025-05-27 15:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Baisikeli Iliyopatikana', 'Baisikeli ya watoto, nyekundu', 'Nilipata baisikeli ya watoto ya rangi nyekundu karibu na shule ya Kakamega.', 'Bicycles', 'Kakamega School', '2025-05-28', 'FOUND', 'ACTIVE', 28, '2025-05-28 16:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Viatu vya Michezo Iliyopotea', 'Viatu vya Nike, nyeusi', 'Nimepoteza viatu vyangu vya michezo vya Nike vya rangi nyeusi kwenye gym ya Machakos.', 'Footwear', 'Machakos Gym', '2025-05-29', 'LOST', 'ACTIVE', 29, '2025-05-29 17:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Kitabu cha Kusoma Kilichopatikana', 'Kitabu cha "Kipepeo" na Rocha', 'Nilipata kitabu cha "Kipepeo" na Rocha kwenye benchi la park ya Kitale.', 'Books', 'Kitale Park', '2025-05-30', 'FOUND', 'ACTIVE', 30, '2025-05-30 18:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Mkufu wa Lulu Uliyopotea', 'Mkufu wa lulu nyeupe', 'Nimepoteza mkufu wangu wa lulu nyeupe kwenye soko la Nairobi.', 'Jewelry', 'Nairobi Market', '2025-05-31', 'LOST', 'ACTIVE', 31, '2025-05-31 09:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Simu Iliyopatikana', 'Simu ya Xiaomi, nyeusi', 'Nilipata simu ya Xiaomi ya rangi nyeusi kwenye basi la Mombasa.', 'Electronics', 'Mombasa Bus', '2025-06-01', 'FOUND', 'ACTIVE', 32, '2025-06-01 10:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Begi la Michezo Liliopotea', 'Begi la michezo la bluu', 'Nimepoteza begi langu la michezo la rangi ya bluu kwenye uwanja wa Kisumu.', 'Bags', 'Kisumu Field', '2025-06-02', 'LOST', 'ACTIVE', 33, '2025-06-02 11:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Saa ya Kidigitali Iliyopatikana', 'Saa ya kidigitali ya Fitbit', 'Nilipata saa ya kidigitali ya Fitbit kwenye mkahawa wa Nakuru.', 'Watches', 'Nakuru Cafe', '2025-06-03', 'FOUND', 'ACTIVE', 34, '2025-06-03 12:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Skafu ya Pamba Iliyopotea', 'Skafu ya pamba ya kijani', 'Nimepoteza skafu yangu ya pamba ya rangi ya kijani kwenye duka la Eldoret.', 'Apparel', 'Eldoret Shop', '2025-06-04', 'LOST', 'ACTIVE', 35, '2025-06-04 13:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Funguo za Nyumba Zilizopatikana', 'Seti ya funguo za nyumba', 'Nilipata seti ya funguo za nyumba kwenye barabara ya Thika.', 'Keys', 'Thika Road', '2025-06-05', 'FOUND', 'ACTIVE', 36, '2025-06-05 14:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Miwani ya Jua Iliyopotea', 'Miwani ya jua ya bluu', 'Nimepoteza miwani yangu ya jua ya rangi ya bluu kwenye soko la Nyeri.', 'Eyewear', 'Nyeri Market', '2025-06-06', 'LOST', 'ACTIVE', 37, '2025-06-06 15:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Paka Mdogo Aliyepatikana', 'Paka mdogo wa rangi ya manjano', 'Nilipata paka mdogo wa rangi ya manjano karibu na ofisi ya Kakamega.', 'Pets', 'Kakamega Office', '2025-06-07', 'FOUND', 'ACTIVE', 38, '2025-06-07 16:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Mkoba wa Fedha Uliyopotea', 'Mkoba wa fedha wa nyeusi', 'Nimepoteza mkoba wangu wa fedha wa rangi nyeusi kwenye kituo cha basi cha Machakos.', 'Bags', 'Machakos Bus Station', '2025-06-08', 'LOST', 'ACTIVE', 39, '2025-06-08 17:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Saa ya Mkono Iliyopatikana', 'Saa ya mkono ya Rolex, fedha', 'Nilipata saa ya mkono ya Rolex ya rangi ya fedha kwenye mkahawa wa Kitale.', 'Watches', 'Kitale Cafe', '2025-06-09', 'FOUND', 'ACTIVE', 40, '2025-06-09 18:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Kitabu cha Chuo Kilichopotea', 'Kitabu cha chuo cha sayansi', 'Nimepoteza kitabu changu cha chuo cha sayansi kwenye maktaba ya Nairobi.', 'Books', 'Nairobi Library', '2025-06-10', 'LOST', 'ACTIVE', 41, '2025-06-10 09:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Mbrella Iliyopatikana', 'Mbrella ya kijani', 'Nilipata mbrella ya rangi ya kijani kwenye stesheni ya treni ya Mombasa.', 'Household Items', 'Mombasa Train Station', '2025-06-11', 'FOUND', 'ACTIVE', 42, '2025-06-11 10:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Jezi ya Michezo Iliyopotea', 'Jezi ya michezo ya nyekundu', 'Nimepoteza jezi yangu ya michezo ya rangi nyekundu kwenye uwanja wa Kisumu.', 'Apparel', 'Kisumu Stadium', '2025-06-12', 'LOST', 'ACTIVE', 43, '2025-06-12 11:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Kalamu ya Fedha Iliyopatikana', 'Kalamu ya fedha ya Parker', 'Nilipata kalamu ya fedha ya Parker kwenye ofisi ya Nakuru.', 'Office Supplies', 'Nakuru Office', '2025-06-13', 'FOUND', 'ACTIVE', 44, '2025-06-13 12:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Pete ya Dhahabu Iliyopotea', 'Pete ya dhahabu yenye maandishi', 'Nimepoteza pete yangu ya dhahabu iliyo na maandishi ya kihisia kwenye hoteli ya Eldoret.', 'Jewelry', 'Eldoret Hotel', '2025-06-14', 'LOST', 'ACTIVE', 45, '2025-06-14 13:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Kamera ya Nikon Iliyopatikana', 'Kamera ya Nikon, nyeusi', 'Nilipata kamera ya Nikon ya rangi nyeusi kwenye pwani ya Mombasa.', 'Electronics', 'Mombasa Beach', '2025-06-15', 'FOUND', 'ACTIVE', 46, '2025-06-15 14:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Begi la Shule Liliopotea', 'Begi la shule la bluu', 'Nimepoteza begi langu la shule la rangi ya bluu kwenye kituo cha basi cha Thika.', 'Bags', 'Thika Bus Station', '2025-06-16', 'LOST', 'ACTIVE', 47, '2025-06-16 15:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Kitabu cha Historia Kilichopatikana', 'Kitabu cha historia cha shule', 'Nilipata kitabu cha historia cha shule kwenye maktaba ya Nyeri.', 'Books', 'Nyeri Library', '2025-06-17', 'FOUND', 'ACTIVE', 48, '2025-06-17 16:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Sunglasses za Oakley Iliyopotea', 'Sunglasses za Oakley, nyeusi', 'Nimepoteza sunglasses zangu za Oakley za rangi nyeusi kwenye soko la Kakamega.', 'Eyewear', 'Kakamega Market', '2025-06-18', 'LOST', 'ACTIVE', 49, '2025-06-18 17:00:00');
+-- INSERT INTO items (title, short_description, full_description, category, location, date, type, status, user_id, reported_date)
+-- VALUES ('Mbwa Mdogo Aliyepatikana', 'Mbwa mdogo wa rangi nyeupe', 'Nilipata mbwa mdogo wa rangi nyeupe karibu na duka la Kitale.', 'Pets', 'Kitale Shop', '2025-06-19', 'FOUND', 'ACTIVE', 50, '2025-06-19 18:00:00');
+--
+-- -- Item Images
+-- INSERT INTO item_images (item_id, image_url) VALUES (1, 'http://example.com/images/samsung_phone.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (2, 'http://example.com/images/red_fob_keys.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (3, 'http://example.com/images/gold_necklace.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (4, 'http://example.com/images/hp_laptop.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (5, 'http://example.com/images/yellow_scarf.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (6, 'http://example.com/images/siku_njema_book.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (7, 'http://example.com/images/black_glasses.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (8, 'http://example.com/images/white_cat.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (9, 'http://example.com/images/brown_wallet.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (10, 'http://example.com/images/casio_watch.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (11, 'http://example.com/images/silver_ring.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (12, 'http://example.com/images/canon_camera.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (13, 'http://example.com/images/leather_jacket.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (14, 'http://example.com/images/blue_notebook.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (15, 'http://example.com/images/red_cap.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (16, 'http://example.com/images/toyota_keys.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (17, 'http://example.com/images/green_scarf.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (18, 'http://example.com/images/brown_dog.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (19, 'http://example.com/images/laptop_bag.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (20, 'http://example.com/images/rayban_sunglasses.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (21, 'http://example.com/images/textbooks.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (22, 'http://example.com/images/red_umbrella.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (23, 'http://example.com/images/blue_jersey.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (24, 'http://example.com/images/gold_pen.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (25, 'http://example.com/images/blue_jewelry_box.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (26, 'http://example.com/images/iphone_charger.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (27, 'http://example.com/images/family_photo.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (28, 'http://example.com/images/red_bicycle.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (29, 'http://example.com/images/nike_shoes.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (30, 'http://example.com/images/kipepeo_book.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (31, 'http://example.com/images/pearl_necklace.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (32, 'http://example.com/images/xiaomi_phone.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (33, 'http://example.com/images/blue_sports_bag.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (34, 'http://example.com/images/fitbit_watch.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (35, 'http://example.com/images/green_scarf2.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (36, 'http://example.com/images/house_keys.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (37, 'http://example.com/images/blue_sunglasses.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (38, 'http://example.com/images/yellow_cat.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (39, 'http://example.com/images/black_wallet.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (40, 'http://example.com/images/rolex_watch.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (41, 'http://example.com/images/science_book.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (42, 'http://example.com/images/green_umbrella.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (43, 'http://example.com/images/red_jersey.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (44, 'http://example.com/images/silver_pen.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (45, 'http://example.com/images/gold_ring.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (46, 'http://example.com/images/nikon_camera.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (47, 'http://example.com/images/blue_school_bag.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (48, 'http://example.com/images/history_book.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (49, 'http://example.com/images/oakley_sunglasses.jpg');
+-- INSERT INTO item_images (item_id, image_url) VALUES (50, 'http://example.com/images/white_dog.jpg');
+--
+-- -- Item Additional Details
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (1, 'Brand', 'Samsung');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (1, 'Model', 'Galaxy A12');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (1, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (2, 'Quantity', 'Tatu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (2, 'Fob Color', 'Nyekundu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (3, 'Material', 'Dhahabu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (3, 'Stone', 'Zumaridi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (4, 'Brand', 'HP');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (4, 'Color', 'Fedha');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (5, 'Material', 'Pamba');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (5, 'Color', 'Manjano');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (6, 'Author', 'Ken Walibora');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (6, 'Title', 'Siku Njema');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (7, 'Frame Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (7, 'Type', 'Kusoma');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (8, 'Color', 'Mweupe');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (8, 'Eye Color', 'Bluu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (9, 'Material', 'Ngozi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (9, 'Color', 'Kahawia');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (10, 'Brand', 'Casio');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (10, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (11, 'Material', 'Fedha');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (11, 'Stone Color', 'Nyekundu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (12, 'Brand', 'Canon');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (12, 'Model', 'EOS');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (13, 'Material', 'Ngozi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (13, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (14, 'Color', 'Bluu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (14, 'Contents', 'Michoro');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (15, 'Type', 'Baseball');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (15, 'Color', 'Nyekundu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (16, 'Brand', 'Toyota');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (16, 'Fob Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (17, 'Material', 'Kitambaa');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (17, 'Color', 'Kijani');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (18, 'Color', 'Kahawia');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (18, 'Size', 'Mdogo');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (19, 'Type', 'Laptop');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (19, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (20, 'Brand', 'Ray-Ban');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (20, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (21, 'Type', 'Chuo');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (21, 'Quantity', 'Seti');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (22, 'Type', 'Mbrella');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (22, 'Color', 'Nyekundu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (23, 'Type', 'Soka');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (23, 'Color', 'Bluu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (24, 'Material', 'Dhahabu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (24, 'Type', 'Kalamu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (25, 'Type', 'Zao');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (25, 'Color', 'Bluu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (26, 'Brand', 'Apple');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (26, 'Color', 'Nyeupe');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (27, 'Type', 'Familia');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (27, 'Frame', 'Mbao');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (28, 'Type', 'Watoto');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (28, 'Color', 'Nyekundu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (29, 'Brand', 'Nike');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (29, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (30, 'Author', 'Rocha');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (30, 'Title', 'Kipepeo');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (31, 'Material', 'Lulu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (31, 'Color', 'Nyeupe');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (32, 'Brand', 'Xiaomi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (32, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (33, 'Type', 'Michezo');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (33, 'Color', 'Bluu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (34, 'Brand', 'Fitbit');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (34, 'Type', 'Kidigitali');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (35, 'Material', 'Pamba');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (35, 'Color', 'Kijani');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (36, 'Type', 'Nyumba');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (36, 'Quantity', 'Seti');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (37, 'Type', 'Jua');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (37, 'Color', 'Bluu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (38, 'Color', 'Manjano');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (38, 'Size', 'Mdogo');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (39, 'Type', 'Fedha');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (39, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (40, 'Brand', 'Rolex');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (40, 'Color', 'Fedha');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (41, 'Type', 'Sayansi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (41, 'Level', 'Chuo');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (42, 'Type', 'Mbrella');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (42, 'Color', 'Kijani');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (43, 'Type', 'Michezo');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (43, 'Color', 'Nyekundu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (44, 'Brand', 'Parker');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (44, 'Material', 'Fedha');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (45, 'Material', 'Dhahabu');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (45, 'Feature', 'Maandishi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (46, 'Brand', 'Nikon');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (46, 'Color', 'Nyeusi');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (47, 'Type', 'Shule');
+-- INSERT INTO item_additional_details (item_id, detail_key, detail_value) VALUES (47, 'Color', 'Bluu');
