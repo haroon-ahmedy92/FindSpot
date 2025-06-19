@@ -29,6 +29,7 @@ import UserProfilePage from './pages/UserProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import FaqPage from './pages/FaqPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
+import ContactPage from './pages/ContactPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 // App content wrapper component
@@ -88,15 +89,7 @@ const AppContent = () => {
                     <Route path="/contact" element={
                         <>
                             <Header />
-                            <div className={`pt-20 min-h-screen flex items-center justify-center ${
-                                isDarkMode ? 'bg-gray-900' : 'bg-white'
-                            }`}>
-                                <h1 className={`text-2xl font-bold ${
-                                    isDarkMode ? 'text-white' : 'text-gray-900'
-                                }`}>
-                                    Contact Page - Coming Soon
-                                </h1>
-                            </div>
+                            <ContactPage />
                             <Footer />
                         </>
                     } />

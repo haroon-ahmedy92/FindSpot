@@ -42,10 +42,10 @@ const SettingsPage = () => {
         confirmPassword: ''
     });
     
-    // Notification Settings
+    // Notification Settings - matching backend structure
     const [notificationSettings, setNotificationSettings] = useState({
         emailNotifications: true,
-        smsNotifications: false,
+        smsNotifications: true,
         pushNotifications: true,
         itemMatchAlerts: true,
         weeklyDigest: true,
@@ -53,9 +53,9 @@ const SettingsPage = () => {
         securityAlerts: true
     });
     
-    // Privacy Settings
+    // Privacy Settings - matching backend structure
     const [privacySettings, setPrivacySettings] = useState({
-        profileVisibility: 'public', // public, private, friends
+        profileVisibility: 'public',
         showEmail: false,
         showPhone: false,
         showLocation: true,
@@ -63,13 +63,12 @@ const SettingsPage = () => {
         showOnlineStatus: true
     });
     
-    // Theme & Display Settings
+    // Display Settings - matching backend structure
     const [displaySettings, setDisplaySettings] = useState({
         theme: isDarkMode ? 'dark' : 'light',
         language: 'en',
-        timezone: 'UTC',
-        itemsPerPage: 12,
-        defaultView: 'grid' // grid, list
+        defaultView: 'grid',
+        itemsPerPage: 12
     });
 
     // Load user settings on component mount
@@ -93,20 +92,42 @@ const SettingsPage = () => {
                 });
             }
             
-            // Load user settings
-            const settings = await UserService.getUserSettings();
-            if (settings) {
-                setNotificationSettings(settings.notifications || notificationSettings);
-                setPrivacySettings(settings.privacy || privacySettings);
-                setDisplaySettings({
-                    ...displaySettings,
-                    ...settings.display,
-                    theme: isDarkMode ? 'dark' : 'light'
-                });
+            // Load notification settings
+            try {
+                const notifications = await UserService.getNotificationSettings();
+                if (notifications) {
+                    setNotificationSettings(notifications);
+                }
+            } catch (error) {
+                console.log('Notification settings not found, using defaults');
+            }
+            
+            // Load privacy settings
+            try {
+                const privacy = await UserService.getPrivacySettings();
+                if (privacy) {
+                    setPrivacySettings(privacy);
+                }
+            } catch (error) {
+                console.log('Privacy settings not found, using defaults');
+            }
+            
+            // Load display settings
+            try {
+                const display = await UserService.getDisplaySettings();
+                if (display) {
+                    setDisplaySettings({
+                        ...displaySettings,
+                        ...display,
+                        theme: isDarkMode ? 'dark' : 'light'
+                    });
+                }
+            } catch (error) {
+                console.log('Display settings not found, using defaults');
             }
         } catch (error) {
             console.error('Error loading settings:', error);
-            showToast('Failed to load settings', 'error');
+            showToast('Failed to load settings. Please try again later.', 'error');
         } finally {
             setLoading(false);
         }
@@ -116,7 +137,9 @@ const SettingsPage = () => {
         e.preventDefault();
         try {
             setSaving(true);
-            await UserService.updateProfile(accountSettings);
+            // Clone the account settings to avoid reference issues
+            const profileData = {...accountSettings};
+            await UserService.updateProfile(profileData);
             showToast('Account settings updated successfully', 'success');
         } catch (error) {
             console.error('Error updating account:', error);
@@ -164,7 +187,9 @@ const SettingsPage = () => {
     const handleNotificationUpdate = async () => {
         try {
             setSaving(true);
-            await UserService.updateNotificationSettings(notificationSettings);
+            // Make a deep copy to avoid any potential reference issues
+            const settingsToSend = {...notificationSettings};
+            await UserService.updateNotificationSettings(settingsToSend);
             showToast('Notification settings updated', 'success');
         } catch (error) {
             console.error('Error updating notifications:', error);
@@ -177,7 +202,9 @@ const SettingsPage = () => {
     const handlePrivacyUpdate = async () => {
         try {
             setSaving(true);
-            await UserService.updatePrivacySettings(privacySettings);
+            // Clone the settings to avoid reference issues
+            const settings = {...privacySettings};
+            await UserService.updatePrivacySettings(settings);
             showToast('Privacy settings updated', 'success');
         } catch (error) {
             console.error('Error updating privacy:', error);
@@ -196,7 +223,14 @@ const SettingsPage = () => {
                 toggleTheme();
             }
             
-            await UserService.updateDisplaySettings(displaySettings);
+            // Clone and prepare display settings for API
+            const settings = {...displaySettings};
+            // Convert itemsPerPage to number if it's a string
+            if (typeof settings.itemsPerPage === 'string') {
+                settings.itemsPerPage = parseInt(settings.itemsPerPage, 10);
+            }
+            
+            await UserService.updateDisplaySettings(settings);
             showToast('Display settings updated', 'success');
         } catch (error) {
             console.error('Error updating display:', error);
@@ -215,12 +249,31 @@ const SettingsPage = () => {
                 // Redirect to login or home page
                 window.location.href = '/';
             } catch (error) {
-                console.error('Error deleting account:', error);
-                showToast('Failed to delete account', 'error');
+                handleApiError(error, 'Failed to delete account');
             } finally {
                 setSaving(false);
             }
         }
+    };
+
+    // Generic API error handler
+    const handleApiError = (error, fallbackMessage) => {
+        console.error(error);
+        let errorMessage = fallbackMessage;
+        
+        if (error.response) {
+            // Server responded with an error
+            if (error.response.data && error.response.data.message) {
+                errorMessage = error.response.data.message;
+            } else {
+                errorMessage = `Error ${error.response.status}: ${fallbackMessage}`;
+            }
+        } else if (error.request) {
+            // No response received
+            errorMessage = 'Network error. Please check your connection.';
+        }
+        
+        showToast(errorMessage, 'error');
     };
 
     if (loading) {
@@ -489,7 +542,7 @@ const SettingsPage = () => {
                                         <label className="relative inline-flex items-center cursor-pointer">
                                             <input
                                                 type="checkbox"
-                                                checked={notificationSettings[key]}
+                                                checked={notificationSettings[key] || false}
                                                 onChange={(e) => setNotificationSettings({
                                                     ...notificationSettings,
                                                     [key]: e.target.checked
@@ -559,7 +612,7 @@ const SettingsPage = () => {
                                             <label className="relative inline-flex items-center cursor-pointer">
                                                 <input
                                                     type="checkbox"
-                                                    checked={privacySettings[key]}
+                                                    checked={privacySettings[key] || false}
                                                     onChange={(e) => setPrivacySettings({
                                                         ...privacySettings,
                                                         [key]: e.target.checked
@@ -640,7 +693,7 @@ const SettingsPage = () => {
                                     </label>
                                     <select
                                         value={displaySettings.itemsPerPage}
-                                        onChange={(e) => setDisplaySettings({...displaySettings, itemsPerPage: parseInt(e.target.value)})}
+                                        onChange={(e) => setDisplaySettings({...displaySettings, itemsPerPage: parseInt(e.target.value, 10)})}
                                         className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                                             isDarkMode 
                                                 ? 'bg-gray-700 border-gray-600 text-white' 

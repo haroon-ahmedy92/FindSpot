@@ -16,12 +16,10 @@ const RecentListings = () => {
   const { isAuthenticated } = useAuth();
   const { isDarkMode } = useTheme();
 
-  // Fetch items when tab changes or component mounts
+  // Fetch items when tab changes or component mounts (for all users)
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchRecentItems();
-    }
-  }, [activeTab, isAuthenticated]);
+    fetchRecentItems();
+  }, [activeTab]);
 
   const fetchRecentItems = async () => {
     setLoading(true);
@@ -153,56 +151,49 @@ const RecentListings = () => {
           </div>
         )}
 
-        {/* Items Grid */}
+        {/* Items Grid - Show to all users */}
         {!loading && (
-          <>
-            {isAuthenticated ? (
-              <motion.div
-                variants={container}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-              >
-                {items.map((itemData) => (
-                  <motion.div key={itemData.id} variants={item}>
-                    <ItemCard item={itemData} />
-                  </motion.div>
-                ))}
-                {items.length === 0 && !loading && (
-                  <div className="col-span-full text-center py-10">
-                    <p className={`text-xl mb-2 ${
-                      isDarkMode ? 'text-gray-300' : 'text-[#212529]/60'
-                    }`}>No recent {activeTab === 'lost-items' ? 'lost' : 'found'} items</p>
-                    <p className={`${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                    }`}>
-                      Be the first to report a {activeTab === 'lost-items' ? 'lost' : 'found'} item!
-                    </p>
-                  </div>
-                )}
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {items.map((itemData) => (
+              <motion.div key={itemData.id} variants={item}>
+                <ItemCard item={itemData} />
               </motion.div>
-            ) : (
-              <div className="text-center py-12">
-                <p className={`text-xl mb-4 ${
-                  isDarkMode ? 'text-white' : 'text-[#212529]'
-                }`}>Log in to view recent listings</p>
-                <p className={`mb-6 ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                }`}>Join our community to see the latest lost and found items</p>
-                <button 
-                  onClick={() => navigate('/login')}
-                  className="bg-[#F35B04] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#d95203] transition-colors"
-                >
-                  Log In
-                </button>
+            ))}
+            {items.length === 0 && !loading && (
+              <div className="col-span-full text-center py-10">
+                <p className={`text-xl mb-2 ${
+                  isDarkMode ? 'text-gray-300' : 'text-[#212529]/60'
+                }`}>No recent {activeTab === 'lost-items' ? 'lost' : 'found'} items</p>
+                <p className={`${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  {isAuthenticated 
+                    ? `Be the first to report a ${activeTab === 'lost-items' ? 'lost' : 'found'} item!`
+                    : `Check back later for ${activeTab === 'lost-items' ? 'lost' : 'found'} items.`
+                  }
+                </p>
+                {/* Show login prompt only if not authenticated */}
+                {!isAuthenticated && (
+                  <button 
+                    onClick={() => navigate('/login')}
+                    className="mt-4 bg-[#F35B04] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#d95203] transition-colors"
+                  >
+                    Log In to Post Items
+                  </button>
+                )}
               </div>
             )}
-          </>
+          </motion.div>
         )}
 
-        {/* View All Button */}
-        {!loading && isAuthenticated && items.length > 0 && (
+        {/* View All Button - Show to all users */}
+        {!loading && items.length > 0 && (
           <motion.div
             className="flex justify-center mt-12"
             initial={{ opacity: 0, y: 20 }}

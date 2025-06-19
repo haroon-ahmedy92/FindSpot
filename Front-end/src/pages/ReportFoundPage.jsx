@@ -1,6 +1,6 @@
 // src/pages/ReportFoundPage.jsx
 import React, { useState } from 'react';
-import { FaCloudUploadAlt, FaTimes } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaTimes, FaArrowRight, FaInfoCircle, FaMapMarkerAlt, FaCalendarAlt, FaImage, FaCheck } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -147,186 +147,252 @@ const ReportFoundPage = () => {
     }
 
     return (
-        <div className={`min-h-screen flex flex-col ${
-            isDarkMode 
-                ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
-                : 'bg-gradient-to-b from-[#F8F9FA] to-white'
-        }`}>
-            <main className="flex-grow py-12">
-                <div className="container max-w-4xl mx-auto px-4">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className={`rounded-2xl shadow-lg overflow-hidden ${
-                            isDarkMode ? 'bg-gray-800' : 'bg-white'
-                        }`}
-                    >
-                        {/* Form Header */}
-                        <div className="bg-[#00AFB9] py-6 px-8 text-white">
-                            <h2 className="text-2xl md:text-3xl font-bold text-center">
-                                Report Found Item
-                            </h2>
-                            <p className="text-center opacity-90 mt-2">
-                                Help reunite this item with its owner by providing detailed information
-                            </p>
-                        </div>
+        <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+            <div className="container max-w-5xl mx-auto px-4 py-6">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-6"
+                >
+                    <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                        Report Found Item
+                    </h1>
+                    <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        Help reunite this item with its owner
+                    </p>
+                </motion.div>
 
-                        {/* Success/Error Messages */}
-                        {error && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className={`p-4 border-l-4 ${
-                                    isDarkMode 
-                                        ? 'bg-red-900/30 border-red-600/30 text-red-300' 
-                                        : 'bg-red-100 text-red-700 border-red-500'
-                                }`}
-                            >
-                                {error}
-                            </motion.div>
-                        )}
-                        {successMessage && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className={`p-4 border-l-4 ${
-                                    isDarkMode 
-                                        ? 'bg-green-900/30 border-green-600/30 text-green-300' 
-                                        : 'bg-green-100 text-green-700 border-green-500'
-                                }`}
-                            >
-                                {successMessage}
-                            </motion.div>
-                        )}
-
-                        {/* Form Body */}
-                        <form onSubmit={handleSubmit} className="p-6 md:p-8">
-                            {/* Item Title */}
-                            <div className="mb-6">
-                                <label className={`block font-medium mb-2 ${
-                                    isDarkMode ? 'text-white' : 'text-[#212529]'
-                                }`}>
-                                    Item Title*
-                                </label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleChange}
-                                    placeholder="Brief description of the found item"
-                                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
-                                        isDarkMode 
-                                            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                                            : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
-                                    }`}
-                                    required
-                                />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Left Column - Form Fields */}
+                    <div className="lg:col-span-2">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className={`rounded-xl shadow-md overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
+                        >
+                            {/* Form Header */}
+                            <div className="bg-[#00AFB9] py-3 px-4 text-white">
+                                <h2 className="text-lg font-semibold">
+                                    Item Details
+                                </h2>
                             </div>
 
-                            {/* Category */}
-                            <div className="mb-6">
-                                <label className={`block font-medium mb-2 ${
-                                    isDarkMode ? 'text-white' : 'text-[#212529]'
-                                }`}>
-                                    Category*
-                                </label>
-                                <select
-                                    name="category"
-                                    value={formData.category}
-                                    onChange={handleChange}
-                                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM3NzgxODIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWRvd24iPjxwYXRoIGQ9Im03IDEwIDUgNSA1LTUiLz48L3N2Zz4=')] bg-no-repeat bg-[center_right_1rem] ${
+                            {/* Success/Error Messages */}
+                            {error && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className={`p-2 border-l-4 text-xs ${
                                         isDarkMode 
-                                            ? 'bg-gray-700 border-gray-600 text-white' 
-                                            : 'bg-white border-[#E9ECEF] text-gray-900'
+                                            ? 'bg-red-900/30 border-red-600/30 text-red-300' 
+                                            : 'bg-red-100 text-red-700 border-red-500'
                                     }`}
-                                    required
                                 >
-                                    <option value="">Select a category</option>
-                                    <option value="Electronics">Electronics</option>
-                                    <option value="Documents">Documents</option>
-                                    <option value="Wallet">Wallets/Purses</option>
-                                    <option value="Keys">Keys</option>
-                                    <option value="Bags">Bags/Backpacks</option>
-                                    <option value="Jewelry">Jewelry/Accessories</option>
-                                    <option value="Clothing">Clothing</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-
-                            {/* Description */}
-                            <div className="mb-6">
-                                <label className={`block font-medium mb-2 ${
-                                    isDarkMode ? 'text-white' : 'text-[#212529]'
-                                }`}>
-                                    Detailed Description*
-                                </label>
-                                <textarea
-                                    name="description"
-                                    value={formData.description}
-                                    onChange={handleChange}
-                                    rows="4"
-                                    placeholder="Provide specific details about the item (brand, color, distinguishing features, etc.)"
-                                    className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
+                                    {error}
+                                </motion.div>
+                            )}
+                            {successMessage && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className={`p-2 border-l-4 text-xs ${
                                         isDarkMode 
-                                            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                                            : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                            ? 'bg-green-900/30 border-green-600/30 text-green-300' 
+                                            : 'bg-green-100 text-green-700 border-green-500'
                                     }`}
-                                    required
-                                ></textarea>
-                            </div>
+                                >
+                                    {successMessage}
+                                </motion.div>
+                            )}
 
-                            {/* Location & Date */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                <div>
-                                    <label className={`block font-medium mb-2 ${
-                                        isDarkMode ? 'text-white' : 'text-[#212529]'
-                                    }`}>
-                                        Where did you find it?*
+                            {/* Form Content */}
+                            <form onSubmit={handleSubmit} className="p-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* Title */}
+                                    <div className="mb-3">
+                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                                            Item Title*
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            value={formData.title}
+                                            onChange={handleChange}
+                                            placeholder="Brief description"
+                                            className={`w-full px-3 py-2 text-sm rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-1 focus:ring-[#00AFB9]/20 ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                                    : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                            }`}
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Category */}
+                                    <div className="mb-3">
+                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                                            Category*
+                                        </label>
+                                        <select
+                                            name="category"
+                                            value={formData.category}
+                                            onChange={handleChange}
+                                            className={`w-full px-3 py-2 text-sm rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-1 focus:ring-[#00AFB9]/20 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM3NzgxODIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWRvd24iPjxwYXRoIGQ9Im03IDEwIDUgNSA1LTUiLz48L3N2Zz4=')] bg-no-repeat bg-[center_right_1rem] ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white' 
+                                                    : 'bg-white border-[#E9ECEF] text-gray-900'
+                                            }`}
+                                            required
+                                        >
+                                            <option value="">Select category</option>
+                                            <option value="Electronics">Electronics</option>
+                                            <option value="Documents">Documents</option>
+                                            <option value="Wallet">Wallets/Purses</option>
+                                            <option value="Keys">Keys</option>
+                                            <option value="Bags">Bags/Backpacks</option>
+                                            <option value="Jewelry">Jewelry/Accessories</option>
+                                            <option value="Clothing">Clothing</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Description */}
+                                <div className="mb-3">
+                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                                        <FaInfoCircle className="inline-block mr-1 text-xs text-[#00AFB9]" /> Description*
                                     </label>
-                                    <input
-                                        type="text"
-                                        name="location"
-                                        value={formData.location}
+                                    <textarea
+                                        name="description"
+                                        value={formData.description}
                                         onChange={handleChange}
-                                        placeholder="Specific location (e.g., University Library)"
-                                        className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
+                                        rows="3"
+                                        placeholder="Color, brand, distinguishing features"
+                                        className={`w-full px-3 py-2 text-sm rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-1 focus:ring-[#00AFB9]/20 ${
                                             isDarkMode 
                                                 ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                                                 : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
                                         }`}
                                         required
-                                    />
+                                    ></textarea>
                                 </div>
-                                <div>
-                                    <label className={`block font-medium mb-2 ${
-                                        isDarkMode ? 'text-white' : 'text-[#212529]'
-                                    }`}>
-                                        When did you find it?*
-                                    </label>
-                                    <input
-                                        type="date"
-                                        name="date"
-                                        value={formData.date}
-                                        onChange={handleChange}
-                                        className={`w-full px-4 py-3 rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-2 focus:ring-[#00AFB9]/20 ${
-                                            isDarkMode 
-                                                ? 'bg-gray-700 border-gray-600 text-white' 
-                                                : 'bg-white border-[#E9ECEF] text-gray-900'
-                                        }`}
-                                        required
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Images */}
-                            <div className="mb-6">
-                                <label className={`block font-medium mb-2 ${
-                                    isDarkMode ? 'text-white' : 'text-[#212529]'
-                                }`}>
-                                    Upload Photos (Max 3)
-                                </label>
-                                <div className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* Location */}
+                                    <div className="mb-3">
+                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                                            <FaMapMarkerAlt className="inline-block mr-1 text-xs text-[#00AFB9]" /> Location Found*
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="location"
+                                            value={formData.location}
+                                            onChange={handleChange}
+                                            placeholder="Where did you find it?"
+                                            className={`w-full px-3 py-2 text-sm rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-1 focus:ring-[#00AFB9]/20 ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                                    : 'bg-white border-[#E9ECEF] text-gray-900 placeholder-gray-500'
+                                            }`}
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Date */}
+                                    <div className="mb-3">
+                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                                            <FaCalendarAlt className="inline-block mr-1 text-xs text-[#00AFB9]" /> Date Found*
+                                        </label>
+                                        <input
+                                            type="date"
+                                            name="date"
+                                            value={formData.date}
+                                            onChange={handleChange}
+                                            className={`w-full px-3 py-2 text-sm rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-1 focus:ring-[#00AFB9]/20 ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white' 
+                                                    : 'bg-white border-[#E9ECEF] text-gray-900'
+                                            }`}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Status & Contact Preference in one row */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                    {/* Current Status */}
+                                    <div>
+                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                                            Current Status*
+                                        </label>
+                                        <div className="space-y-2 text-sm">
+                                            <label className="flex items-center space-x-2">
+                                                <input
+                                                    type="radio"
+                                                    name="status"
+                                                    value="with-me"
+                                                    checked={formData.status === 'with-me'}
+                                                    onChange={handleChange}
+                                                    className="h-4 w-4 text-[#00AFB9]"
+                                                />
+                                                <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>I'm keeping it safe</span>
+                                            </label>
+                                            <label className="flex items-center space-x-2">
+                                                <input
+                                                    type="radio"
+                                                    name="status"
+                                                    value="turned-in"
+                                                    checked={formData.status === 'turned-in'}
+                                                    onChange={handleChange}
+                                                    className="h-4 w-4 text-[#00AFB9]"
+                                                />
+                                                <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>Turned in to lost & found</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact Preference */}
+                                    <div>
+                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                                            Contact Preference
+                                        </label>
+                                        <select
+                                            name="contactPreference"
+                                            value={formData.contactPreference}
+                                            onChange={handleChange}
+                                            className={`w-full px-3 py-2 text-sm rounded-lg border focus:border-[#00AFB9] focus:outline-none focus:ring-1 focus:ring-[#00AFB9]/20 appearance-none ${
+                                                isDarkMode 
+                                                    ? 'bg-gray-700 border-gray-600 text-white' 
+                                                    : 'bg-white border-[#E9ECEF] text-gray-900'
+                                            }`}
+                                        >
+                                            <option value="email">Email</option>
+                                            <option value="phone">Phone</option>
+                                            <option value="app">In-App Messages Only</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+
+                    {/* Right Column - Images and Submit */}
+                    <div className="lg:col-span-1">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className={`rounded-xl shadow-md overflow-hidden mb-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
+                        >
+                            <div className="bg-[#00AFB9] py-3 px-4 text-white">
+                                <h2 className="text-lg font-semibold flex items-center">
+                                    <FaImage className="mr-2" /> Photos
+                                </h2>
+                            </div>
+                            <div className="p-4">
+                                <div className={`border-2 border-dashed rounded-lg p-3 text-center cursor-pointer transition-colors ${
                                     isDarkMode 
                                         ? 'border-gray-600 hover:border-[#00AFB9]' 
                                         : 'border-[#E9ECEF] hover:border-[#00AFB9]'
@@ -340,29 +406,24 @@ const ReportFoundPage = () => {
                                         onChange={handleImageUpload}
                                     />
                                     <label htmlFor="item-images" className="cursor-pointer">
-                                        <div className="flex flex-col items-center justify-center space-y-2">
-                                            <FaCloudUploadAlt className="text-3xl text-[#00AFB9]" />
-                                            <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                                                Click to upload or drag and drop
-                                            </p>
-                                            <p className={`text-sm ${
-                                                isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                                            }`}>
-                                                Upload clear photos of the item (max 3 photos, 5MB each)
+                                        <div className="flex flex-col items-center justify-center py-2">
+                                            <FaCloudUploadAlt className="text-2xl text-[#00AFB9]" />
+                                            <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                Upload Images (Max 3)
                                             </p>
                                         </div>
                                     </label>
                                 </div>
                                 {formData.images.length > 0 && (
-                                    <div className="flex flex-wrap gap-4 mt-4">
+                                    <div className="flex flex-wrap gap-2 mt-3">
                                         {formData.images.map((img, index) => (
-                                            <div key={index} className={`relative w-24 h-24 rounded-lg overflow-hidden border ${
+                                            <div key={index} className={`relative w-full rounded-lg overflow-hidden border ${
                                                 isDarkMode ? 'border-gray-600' : 'border-gray-200'
-                                            }`}>
+                                            } mb-2`}>
                                                 <img
                                                     src={img.preview}
                                                     alt={`Preview ${index + 1}`}
-                                                    className="w-full h-full object-cover"
+                                                    className="w-full h-32 object-cover"
                                                 />
                                                 <button
                                                     type="button"
@@ -376,141 +437,53 @@ const ReportFoundPage = () => {
                                     </div>
                                 )}
                             </div>
+                        </motion.div>
 
-                            {/* Item Status */}
-                            <div className="mb-6">
-                                <label className={`block font-medium mb-2 ${
-                                    isDarkMode ? 'text-white' : 'text-[#212529]'
-                                }`}>
-                                    Current Item Status*
-                                </label>
-                                <div className="space-y-3">
-                                    <label className="flex items-center space-x-3">
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            value="with-me"
-                                            checked={formData.status === 'with-me'}
-                                            onChange={handleChange}
-                                            className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
-                                        />
-                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>I'm keeping it safe</span>
-                                    </label>
-                                    <label className="flex items-center space-x-3">
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            value="turned-in"
-                                            checked={formData.status === 'turned-in'}
-                                            onChange={handleChange}
-                                            className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
-                                        />
-                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Turned in to lost & found office</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            {/* Contact Preference */}
-                            <div className="mb-6">
-                                <label className={`block font-medium mb-2 ${
-                                    isDarkMode ? 'text-white' : 'text-[#212529]'
-                                }`}>
-                                    Contact Preference*
-                                </label>
-                                <div className="space-y-3">
-                                    <label className="flex items-center space-x-3">
-                                        <input
-                                            type="radio"
-                                            name="contactPreference"
-                                            value="email"
-                                            checked={formData.contactPreference === 'email'}
-                                            onChange={handleChange}
-                                            className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
-                                        />
-                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Email</span>
-                                    </label>
-                                    <label className="flex items-center space-x-3">
-                                        <input
-                                            type="radio"
-                                            name="contactPreference"
-                                            value="phone"
-                                            checked={formData.contactPreference === 'phone'}
-                                            onChange={handleChange}
-                                            className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
-                                        />
-                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Phone</span>
-                                    </label>
-                                    <label className="flex items-center space-x-3">
-                                        <input
-                                            type="radio"
-                                            name="contactPreference"
-                                            value="both"
-                                            checked={formData.contactPreference === 'both'}
-                                            onChange={handleChange}
-                                            className="h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9]"
-                                        />
-                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-900'}>Both</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            {/* Terms */}
-                            <div className="mb-8">
-                                <div className="flex items-start">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            className={`rounded-xl shadow-md overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
+                        >
+                            <div className="p-4">
+                                <label className="flex items-start space-x-2 mb-4 cursor-pointer">
                                     <input
                                         type="checkbox"
                                         name="agreedToTerms"
                                         checked={formData.agreedToTerms}
                                         onChange={handleChange}
-                                        className="mt-1 h-5 w-5 text-[#00AFB9] focus:ring-[#00AFB9] rounded"
-                                        required
+                                        className="mt-0.5 h-4 w-4 text-[#00AFB9] rounded"
                                     />
-                                    <span className={`ml-3 text-sm ${
-                                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                                    }`}>
-                    I confirm that all information provided is accurate and I agree to the{' '}
-                                        <a href="#" className="text-[#00AFB9] hover:underline">Terms of Service</a> and{' '}
-                                        <a href="#" className="text-[#00AFB9] hover:underline">Privacy Policy</a>.
-                  </span>
-                                </div>
-                            </div>
+                                    <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                        I confirm this report is accurate and I agree to the <a href="/terms" className="text-[#00AFB9]">Terms of Service</a> and <a href="/privacy" className="text-[#00AFB9]">Privacy Policy</a>.
+                                    </span>
+                                </label>
 
-                            {/* Submit Button */}
-                            <div className="flex justify-between">
-                                <motion.button
+                                <button
                                     type="button"
-                                    whileHover={{ x: -3 }}
-                                    onClick={() => navigate('/dashboard')}
-                                    className={`px-6 py-3 border-2 border-[#F35B04] text-[#F35B04] rounded-lg font-medium hover:bg-[#F35B04]/10 transition-colors ${
-                                        isDarkMode ? 'bg-gray-800' : 'bg-white'
-                                    }`}
-                                >
-                                    Cancel
-                                </motion.button>
-                                <motion.button
-                                    type="submit"
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
+                                    onClick={handleSubmit}
                                     disabled={isSubmitting}
-                                    className="px-8 py-3 bg-[#00AFB9] hover:bg-[#0095a0] text-white rounded-lg font-bold shadow-md transition-colors duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className={`w-full py-2 px-4 rounded-lg flex items-center justify-center ${
+                                        isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#00AFB9] hover:bg-[#009ca5]'
+                                    } text-white font-medium transition-colors`}
                                 >
                                     {isSubmitting ? (
                                         <>
-                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Processing...
+                                            <FaCloudUploadAlt className="animate-spin mr-2" />
+                                            Submitting...
                                         </>
                                     ) : (
-                                        'Submit Found Item'
+                                        <>
+                                            Submit Report 
+                                            <FaArrowRight className="ml-2" />
+                                        </>
                                     )}
-                                </motion.button>
+                                </button>
                             </div>
-                        </form>
-                    </motion.div>
+                        </motion.div>
+                    </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 };

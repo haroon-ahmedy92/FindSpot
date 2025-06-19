@@ -1,6 +1,6 @@
 // src/pages/MyItemsPage.jsx
 import React, { useState, useEffect } from 'react';
-import { FaMobileAlt, FaWallet, FaKey, FaBook, FaPlus, FaEdit, FaCheck, FaTrash, FaChevronLeft, FaChevronRight, FaEye } from 'react-icons/fa';
+import { FaMobileAlt, FaWallet, FaKey, FaBook, FaPlus, FaEdit, FaCheck, FaTrash, FaChevronLeft, FaChevronRight, FaEye, FaUndo } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
@@ -9,8 +9,6 @@ import ItemService from '../api/itemService';
 import Loading from '../components/ui/Loading';
 import { useToast } from '../contexts/ToastContext';
 import ConfirmModal from '../components/ui/ConfirmModal';
-
-// Mock data for testing
 
 const MyItemsPage = () => {
     const navigate = useNavigate();
@@ -30,6 +28,13 @@ const MyItemsPage = () => {
     const [error, setError] = useState(null);
     const [actionLoading, setActionLoading] = useState(false);
     const [processingItemId, setProcessingItemId] = useState(null);
+    const [justUpdatedItem, setJustUpdatedItem] = useState(false);
+    const [initialCountsLoaded, setInitialCountsLoaded] = useState(false);
+    
+    // Count states for tab headers
+    const [lostCount, setLostCount] = useState(0);
+    const [foundCount, setFoundCount] = useState(0);
+    const [resolvedCount, setResolvedCount] = useState(0);
     
     // Edit modal state
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -40,12 +45,55 @@ const MyItemsPage = () => {
     const [confirmAction, setConfirmAction] = useState(null);
     const [confirmItemId, setConfirmItemId] = useState(null);
 
+    // Secondary confirm modal for force remove scenarios
+    const [isForceRemoveModalOpen, setIsForceRemoveModalOpen] = useState(false);
+    const [forceRemoveItemId, setForceRemoveItemId] = useState(null);
+
     // Toast context
-    const { showSuccess, showError } = useToast();
+    const { showSuccess, showError, showInfo } = useToast();
 
     useEffect(() => {
-        fetchItems();
-    }, [activeTab]);
+        // Only fetch if we haven't just updated an item
+        if (!justUpdatedItem) {
+            // Only fetch counts on first load, not on every tab change
+            if (!initialCountsLoaded) {
+                fetchAllCounts();
+                setInitialCountsLoaded(true);
+            }
+            fetchItems();
+        }
+    }, [activeTab, initialCountsLoaded, justUpdatedItem]);
+
+    // Separate useEffect to handle the justUpdatedItem flag reset
+    useEffect(() => {
+        if (justUpdatedItem) {
+            // Reset the flag after a short delay without triggering any API calls
+            const timer = setTimeout(() => setJustUpdatedItem(false), 500);
+            return () => clearTimeout(timer);
+        }
+    }, [justUpdatedItem]);
+
+    // New function to fetch counts for all tabs
+    const fetchAllCounts = async () => {
+        try {
+            const params = { page: 0, limit: 1 }; // Only need count, not actual data
+            
+            // Fetch counts for all tabs simultaneously
+            const [lostResponse, foundResponse, resolvedResponse] = await Promise.all([
+                ItemService.getMyLostItems({ ...params, status: 'ACTIVE' }),
+                ItemService.getMyFoundItems({ ...params, status: 'ACTIVE' }),
+                ItemService.getMyResolvedItems(params)
+            ]);
+            
+            // Update counts from API responses
+            setLostCount(lostResponse?.totalElements || lostResponse?.content?.length || 0);
+            setFoundCount(foundResponse?.totalElements || foundResponse?.content?.length || 0);
+            setResolvedCount(resolvedResponse?.totalElements || resolvedResponse?.content?.length || 0);
+        } catch (err) {
+            console.error('Error fetching counts:', err);
+            // Don't show error for counts, just keep them at 0
+        }
+    };
 
     const fetchItems = async () => {
         setLoading(true);
@@ -60,52 +108,65 @@ const MyItemsPage = () => {
             };
             
             if (activeTab === 'lost') {
-                const response = await ItemService.getMyLostItems(params);
+                // Add status filter for active items only
+                const lostParams = { ...params, status: 'ACTIVE' };
+                const response = await ItemService.getMyLostItems(lostParams);
                 console.log('Lost items API response:', response);
                 if (response && response.content && response.content.length > 0) {
-                    // Map response to match component expectations
-                    const mappedItems = response.content.map(item => ({
-                        itemId: item.id,
-                        title: item.title,
-                        category: item.category,
-                        location: item.location,
-                        description: item.fullDescription || item.shortDescription,
-                        createdAt: item.reportedDate || item.date,
-                        status: item.status || 'ACTIVE',
-                        additionalDetails: item.additionalDetails || {}
-                    }));
+                    // Map response and filter for ACTIVE status items only
+                    const mappedItems = response.content
+                        .filter(item => item.status === 'ACTIVE') // Extra filter to ensure only active items
+                        .map(item => ({
+                            itemId: item.id,
+                            title: item.title,
+                            category: item.category,
+                            location: item.location,
+                            description: item.fullDescription || item.shortDescription,
+                            createdAt: item.reportedDate || item.date,
+                            status: item.status || 'ACTIVE',
+                            additionalDetails: item.additionalDetails || {}
+                        }));
                     setLostItems(mappedItems);
+                    // Don't update count here - it's managed separately
                 } else {
-                    // Use mock data if API returns empty results
-                    console.log('Using mock lost items data - no items returned from API');
-                    setLostItems(MOCK_LOST_ITEMS);
+                    // No active lost items returned from API
+                    console.log('No active lost items returned from API');
+                    setLostItems([]);
+                    // Don't update count here - it's managed separately
                 }
             } else if (activeTab === 'found') {
-                const response = await ItemService.getMyFoundItems(params);
+                // Add status filter for active items only
+                const foundParams = { ...params, status: 'ACTIVE' };
+                const response = await ItemService.getMyFoundItems(foundParams);
                 console.log('Found items API response:', response);
                 if (response && response.content && response.content.length > 0) {
-                    // Map response to match component expectations
-                    const mappedItems = response.content.map(item => ({
-                        itemId: item.id,
-                        title: item.title,
-                        category: item.category,
-                        location: item.location,
-                        description: item.fullDescription || item.shortDescription,
-                        createdAt: item.reportedDate || item.date,
-                        status: item.status || 'ACTIVE',
-                        additionalDetails: item.additionalDetails || {}
-                    }));
+                    // Map response and filter for ACTIVE status items only
+                    const mappedItems = response.content
+                        .filter(item => item.status === 'ACTIVE') // Extra filter to ensure only active items
+                        .map(item => ({
+                            itemId: item.id,
+                            title: item.title,
+                            category: item.category,
+                            location: item.location,
+                            description: item.fullDescription || item.shortDescription,
+                            createdAt: item.reportedDate || item.date,
+                            status: item.status || 'ACTIVE',
+                            additionalDetails: item.additionalDetails || {}
+                        }));
                     setFoundItems(mappedItems);
+                    // Don't update count here - it's managed separately
                 } else {
-                    // Use mock data if API returns empty results
-                    console.log('Using mock found items data - no items returned from API');
-                    setFoundItems(MOCK_FOUND_ITEMS);
+                    // No active found items returned from API
+                    console.log('No active found items returned from API');
+                    setFoundItems([]);
+                    // Don't update count here - it's managed separately
                 }
             } else if (activeTab === 'resolved') {
+                // The resolved endpoint should return items with CLAIMED or CLOSED status by default
                 const response = await ItemService.getMyResolvedItems(params);
                 console.log('Resolved items API response:', response);
                 if (response && response.content && response.content.length > 0) {
-                    // Map response to match component expectations
+                    // Map response - resolved endpoint should already filter for resolved items
                     const mappedItems = response.content.map(item => ({
                         itemId: item.id,
                         title: item.title,
@@ -113,34 +174,32 @@ const MyItemsPage = () => {
                         location: item.location,
                         description: item.fullDescription || item.shortDescription,
                         createdAt: item.reportedDate || item.date,
-                        resolvedAt: item.resolvedDate,
+                        resolvedAt: item.resolvedDate, // Now properly mapped from backend
                         itemType: item.type,
                         status: item.status || 'RESOLVED',
                         additionalDetails: item.additionalDetails || {}
                     }));
                     setResolvedItems(mappedItems);
+                    // Don't update count here - it's managed separately
                 } else {
-                    // Use mock data if API returns empty results
-                    console.log('Using mock resolved items data - no items returned from API');
-                    setResolvedItems(MOCK_RESOLVED_ITEMS);
+                    // No resolved items returned from API
+                    console.log('No resolved items returned from API');
+                    setResolvedItems([]);
+                    // Don't update count here - it's managed separately
                 }
             }
         } catch (err) {
             console.error('Error fetching items:', err);
+            setError(`Failed to load ${activeTab} items. Please try again.`);
             
-            // Use mock data as fallback on error
+            // Clear the arrays on error
             if (activeTab === 'lost') {
-                console.log('Using mock lost items data due to error');
-                setLostItems(MOCK_LOST_ITEMS);
+                setLostItems([]);
             } else if (activeTab === 'found') {
-                console.log('Using mock found items data due to error');
-                setFoundItems(MOCK_FOUND_ITEMS);
+                setFoundItems([]);
             } else if (activeTab === 'resolved') {
-                console.log('Using mock resolved items data due to error');
-                setResolvedItems(MOCK_RESOLVED_ITEMS);
+                setResolvedItems([]);
             }
-            
-            setError('Failed to load items from API. Showing sample data instead.');
         } finally {
             setLoading(false);
         }
@@ -204,19 +263,25 @@ const MyItemsPage = () => {
             console.log(`Attempting to delete item with ID: ${itemId}`);
             await ItemService.deleteItem(itemId);
             
+            // Set flag to prevent useEffect from reloading
+            setJustUpdatedItem(true);
+            
             // Remove the item from the state regardless of the active tab
             if (activeTab === 'lost') {
                 setLostItems(prevItems =>
                     prevItems.filter(item => item.itemId !== itemId)
                 );
+                setLostCount(prev => Math.max(0, prev - 1));
             } else if (activeTab === 'found') {
                 setFoundItems(prevItems =>
                     prevItems.filter(item => item.itemId !== itemId)
                 );
+                setFoundCount(prev => Math.max(0, prev - 1));
             } else if (activeTab === 'resolved') {
                 setResolvedItems(prevItems =>
                     prevItems.filter(item => item.itemId !== itemId)
                 );
+                setResolvedCount(prev => Math.max(0, prev - 1));
             }
             
             // Show success message using toast
@@ -224,97 +289,93 @@ const MyItemsPage = () => {
         } catch (err) {
             console.error('Error deleting item:', err);
             
-            // Force remove from UI if backend error but we still want to remove it visually
-            const forceRemove = confirm('Error communicating with server. Remove item from your list anyway?');
-            if (forceRemove) {
-                if (activeTab === 'lost') {
-                    setLostItems(prevItems =>
-                        prevItems.filter(item => item.itemId !== itemId)
-                    );
-                } else if (activeTab === 'found') {
-                    setFoundItems(prevItems =>
-                        prevItems.filter(item => item.itemId !== itemId)
-                    );
-                } else if (activeTab === 'resolved') {
-                    setResolvedItems(prevItems =>
-                        prevItems.filter(item => item.itemId !== itemId)
-                    );
-                }
-                showInfo('Item removed from your list.');
-            } else {
-                showError('Failed to delete item. Please try again.');
-            }
+            // Show force remove confirmation modal instead of browser confirm
+            setForceRemoveItemId(itemId);
+            setIsForceRemoveModalOpen(true);
+            showError('Failed to communicate with server. You can force remove the item from your list.');
         } finally {
             setActionLoading(false);
             setProcessingItemId(null);
         }
     };
 
+    // Handle force remove confirmation
+    const handleForceRemove = (itemId) => {
+        // Set flag to prevent useEffect from reloading
+        setJustUpdatedItem(true);
+        
+        // Remove item from UI even if backend failed
+        if (activeTab === 'lost') {
+            setLostItems(prevItems =>
+                prevItems.filter(item => item.itemId !== itemId)
+            );
+            setLostCount(prev => Math.max(0, prev - 1));
+        } else if (activeTab === 'found') {
+            setFoundItems(prevItems =>
+                prevItems.filter(item => item.itemId !== itemId)
+            );
+            setFoundCount(prev => Math.max(0, prev - 1));
+        } else if (activeTab === 'resolved') {
+            setResolvedItems(prevItems =>
+                prevItems.filter(item => item.itemId !== itemId)
+            );
+            setResolvedCount(prev => Math.max(0, prev - 1));
+        }
+        
+        setIsForceRemoveModalOpen(false);
+        setForceRemoveItemId(null);
+        showInfo('Item removed from your list.');
+    };
+
     // Handle item status update with toast notifications
     const handleUpdateStatus = async (itemId, newStatus) => {
-        setActionLoading(true);
-        setProcessingItemId(itemId);
-        
         try {
-            const response = await ItemService.updateItemStatus(itemId, newStatus);
+            setJustUpdatedItem(true);
             
-            // Update the item in the state
-            const updatedItem = {
-                ...response,
-                status: newStatus
-            };
+            // Find the item to get its current status
+            let itemToUpdate = null;
+            let currentStatus = null;
             
-            // If status is changed to a resolved status, move it to resolved tab
-            if (newStatus === 'CLAIMED' || newStatus === 'CLOSED' || newStatus === 'RESOLVED') {
-                // Remove from current tab
-                if (activeTab === 'lost') {
-                    setLostItems(prevItems => 
-                        prevItems.filter(item => item.itemId !== itemId)
-                    );
-                } else if (activeTab === 'found') {
-                    setFoundItems(prevItems => 
-                        prevItems.filter(item => item.itemId !== itemId)
-                    );
-                }
-                
-                // Add to resolved items
-                setResolvedItems(prevItems => [
-                    { 
-                        ...prevItems.find(item => item.itemId === itemId) || updatedItem,
-                        status: newStatus,
-                        resolvedAt: new Date().toISOString()
-                    },
-                    ...prevItems
-                ]);
-                
-                showSuccess('Item has been marked as resolved');
-            } else {
-                // Just update the status in the current tab
-                if (activeTab === 'lost') {
-                    setLostItems(prevItems => 
-                        prevItems.map(item => 
-                            item.itemId === itemId ? { ...item, status: newStatus } : item
-                        )
-                    );
-                } else if (activeTab === 'found') {
-                    setFoundItems(prevItems => 
-                        prevItems.map(item => 
-                            item.itemId === itemId ? { ...item, status: newStatus } : item
-                        )
-                    );
-                }
-                
-                showSuccess(`Item status updated to ${newStatus}`);
+            if (lostItems.some(item => item.itemId === itemId)) {
+                itemToUpdate = lostItems.find(item => item.itemId === itemId);
+                currentStatus = 'lost';
+            } else if (foundItems.some(item => item.itemId === itemId)) {
+                itemToUpdate = foundItems.find(item => item.itemId === itemId);
+                currentStatus = 'found';
             }
             
-            return response;
-        } catch (err) {
-            console.error('Error updating item status:', err);
-            showError('Failed to update item status. Please try again.');
-            throw err;
-        } finally {
-            setActionLoading(false);
-            setProcessingItemId(null);
+            if (!itemToUpdate) return;
+            
+            await ItemService.updateItemStatus(itemId, newStatus);
+            
+            // Update the state immediately
+            if (newStatus === 'CLAIMED' || newStatus === 'CLOSED' || newStatus === 'RESOLVED') {
+                const resolvedItem = {
+                    ...itemToUpdate,
+                    status: newStatus,
+                    resolvedAt: new Date().toISOString(),
+                    itemType: currentStatus === 'lost' ? 'LOST' : 'FOUND'
+                };
+                
+                // Remove from current arrays and add to resolved
+                setLostItems(prevItems => prevItems.filter(item => item.itemId !== itemId));
+                setFoundItems(prevItems => prevItems.filter(item => item.itemId !== itemId));
+                setResolvedItems(prevItems => [resolvedItem, ...prevItems]);
+                
+                // Update counts efficiently
+                if (currentStatus === 'lost') {
+                    setLostCount(prev => Math.max(0, prev - 1));
+                    showSuccess('Item marked as found and moved to resolved section');
+                } else {
+                    setFoundCount(prev => Math.max(0, prev - 1));
+                    showSuccess('Item marked as returned and moved to resolved section');
+                }
+                setResolvedCount(prev => prev + 1);
+            }
+        } catch (error) {
+            console.error('Error updating item status:', error);
+            showError('Failed to update item status');
+            setJustUpdatedItem(false); // Reset flag on error
         }
     };
 
@@ -342,6 +403,67 @@ const MyItemsPage = () => {
     // Handle viewing item details
     const handleViewItem = (itemId) => {
         navigate(`/dashboard/item/${itemId}`);
+    };
+
+    // Handle reopening a resolved item
+    const handleReopenItem = async (itemId) => {
+        try {
+            setJustUpdatedItem(true);
+            
+            // Find the item in resolved items
+            const resolvedItem = resolvedItems.find(item => item.itemId === itemId);
+            if (!resolvedItem) {
+                showError('Item not found in resolved list');
+                return;
+            }
+            
+            // Call the new reopen API endpoint
+            const response = await ItemService.reopenItem(itemId);
+            
+            if (response.success) {
+                // Remove from resolved items
+                setResolvedItems(prevItems => prevItems.filter(item => item.itemId !== itemId));
+                
+                // Add back to original list based on item type
+                const reopenedItem = {
+                    ...resolvedItem,
+                    status: 'ACTIVE',
+                    resolvedAt: null
+                };
+                
+                if (resolvedItem.itemType === 'LOST') {
+                    setLostItems(prevItems => [reopenedItem, ...prevItems]);
+                    setLostCount(prev => prev + 1);
+                    showSuccess('Lost item reopened and moved back to active items');
+                } else if (resolvedItem.itemType === 'FOUND') {
+                    setFoundItems(prevItems => [reopenedItem, ...prevItems]);
+                    setFoundCount(prev => prev + 1);
+                    showSuccess('Found item reopened and moved back to active items');
+                }
+                
+                setResolvedCount(prev => Math.max(0, prev - 1));
+            } else {
+                showError(response.message || 'Failed to reopen item');
+                setJustUpdatedItem(false); // Reset flag on error
+            }
+            
+            return response;
+        } catch (err) {
+            console.error('Error reopening item:', err);
+            setJustUpdatedItem(false); // Reset flag on error
+            
+            // Handle specific error cases
+            if (err.response?.status === 400) {
+                showError('Cannot reopen this item - it may not be in a resolved state');
+            } else if (err.response?.status === 403) {
+                showError('You do not have permission to reopen this item');
+            } else if (err.response?.status === 404) {
+                showError('Item not found');
+            } else {
+                showError('Failed to reopen item. Please try again.');
+            }
+            throw err;
+        }
     };
 
     return (
@@ -388,7 +510,7 @@ const MyItemsPage = () => {
                                             : 'text-gray-500 hover:text-[#F35B04]'
                                 }`}
                             >
-                                Items I've Lost ({lostItems.length})
+                                Items I've Lost ({lostCount})
                             </button>
                             <button
                                 onClick={() => setActiveTab('found')}
@@ -400,7 +522,7 @@ const MyItemsPage = () => {
                                             : 'text-gray-500 hover:text-[#00AFB9]'
                                 }`}
                             >
-                                Items I've Found ({foundItems.length})
+                                Items I've Found ({foundCount})
                             </button>
                             <button
                                 onClick={() => setActiveTab('resolved')}
@@ -412,7 +534,7 @@ const MyItemsPage = () => {
                                             : 'text-gray-500 hover:text-[#3D348B]'
                                 }`}
                             >
-                                Resolved ({resolvedItems.length})
+                                Resolved ({resolvedCount})
                             </button>
                         </div>
 
@@ -797,6 +919,12 @@ const MyItemsPage = () => {
                                                                     <FaEye className="mr-1" /> View
                                                                 </button>
                                                                 <button 
+                                                                    className="text-[#00AFB9] hover:text-[#0095a0] flex items-center"
+                                                                    onClick={() => handleReopenItem(item.itemId)}
+                                                                >
+                                                                    <FaUndo className="mr-1" /> Reopen
+                                                                </button>
+                                                                <button 
                                                                     className="text-[#F35B04] hover:text-[#d95203]"
                                                                     onClick={() => handleDeleteItem(item.itemId)}
                                                                 >
@@ -927,6 +1055,23 @@ const MyItemsPage = () => {
                                 message="Are you sure you want to delete this item? This action cannot be undone."
                                 confirmText="Delete"
                                 cancelText="Cancel"
+                            />
+                        )}
+
+                        {/* Force Remove Modal */}
+                        {isForceRemoveModalOpen && (
+                            <ConfirmModal
+                                isOpen={isForceRemoveModalOpen}
+                                onClose={() => {
+                                    setIsForceRemoveModalOpen(false);
+                                    setForceRemoveItemId(null);
+                                }}
+                                onConfirm={() => handleForceRemove(forceRemoveItemId)}
+                                title="Server Error - Force Remove?"
+                                message="Failed to communicate with the server. Do you want to remove this item from your list anyway? Note: This will only remove it from your view, not from the server."
+                                confirmText="Force Remove"
+                                cancelText="Cancel"
+                                confirmButtonType="warning"
                             />
                         )}
                     </motion.div>

@@ -53,7 +53,7 @@ const AllListings = ({ type, isDashboard }) => {
 
     // Memoized fetch function to prevent recreation on every render
     const fetchItems = useCallback(async () => {
-        if (!isAuthenticated || !isInitialized.current) return;
+        if (!isInitialized.current) return;
 
         // Cancel any pending request
         if (abortControllerRef.current) {
@@ -149,11 +149,11 @@ const AllListings = ({ type, isDashboard }) => {
                 setLoading(false);
             }
         }
-    }, [filterType, category, location, currentPage, itemsPerPage, searchTerm, isAuthenticated]);
+    }, [filterType, category, location, currentPage, itemsPerPage, searchTerm]);
 
     // Main effect to fetch items when dependencies change
     useEffect(() => {
-        if (isInitialized.current && isAuthenticated) {
+        if (isInitialized.current) {
             fetchItems();
         }
         
@@ -176,10 +176,8 @@ const AllListings = ({ type, isDashboard }) => {
 
         // Set new timeout for search
         searchTimeoutRef.current = setTimeout(() => {
-            if (isAuthenticated) {
-                setCurrentPage(0); // Reset to first page when searching
-                // fetchItems will be called automatically due to currentPage change
-            }
+            setCurrentPage(0); // Reset to first page when searching
+            // fetchItems will be called automatically due to currentPage change
         }, 500);
 
         // Cleanup function
@@ -188,7 +186,7 @@ const AllListings = ({ type, isDashboard }) => {
                 clearTimeout(searchTimeoutRef.current);
             }
         };
-    }, [searchTerm, isAuthenticated]);
+    }, [searchTerm]);
 
     // Cleanup on unmount
     useEffect(() => {
@@ -227,32 +225,6 @@ const AllListings = ({ type, isDashboard }) => {
         hidden: { y: 20, opacity: 0 },
         show: { y: 0, opacity: 1 },
     };
-
-    // Show login message if not authenticated
-    if (!isAuthenticated) {
-        return (
-            <section className={`py-10 ${
-                isDarkMode 
-                    ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
-                    : 'bg-gradient-to-b from-[#F8F9FA] to-white'
-            }`}>
-                <div className="container mx-auto px-4 text-center">
-                    <h2 className={`text-3xl font-bold mb-4 ${
-                        isDarkMode ? 'text-white' : 'text-[#212529]'
-                    }`}>Browse Items</h2>
-                    <p className={`mb-6 ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}>Please log in to view and browse items.</p>
-                    <button 
-                        onClick={() => navigate('/login')}
-                        className="bg-[#F35B04] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#d95203] transition-colors"
-                    >
-                        Log In
-                    </button>
-                </div>
-            </section>
-        );
-    }
 
     return (
         <section className={`py-10 ${

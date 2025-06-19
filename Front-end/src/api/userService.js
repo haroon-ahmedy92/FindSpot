@@ -82,6 +82,54 @@ const UserService = {
   },
 
   /**
+   * Get user notification settings
+   * 
+   * @returns {Promise} User notification settings
+   */
+  getNotificationSettings: async () => {
+    try {
+      const response = await axiosInstance.get('/users/settings/notifications');
+      console.log('Raw notification settings response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error fetching notification settings:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get user privacy settings
+   * 
+   * @returns {Promise} User privacy settings
+   */
+  getPrivacySettings: async () => {
+    try {
+      const response = await axiosInstance.get('/users/settings/privacy');
+      console.log('Raw privacy settings response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error fetching privacy settings:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get user display settings
+   * 
+   * @returns {Promise} User display settings
+   */
+  getDisplaySettings: async () => {
+    try {
+      const response = await axiosInstance.get('/users/settings/display');
+      console.log('Raw display settings response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error fetching display settings:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Update notification settings
    * 
    * @param {Object} notificationSettings - Notification preferences

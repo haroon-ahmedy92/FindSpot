@@ -201,6 +201,17 @@ const ItemService = {
       console.error(`Error updating item ${itemId} status:`, error);
       throw error;
     }
+  },
+
+  // Reopen a resolved item (change status back to ACTIVE)
+  reopenItem: async (itemId) => {
+    try {
+      const result = await axiosInstance.post(`/items/${itemId}/reopen`);
+      return result;
+    } catch (error) {
+      console.error(`Error reopening item ${itemId}:`, error);
+      throw error;
+    }
   }
 };
 

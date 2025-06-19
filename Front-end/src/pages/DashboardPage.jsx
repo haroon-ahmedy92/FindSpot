@@ -73,45 +73,63 @@ const DashboardPage = () => {
     fetchUserStats();
   }, []);
 
-  // Fetch user's items
+  // Fetch user's items using separate endpoints like in AllListings
   useEffect(() => {
     const fetchUserItems = async () => {
       try {
         setLoading(true);
-        // Fetch all user items
-        const response = await ItemService.getUserItems();
-        console.log('User items response:', response);
         
-        let items = [];
-        if (response && response.content) {
-          items = response.content;
-        } else if (Array.isArray(response)) {
-          items = response;
-        }
+        // Fetch lost and found items separately to ensure proper itemType mapping
+        const [lostResponse, foundResponse] = await Promise.all([
+          ItemService.getMyLostItems({ page: 0, limit: 10 }),
+          ItemService.getMyFoundItems({ page: 0, limit: 10 })
+        ]);
+        
+        console.log('Lost items response:', lostResponse);
+        console.log('Found items response:', foundResponse);
+        
+        // Extract items from responses
+        const lostItems = (lostResponse?.content || []).map(item => ({
+          ...item,
+          itemType: 'lost' // Explicitly set itemType for lost items
+        }));
+        
+        const foundItems = (foundResponse?.content || []).map(item => ({
+          ...item,
+          itemType: 'found' // Explicitly set itemType for found items
+        }));
+        
+        // Combine and sort by date
+        const allItems = [...lostItems, ...foundItems];
+        allItems.sort((a, b) => new Date(b.reportedDate || b.createdAt || 0) - new Date(a.reportedDate || a.createdAt || 0));
         
         // Process items for display
-        const processedItems = items.map(item => ({
+        const processedItems = allItems.map(item => ({
           id: item.id || item.itemId,
           title: item.title,
           category: item.category || '',
           date: item.reportedDate || item.createdAt || item.date,
-          status: item.type?.toLowerCase() || 'lost',
+          status: item.status || 'ACTIVE',
+          itemType: item.itemType, // Use the explicitly set itemType
           location: item.location || '',
-          imageUrl: item.images?.[0] || `https://via.placeholder.com/150/${item.type === 'LOST' ? 'F35B04' : '00AFB9'}/FFFFFF?Text=${item.category}`
+          imageUrl: item.images?.[0] || `https://via.placeholder.com/150/${item.itemType === 'lost' ? 'F35B04' : '00AFB9'}/FFFFFF?Text=${item.category}`
         }));
+        
+        console.log('Processed items with correct itemType:', processedItems);
         
         setUserItems(processedItems);
         
-        // If we couldn't get stats from the API, calculate them from items
+        // Calculate stats from the fetched items if needed
         if (statsError) {
-          const activeFound = items.filter(item => item.type === 'FOUND' && item.status === 'ACTIVE').length;
-          const activeLost = items.filter(item => item.type === 'LOST' && item.status === 'ACTIVE').length;
-          const resolved = items.filter(item => item.status === 'RESOLVED' || item.status === 'CLAIMED' || item.status === 'CLOSED').length;
+          const activeFound = foundItems.filter(item => item.status === 'ACTIVE').length;
+          const activeLost = lostItems.filter(item => item.status === 'ACTIVE').length;
+          const resolved = allItems.filter(item => item.status === 'RESOLVED' || item.status === 'CLAIMED' || item.status === 'CLOSED').length;
           
           setStats({
             activeFound,
             activeLost,
-            resolved
+            resolved,
+            total: allItems.length
           });
         }
       } catch (err) {
@@ -310,7 +328,7 @@ const DashboardPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {userItems.slice(0, 3).map(item => (
-                <ItemCard key={item.id} item={item} type={item.status} isDashboard={true} />
+                <ItemCard key={item.id} item={item} isDashboard={true} />
               ))}
             </div>
           )}
